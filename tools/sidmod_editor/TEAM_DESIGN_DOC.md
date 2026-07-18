@@ -219,6 +219,16 @@ Roster: Ferrothorn/Cofagrigus (IronBarbs, Spikes/LeechSeed/WoW) · **Dragonite/G
 - **Threat-scouting added to the pilot:** (a) TEAM PREVIEW — the opponent's 6 mons (decoded to Head/Body) are now shown every turn; (b) a THREAT GLOSSARY in the system prompt so the pilot recognizes and pre-positions for known threats (Whimsicott/Ninetales/Politoed → Spore; Arceus → ExtremeSpeed priority; Gliscor → Poison-Heal EQ/Electric-immune wall, break with Ice; Aegislash → Spectral Thief/Whirlwind, don't set up; Kyurem/Weavile → 4× Ice; Kyogre → Drizzle). This mirrors how a real player reads a team.
 - **KEY EXPERIMENT (running):** 12-team round-robin under the FULLY threat-aware pilot. Two reads: (1) do the sleep-crippled teams (Sand/Box15C/Bunker) recover — proving those were *pilot* flaws, not team flaws; (2) where do the vanilla Gen-5 Ubers control teams land vs the fusions.
 
+## RESULT: threat-aware pilot + Ubers control (12 teams, 66 bo3 battles)
+Standings: UbersBal 82 · **Squads 82** · Box15A 73 · UbersOff 73 · Box15B 64 · Sand 55 · Rain/Overload/Sun 45 · Momentum 18 · Box15C/Bunker 9.
+
+**Three findings:**
+1. **Top fusion teams match real competitive teams.** Squads (82%) ties the UbersBal control (and beats UbersOff h2h); Box15A ties UbersOff; Sun even beat UbersBal. The Ubers controls are strong but don't dominate — validates that the good fusion builds are competitive-grade, not just fusion-vs-fusion good.
+2. **Smarter pilot is a NON-uniform rising tide.** Sand 22→55 (its flaws were partly PILOT — proper sleep/weather play recovered it). But Momentum 56→18, Box15C/Bunker →9 DROPPED — their old win-rates came partly from opponents misplaying; competent play on both sides exposes their real weaknesses (frailty / dead-slow TR / passive stall). They lose to the Ubers control badly.
+3. **Trustworthy numbers** — 0 fallbacks, coherent standings. This is the cleanest read we've had, and it's the one to believe.
+
+**Confirmed tiering:** Ubers-competitive = Squads, Box15A. Solid mid = Box15B, Sand, Rain, Overload, Sun. Genuinely weak (rebuild/retire, a good pilot can't save them) = Momentum, Box15C, Bunker.
+
 ## Known engine caveats (so results are read correctly)
 - **Dex is limited** — unknown species silently become Pikachu. Always validate (`Editor.valid_species?`). Confirmed *absent*: Gastrodon, Seismitoad, Barraskewda, Floatzel, Samurott, Beartic.
 - **Fusion typing is unpredictable** — always build-check the actual type (Ferrothorn/Rhyperior came out Steel/Rock, Ludicolo/Politoed pure Water, Gastrodon/Quagsire Electric/Ground = the Pikachu fallback).
