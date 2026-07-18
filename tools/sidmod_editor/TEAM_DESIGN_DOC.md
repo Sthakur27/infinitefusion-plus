@@ -196,7 +196,21 @@ Roster: Ferrothorn/Cofagrigus (IronBarbs, Spikes/LeechSeed/WoW) · **Dragonite/G
 **Tier 1 — auto-apply (low-risk set/move/item, identity-preserving, all audit-endorsed):** Rain Thunder→Flamethrower + WorrySeed→Encore; Overload Geninja Ice Beam→Taunt; Box15A Deoxys Scarf→Life Orb; Sand Azumachomp Dragon Claw→Aqua Jet; Momentum Gentom SludgeBomb→Focus Blast; Lum Berry on a key sweeper for the most sleep-exposed teams. Re-test + materialize.
 **Tier 2 — FLAG for Sid (judgment / identity / rebuild, NOT auto-done):** Box15C TR rebuild (archetype dead); Bunker stall→bulky-offense + re-fuse Bisharp/Scizor; Box15A Marowak/Arceus re-fuse (it's YOUR idea + team's at 78% — your call); Box15B Kyurem/Salamence re-fuse (top team, careful); Squads Ninetales/Celebi re-fuse (kills the double-weather); Sand Tyrantrum/Aerodactyl→Grass sleep-answer; Sun Blaziken/Aerodactyl 4× Rock.
 
-**STATUS:** Tier 1 applied (Rain Flamethrower+Encore, Overload Taunt, Box15A Deoxys Lum+Roost, Momentum Focus Blast, Sand Aqua Jet + Metagross Lum, Sun Draco Meteor) — re-testing, then materialize. Tier 2 awaits Sid.
+**STATUS:** Tier 1 applied + re-tested + **materialized to Box 24/25** (backup 20260718_030834, collateral NONE). Tier 2 awaits Sid.
+
+## FINAL ASSESSMENT (autopilot run)
+
+**What's now live in Box 24/25** — the fully hand-tuned, audited field with all fusion redesigns + Tier-1 set fixes, all L100, all species verified in-dex, originals + Box 16 untouched.
+
+**Standings, final (bo3):** Box15B 78 · Box15A 78 · Squads 67 · Overload 56 · Momentum 56 · Sun 56 · Rain 33 · Box15C 22 · Sand 22 · Bunker 22.
+
+**The honest headline: two kinds of change, two kinds of result.**
+- **Fusion redesigns = real, validated wins.** Box15A 22→78 (Marowak/Arceus + Ice Beam + Dialga/Espeon), and the whole field is better-built — the audit confirmed ~52/60 fusions now "earn themselves" vs their monos. These moved the needle and are the reason to materialize.
+- **Tier-1 set/move tweaks = competitively sound but sim-neutral.** Win rates barely moved (some ±11 up/down, netting flat). Situational moves (Taunt, Encore) and coverage swaps depend on pilot skill the Haiku sim-agents don't have; the sim under-rewards them. They help *your* in-game play, but don't expect the sim to show it. **If you'd rather, revert Overload's Geninja Ice Beam→Taunt** (its one clear regression, 67→56 — Ice Beam is more generally useful when the pilot won't time Taunt).
+
+**Biggest unsolved lever (needs your call):** SLEEP. Every team gets Spore-locked and the sim AI switch-loops under sleep — but that's *half pilot flaw*. The highest-value single project isn't more team edits; it's **fixing the sim's sleep-handling (attack through sleep instead of switch-looping)**, then re-reading whether the mid-tier teams are actually fine. I did NOT change the pilot autonomously (it affects all results).
+
+**Tier-2 decisions waiting for you** (all with concrete recs above): Box15C (retire/rebuild Trick Room), Bunker (stall→bulky-offense), the 3 stat-stick re-fuses (Box15B Kyurem/Salamence, Bunker Bisharp/Scizor, Sand Tyrantrum/Aerodactyl), Squads double-weather (Ninetales/Celebi), and **whether to keep your Marowak/Arceus** (I kept it — huge Atk, but redundant with Dragonite/Arceus and its ExtremeSpeed is Ghost-blanked).
 
 ## Known engine caveats (so results are read correctly)
 - **Dex is limited** — unknown species silently become Pikachu. Always validate (`Editor.valid_species?`). Confirmed *absent*: Gastrodon, Seismitoad, Barraskewda, Floatzel, Samurott, Beartic.
