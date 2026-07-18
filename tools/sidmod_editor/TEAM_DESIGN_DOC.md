@@ -141,9 +141,62 @@ Roster: Ferrothorn/Cofagrigus (IronBarbs, Spikes/LeechSeed/WoW) · **Dragonite/G
 
 **Correction logged:** my first `explore_fixes` probe didn't fix natures → random-nature noise gave a false "Kingdra boosts SpA" claim. Always fix nature when comparing fusion stats. Guard: `probe3.rb` uses fixed natures.
 
+**Standings after all fusion fixes (bo3):** Box15B 89 · **Box15A 78** (was 22 — Marowak/Arceus) · Overload 67 · Momentum 56 · Sun 56 · Squads 56 (was 89 — field caught up) · Rain 44 · Sand 22 · Bunker 22 · **Box15C 11** (new bottom). Buffing everyone compressed the ladder (win% is zero-sum); absolute build quality rose but relative standings reshuffled.
+
 **Next:** per-team audit (agent per team, mon-by-mon, two-question lens) → final assessment → resolve → materialize.
 
 ---
+
+## Per-team audit findings (agent per team, mon-by-mon)
+
+### Box15C (1-8, dead last) — ARCHETYPE problem, not a fusion problem
+- Fusions mostly fine (Reuninoir, Slowgrigus, Chandelwak, Maroperior @ThickClub Atk370, Slalax = no-Truant Snorlax fusion all pass the body-contributes test).
+- **Trick Room is unviable in this meta** — it never lands a single logged game (opponents open with Spore / 4× Knock Off / faster weather). Half the team (Spe 106/127/133) isn't even slow enough to *need* TR, so 2 setter slots buy nothing.
+- Stacked Water 4× weaknesses (Maroperior/Chandelwak/Quagbro) get bulldozed by Rain; zero sleep answer → 20-turn sleep-switch death spirals.
+- **Quagbro (Quagsire/Slowbro) = MONO-BETTER** → mono Quagsire (Water/Ground, **Unaware**) directly fixes "everyone sets up on us."
+- Verdict: **ground-up rebuild** — drop TR, cut a passive setter (Slowgrigus), keep Slalax/Maroperior/Chandelwak as bulky-offense, add a sleep/weather answer. (AI box team, low priority — flagged for Sid.)
+
+### Box15A (7-2, #2) — sound fusions, two structural holes
+- **5/6 fusions beat both monos** (Dialga/Espeon, Kyogre/Toxapex, Deoxys/Latios, Reshiram/Clefable = best mon, Dragonite/Arceus). No mono-better calls.
+- Holes: (a) **sleep** — only Dialga/Espeon's Magic Bounce answers Spore; once pivoted out, rest get locked (lost Box15B). (b) **Ghost/Electric special attackers** blow past the physical walls (lost Momentum to Gengar/Rotom + Magnezone).
+- **Marowak/Arceus (Sid's idea) = weakest slot**: 684 Atk but ExtremeSpeed (Normal) is IMMUNE vs the Ghost meta (Gengar/Giratina/Aegislash/Reuniclus), and it's **redundant with Dragonite/Arceus** (2nd Arceus ES/EQ physical). Audit says RE-FUSE into an anti-Ghost/sleep answer. *[JUDGMENT CALL — it's Sid's idea + team is 78%; flag, don't auto-revert.]*
+- Clear refinements: **Deoxys/Latios: Choice Scarf → Life Orb/Lum** (Choice-lock = Spore magnet); add a **Lum Berry** somewhere for sleep insurance.
+
+### Box15B (8-1, #1) — dominant, but 2 seams
+- 5/6 fusions clearly beat both monos. **Kyurem/Salamence = stat-stick** (Dragon/Flying = mono Salamence, discards Kyurem's Ice identity, stacks a 2nd 4×-Ice Flyer next to Groudon) → RE-FUSE. Dialga/Espeon adjust set (recovery/CM over passive SR/Toxic).
+- Seams: 3 mons Dark-weak (Kyogre/Giratina/Dialga-Espeon, none resists Dark) + 2 mons 4× Ice (Groudon+Kyurem). Overload hits both at once = its only loss.
+
+### Momentum (5-4, mine) — well-built VoltTurn
+- 6/6 fusions justified; **Garchomp/Haxorus re-fuse ENDORSED** (pure Dragon 2× Ice vs old 4×). Cofagrigus/Skarmory (Ghost/Flying, 223 SpD) folds to special spam → try mono Skarmory (resists Ice + Spikes). No sleep answer. Gentom wants Dark/Normal coverage (Focus Blast).
+
+### Overload (6-3, mine) — 6/6 KEEP, best-built team
+- Every fusion beats both parents; **mono-Hydreigon endorsed.** Losses are structural (no sleep, no weather, phazing), not roster. Top fix: **Geninja Ice Beam → Taunt** (blanks the Spore/phaze lead — "likely flips Sun"); Ice Beam is redundant with 3 other Ice users.
+
+### Bunker (2-7, mine) — pure stall not viable
+- **Bisharp/Scizor = stat-stick** (all Bisharp's kit, Scizor only stats) → RE-FUSE/drop, redundant with Dragonite/Scizor. Ferrothorn/Cofagrigus lost Grass = lost Spore immunity. Blismory/Suikiss both wear an Electric weakness the monos wouldn't. **Suicune/Togekiss = MVP.** Pivot to bulky-offense around it.
+
+### Sand (2-7, yours) — 4 DD sweepers funnel into EQ
+- **Tyrantrum/Aerodactyl = stat-stick** (Rock/Flying = mono Aerodactyl) → RE-FUSE into a Grass sleep-answer that also hits Ground-immune Flyers. Azumarill/Garchomp: Dragon Claw → **Aqua Jet** (breaks DD-mirror loop + priority). Add Lum Berry. One Ground-immune Flyer (Groudon) blanks the whole team; 2 mons share 4× Fighting.
+
+### Rain (4-5, yours) — coherent rain core now
+- 6/6 fusions justified (Ludicolo/Sceptile +80 SpA/+129 Spe over mono). Set fixes: **Togekiss/Dragonite Thunder → Flamethrower** (Thunder is immune-blanked by every Ground wall; Fire nukes the Steel/Grass walls that hard-wall it). **Politoed/Whimsicott WorrySeed → Encore/Scald** (its self-stall loops caused all three 0-3 losses). Add Lum/Chesto.
+
+### Squads (5-4, was #1) — double-weather self-sabotage
+- 4/6 fusions elite (Kyogre/Mew, Aegislash/Lugia, Groudon/Gliscor, Sylveon/Arceus). **Ninetales/Celebi = the culprit**: its Drought overwrites Kyoew's own Drizzle, and it's a 3rd Fire-weak body (with Dialga/Espeon + Aegislash/Lugia) → RE-FUSE into a rain-abuser that resists Fire. Dialga/Espeon passive (most cuttable). 89→56 is ~60% field-catching-up, ~40% the double-weather + Fire weakness.
+
+### Sun (5-4, yours) — glass-cannon, weather-dependent
+- All 6 fusions justified; **Regigigas/Gliscor (Poison Heal bypasses Slow Start) = MVP, weather-independent.** Set fixes: **Charizard/Hydreigon: Overheat → Draco Meteor** (it's all-Fire and gets walled — Draco is a weather-independent Specs breaker off 357 SpA). **Blaziken/Aerodactyl is the lone 4× Rock body** → consider mono Blaziken (Speed Boost, Rock-neutral). All 4 losses = Drought overwritten by Drizzle/Sand.
+
+## CROSS-TEAM SYNTHESIS
+1. **SLEEP is the meta-defining hole** — 7 of 8 teams get Spore-locked with no answer. Highest-leverage fix everywhere: Lum/Chesto on a sweeper, or a powder-immune Grass / Insomnia / Sap Sipper mon. (Caveat: partly the sim AI switch-looping under sleep — a pilot flaw inflating it.)
+2. **Fusions are mostly sound** — the body-contributes principle holds across ~52/60 mons. The failures are the "stat-stick" pattern (Kyurem/Salamence, Bisharp/Scizor, Tyrantrum/Aerodactyl) — same mistake class as the ones already fixed.
+3. **Zero-sum ladder** — buffing everyone just reshuffles ranks; absolute quality is what improved.
+
+## RESOLUTION PLAN
+**Tier 1 — auto-apply (low-risk set/move/item, identity-preserving, all audit-endorsed):** Rain Thunder→Flamethrower + WorrySeed→Encore; Overload Geninja Ice Beam→Taunt; Box15A Deoxys Scarf→Life Orb; Sand Azumachomp Dragon Claw→Aqua Jet; Momentum Gentom SludgeBomb→Focus Blast; Lum Berry on a key sweeper for the most sleep-exposed teams. Re-test + materialize.
+**Tier 2 — FLAG for Sid (judgment / identity / rebuild, NOT auto-done):** Box15C TR rebuild (archetype dead); Bunker stall→bulky-offense + re-fuse Bisharp/Scizor; Box15A Marowak/Arceus re-fuse (it's YOUR idea + team's at 78% — your call); Box15B Kyurem/Salamence re-fuse (top team, careful); Squads Ninetales/Celebi re-fuse (kills the double-weather); Sand Tyrantrum/Aerodactyl→Grass sleep-answer; Sun Blaziken/Aerodactyl 4× Rock.
+
+**STATUS:** Tier 1 applied (Rain Flamethrower+Encore, Overload Taunt, Box15A Deoxys Lum+Roost, Momentum Focus Blast, Sand Aqua Jet + Metagross Lum, Sun Draco Meteor) — re-testing, then materialize. Tier 2 awaits Sid.
 
 ## Known engine caveats (so results are read correctly)
 - **Dex is limited** — unknown species silently become Pikachu. Always validate (`Editor.valid_species?`). Confirmed *absent*: Gastrodon, Seismitoad, Barraskewda, Floatzel, Samurott, Beartic.

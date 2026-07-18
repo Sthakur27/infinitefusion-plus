@@ -72,6 +72,25 @@ m[idx(m,'RHYPERIOR','GARCHOMP')] = GARCHOMP_HAXORUS
 o = field['Overload']
 o[idx(o,'HYDREIGON','SALAMENCE')] = MONO_HYDREIGON
 
+# ===== Tier-1 audit fixes (safe set/move/item; no identity or fusion change) =====
+# Rain: Thunder is immune-blanked by every Ground wall -> Flamethrower nukes the Steel/Grass walls; give Policott a real move
+edit_moves(r, 'TOGEKISS', 'DRAGONITE', %w[FLAMETHROWER HURRICANE MOONBLAST CALMMIND])
+edit_moves(r, 'POLITOED', 'WHIMSICOTT', %w[UTURN TAUNT SPORE ENCORE])
+# Overload: Geninja Ice Beam is redundant (3 other Ice users) -> Taunt blanks the Spore/phaze lead
+edit_moves(o, 'GENGAR', 'GRENINJA', %w[NASTYPLOT SHADOWBALL TAUNT SLUDGEWAVE])
+# Box15A: Deoxys off Choice Scarf -> Lum Berry (sleep insurance + no lock); Trick is dead with Lum -> Roost
+dx = a.find { |m| m['head'] == 'DEOXYS' && m['body'] == 'LATIOS' }
+dx['item'] = 'LUMBERRY'; dx['moves'] = %w[PSYCHIC DRACOMETEOR AURASPHERE ROOST]
+# Momentum: Gengar/Rotom needs a Dark/Normal-wall answer -> Focus Blast over Sludge Bomb
+edit_moves(m, 'GENGAR', 'ROTOM', %w[NASTYPLOT SHADOWBALL THUNDERBOLT FOCUSBLAST])
+# Sand: break the DD-mirror loop + priority; Lum on the lead so it can't be Spore-locked
+s = field['Sand']
+edit_moves(s, 'AZUMARILL', 'GARCHOMP', %w[EARTHQUAKE WATERFALL DRAGONDANCE AQUAJET])
+s.find { |x| x['head'] == 'METAGROSS' && x['body'] == 'HAXORUS' }['item'] = 'LUMBERRY'
+# Sun: Charizard/Hydreigon is all-Fire (walled) -> Draco Meteor = weather-independent breaker
+su = field['Sun']
+edit_moves(su, 'CHARIZARD', 'HYDREIGON', %w[FLAMETHROWER FIREBLAST DRACOMETEOR UTURN])
+
 File.write(File.join(OUT_DIR, 'field_specs.json'), JSON.generate(field))
 puts "wrote hf/field_specs.json"
 
@@ -81,7 +100,7 @@ require_relative 'editor'
 SimEngine.boot
 $DEBUG = false
 bad_species = []
-%w[Box15A Box15C Bunker Rain Momentum Overload].each do |name|
+%w[Box15A Box15C Bunker Rain Momentum Overload Sand Sun].each do |name|
   puts "\n===== #{name} ====="
   team = field[name].map { |m| Editor.normalize(m) }
   team.each do |s|
