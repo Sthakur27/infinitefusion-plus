@@ -229,6 +229,14 @@ Standings: UbersBal 82 · **Squads 82** · Box15A 73 · UbersOff 73 · Box15B 64
 
 **Confirmed tiering:** Ubers-competitive = Squads, Box15A. Solid mid = Box15B, Sand, Rain, Overload, Sun. Genuinely weak (rebuild/retire, a good pilot can't save them) = Momentum, Box15C, Bunker.
 
+## "Can fusions actually be broken?" experiment (Degen + OU + Ubers arena)
+**Why fusions don't auto-dominate:** the stat formula is a WEIGHTED AVERAGE `(2*dom+other)/3`, not a sum. Fusing dilutes toward the mean, so a fusion is often WEAKER than the stronger mono parent (Groudon/Gliscor total 1505 vs mono Groudon 1661; Giratina/Arceus 1739 < mono Arceus 1761). Fusions trade RAW STATS for VERSATILITY (custom typing/ability/movepool/immunities).
+**How to weaponize it (beat the dilution):**
+- Fuse TWO ~equal ubers (both already max → minimal dilution): Kyogre/Arceus 1745, Arceus/Groudon 1739, Mewtwo/Arceus 1723 — near-max stats + custom typing/ability. (But orientation matters: Groudon/Rayquaza 1633 < mono Groudon — head/body governs which stats.)
+- Stack MULTIPLIERS that bypass the average: Thick Club / Huge Power (x2 Atk), Poison Heal (bypass Regigigas Slow Start), Magic Guard + Life Orb (free 1.3x).
+- Multiscale + Dragon Dance bulky sweeper (Sid's insight): **Lugia/Groudon** (Psychic/Ground, Multiscale, Atk325/Def308/SpD300) — sacrifices ~20 Atk vs mono Groudon for Multiscale + mixed bulk + setup; also takes Stealth Rock x1 (vs Ground/Flying x2), preserving Multiscale. A resilient win-con.
+**Arena (running):** Degen (max-broken: Kyogre/Arceus, Thick-Club Marowak/Arceus, Poison-Heal Regigigas/Gliscor, Mewtwo/Arceus, Multiscale-DD Lugia/Groudon, Magic-Guard Reshiram) vs UbersOff, UbersBal, OU control, and our best 2 (Squads, Box15A). Answers: do WEAPONIZED fusions cleanly beat Ubers (=> earlier teams were just under-optimized, not the mechanic)? Where does OU land?
+
 ## Known engine caveats (so results are read correctly)
 - **Dex is limited** — unknown species silently become Pikachu. Always validate (`Editor.valid_species?`). Confirmed *absent*: Gastrodon, Seismitoad, Barraskewda, Floatzel, Samurott, Beartic.
 - **Fusion typing is unpredictable** — always build-check the actual type (Ferrothorn/Rhyperior came out Steel/Rock, Ludicolo/Politoed pure Water, Gastrodon/Quagsire Electric/Ground = the Pikachu fallback).
