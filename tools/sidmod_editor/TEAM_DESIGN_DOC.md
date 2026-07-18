@@ -237,6 +237,21 @@ Standings: UbersBal 82 · **Squads 82** · Box15A 73 · UbersOff 73 · Box15B 64
 - Multiscale + Dragon Dance bulky sweeper (Sid's insight): **Lugia/Groudon** (Psychic/Ground, Multiscale, Atk325/Def308/SpD300) — sacrifices ~20 Atk vs mono Groudon for Multiscale + mixed bulk + setup; also takes Stealth Rock x1 (vs Ground/Flying x2), preserving Multiscale. A resilient win-con.
 **Arena (running):** Degen (max-broken: Kyogre/Arceus, Thick-Club Marowak/Arceus, Poison-Heal Regigigas/Gliscor, Mewtwo/Arceus, Multiscale-DD Lugia/Groudon, Magic-Guard Reshiram) vs UbersOff, UbersBal, OU control, and our best 2 (Squads, Box15A). Answers: do WEAPONIZED fusions cleanly beat Ubers (=> earlier teams were just under-optimized, not the mechanic)? Where does OU land?
 
+## DELIVERABLE: 6 competitive fusion teams (OU balance/rain/sun/sand + 2 Ubers)
+All 36 fusions validated (in-dex, correct typing, no fallbacks). Benchmarked vs vanilla OU + 2 Ubers controls (9-team bo3).
+
+**Proof fusions can be top-tier:** **Ubers2 (rain offense) beat BOTH Ubers controls** — UbersBal 2-1 (the balance team that had gone 100%) and UbersOff 3-0. **OUSun beat the OU control 3-0.** The answer to "did we make good competitive fusion teams" is YES — it was team STRUCTURE (offense-with-a-spine), not the mechanic.
+
+**Status (vs each team's control):**
+- ✅ Ubers2 (rain offense) — elite, beat both Ubers controls
+- ✅ OUSun — beat OU control 3-0
+- ✅ OUBalance — drew OU control 1-1
+- ⚠️ Ubers1 (balance) — lost to UbersBal 1-2 (too passive; offense-with-spine beat balance)
+- ⚠️ OURain — lost to OU 0-3 (Sand Stream overwrites rain; priority revenges frail swimmers)
+- ⚠️ OUSand — lost to OU 0-2-1 (4 walls, no closing wincon)
+
+**Iterating the 3 weak teams** (diagnose losses -> targeted fix -> re-benchmark) until all 6 are at-or-above their control.
+
 ## Known engine caveats (so results are read correctly)
 - **Dex is limited** — unknown species silently become Pikachu. Always validate (`Editor.valid_species?`). Confirmed *absent*: Gastrodon, Seismitoad, Barraskewda, Floatzel, Samurott, Beartic.
 - **Fusion typing is unpredictable** — always build-check the actual type (Ferrothorn/Rhyperior came out Steel/Rock, Ludicolo/Politoed pure Water, Gastrodon/Quagsire Electric/Ground = the Pikachu fallback).
