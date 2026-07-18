@@ -21,13 +21,14 @@ module SimAgent
       st["switches"].each { |s| l << "  [#{s['idx']}] #{s['name']} #{s['hp']}%HP" }
     end
     l << "OPPONENT: #{foe['name']} HP #{foe['hp']}% status=#{foe['status']} types=#{foe['types'].join('/')}"
+    l << "OPPONENT TEAM (preview): #{st['foe_team'].join(', ')}" if st['foe_team'] && !st['foe_team'].empty?
     l << "PLAN: #{team_plan}" if team_plan && !team_plan.empty?
     l << 'Pick the single best action. Respond ONLY with JSON: {"reason":"<=12 words","action":"move"|"switch","idx":<int>}'
     l.join("\n")
   end
 
   def claude_policy(team_plan = "", model: "claude-haiku-4-5-20251001")
-    system = "You are an elite competitive Pokemon battler. This is Pokemon Infinite Fusion: fusions combine both parents' stats, movepools and abilities. Weather set by an ability is PERMANENT until another weather ability overwrites it. Each of your moves lists 'vs_foe' effectiveness against the CURRENT opponent: NEVER choose an IMMUNE move; strongly prefer SUPER, avoid RESISTED unless setting up/pivoting. If you are Choice-locked into a move that is now IMMUNE or badly resisted, SWITCH instead of wasting turns. Do NOT over-set-up: after about +2 boosts, ATTACK - a sweeper that keeps boosting instead of KOing wins nothing; only keep boosting if it's clearly safe AND lethal next turn. SLEEP: if YOUR active mon is ASLEEP, do NOT switch it out - switching burns your turn for free AND the mon you bring in can be slept next; STAY IN and pick an attack (sleep wears off in 1-3 turns, you often wake and move) or use Sleep Talk if you have it. NEVER switch the same sleeping mon in and out repeatedly - that is the worst possible play. A burned/paralyzed/poisoned mon still attacks fine - do not panic-switch over status. Don't switch a mon you need to keep into an obvious Spore/sleep lead. Every needless switch gives the foe a free turn - only switch for a real reason (bad matchup, revenge, pivot). Win by exploiting types, weather wars, setup, priority, and predicting switches. Output ONLY the single-line JSON object, no preamble or text around it."
+    system = "You are an elite competitive Pokemon battler. This is Pokemon Infinite Fusion: fusions combine both parents' stats, movepools and abilities. Weather set by an ability is PERMANENT until another weather ability overwrites it. Each of your moves lists 'vs_foe' effectiveness against the CURRENT opponent: NEVER choose an IMMUNE move; strongly prefer SUPER, avoid RESISTED unless setting up/pivoting. If you are Choice-locked into a move that is now IMMUNE or badly resisted, SWITCH instead of wasting turns. Do NOT over-set-up: after about +2 boosts, ATTACK - a sweeper that keeps boosting instead of KOing wins nothing; only keep boosting if it's clearly safe AND lethal next turn. SLEEP: if YOUR active mon is ASLEEP, do NOT switch it out - switching burns your turn for free AND the mon you bring in can be slept next; STAY IN and pick an attack (sleep wears off in 1-3 turns, you often wake and move) or use Sleep Talk if you have it. NEVER switch the same sleeping mon in and out repeatedly - that is the worst possible play. A burned/paralyzed/poisoned mon still attacks fine - do not panic-switch over status. Don't switch a mon you need to keep into an obvious Spore/sleep lead. Every needless switch gives the foe a free turn - only switch for a real reason (bad matchup, revenge, pivot). Win by exploiting types, weather wars, setup, priority, and predicting switches. THREAT RECOGNITION - the OPPONENT TEAM preview lists their 6 mons; anticipate these known threats BEFORE they act: Whimsicott/Ninetales/Politoed/Mew fusions carry SPORE (sleep) - keep a Grass-type or Magic-Bounce mon (Espeon), or don't lead your wincon into them; Arceus fusions have ExtremeSpeed PRIORITY (Sylveon/Arceus = Pixilate Fairy nuke) - Steel/Rock/Ghost blunt it, don't leave frail mons in range; Gliscor fusions (Groudon/Gliscor, Regigigas/Gliscor) are Poison-Heal walls IMMUNE to Ground AND Electric - break them with ICE (4x!) or special coverage, never Ground/Electric; Aegislash fusions Spectral-Thief STEAL your boosts + Whirlwind phaze you - NEVER set up into them; Kyurem/Weavile/Mamoswine fusions carry Ice that is 4x on Gliscor and Dragons; Kyogre fusions set Drizzle that overwrites your weather. Output ONLY the single-line JSON object, no preamble or text around it."
     lambda do |battle, i, st|
       # Forced turns need no LLM: skip the API call when there is only one legal action.
       lm = st["moves"]; sw = st["switches"]
@@ -93,10 +94,23 @@ module SimAgent
     mult < 1 ? "#{mult}x-RESISTED" : "#{mult}x-SUPER"
   end
 
+  # Decode a mon to recognizable "Head/Body" component names (or plain species) for team preview.
+  def species_label(pk)
+    s = (pk.species rescue nil)
+    if s.is_a?(Symbol) && s.to_s =~ /\AB(\d+)H(\d+)\z/
+      h = (GameData::Species.get($2.to_i).real_name rescue $2)
+      b = (GameData::Species.get($1.to_i).real_name rescue $1)
+      "#{h}/#{b}"
+    else
+      (pk.speciesName rescue s.to_s)
+    end
+  end
+
   def state(battle, i)
     me  = battle.battlers[i]
     foe = (battle.battlers[i ^ 1] rescue nil) || battle.battlers.find { |b| b && b.index != i }
     ftypes = (foe.pbTypes(true) rescue [])
+    foe_team = (battle.pbParty(foe.index).compact.map { |pk| species_label(pk) } rescue [])
 
     moves = legal_moves(battle, i).map do |mi|
       m = me.moves[mi]
@@ -119,7 +133,7 @@ module SimAgent
     {
       "me"  => { "name" => me_name, "hp" => pct(me), "status" => me.status.to_s, "ability" => me_abil, "item" => me_item },
       "foe" => { "name" => foe_name, "hp" => pct(foe), "status" => foe.status.to_s, "types" => foe_types },
-      "weather" => weather, "moves" => moves, "switches" => switches
+      "weather" => weather, "moves" => moves, "switches" => switches, "foe_team" => foe_team
     }
   end
 
