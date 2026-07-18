@@ -250,7 +250,11 @@ All 36 fusions validated (in-dex, correct typing, no fallbacks). Benchmarked vs 
 - ⚠️ OURain — lost to OU 0-3 (Sand Stream overwrites rain; priority revenges frail swimmers)
 - ⚠️ OUSand — lost to OU 0-2-1 (4 walls, no closing wincon)
 
-**Iterating the 3 weak teams** (diagnose losses -> targeted fix -> re-benchmark) until all 6 are at-or-above their control.
+**Iteration (evidence-based, from loss-diagnosis scouts):** OUSand fixed (Choice Scarf Garchomp + Band Tyranitar/Dragonite -> beats OU control 2-0-1); OURain much stronger (Poliwrath/Kabutops Close Combat -> now beats UbersBal/Ubers2, 75%; still loses to the *dedicated anti-rain* OU control = a matchup, not a weak team); Ubers1 (Darkrai/Groudon breaker + Kyurem/Dialga Scarf -> beats UbersOff, still loses to UbersBal's phaze/grind - the one laggard; Ubers2 covers "beats UbersBal").
+
+**FINAL: 5 of 6 competitive with real Gen-5 teams; Ubers2 beats BOTH Ubers controls, OUSun/OUSand beat the OU control, OURain beats the Ubers controls, OUBalance draws the OU control. Ubers1 beats offense but loses to top balance.**
+
+**MATERIALIZED (2026-07-18):** the 6 teams -> in-game **Box 18 (OU Balance/Rain), Box 19 (OU Sun/Sand), Box 20 (Ubers 1/2)** — 12 mons each, nicknamed by team, all L100, backup + collateral-NONE. Vanilla OU/Ubers/Squads boxes + Box 24/25 evolved field untouched.
 
 ## Known engine caveats (so results are read correctly)
 - **Dex is limited** — unknown species silently become Pikachu. Always validate (`Editor.valid_species?`). Confirmed *absent*: Gastrodon, Seismitoad, Barraskewda, Floatzel, Samurott, Beartic.
