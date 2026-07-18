@@ -45,7 +45,9 @@ module Editor
       pilot blunders. Prefer edits that improve the team's OWN consistency and help vs SEVERAL
       opponents over a hard counter to one team. Change AT MOST 1-2 slots. If the coach says
       "no structural change needed" (or the losses were blunders), return the team UNCHANGED -
-      echo the input's 6 mons exactly. KEEP the core identity/archetype. Rules: exactly 6 mons;
+      echo the input's 6 mons exactly. KEEP the core identity/archetype. SPECIES CLAUSE: the 6
+      fusions must use DISTINCT base species - never output a fusion whose head or body species
+      already appears (as head or body) on another mon of this team. Rules: exactly 6 mons;
       each fusion is head+body
       BASE species that really exist (Gen 1-5 era, prefer well-known mons; do NOT invent
       names); 4 valid moves each; valid ability/item/nature. Weather from an ability is
@@ -74,6 +76,19 @@ module Editor
         old_spec[i] || cand
       end
     end.compact
+
+    # SPECIES CLAUSE guard: revert any CHANGED mon that introduces a base species already on the team.
+    base = ->(s) { (s[:head] || s[:body]) ? [s[:head], s[:body]].compact : [s[:species]].compact }
+    seen = {}
+    validated = validated.each_with_index.map do |s, i|
+      keep = s
+      if base.(s).any? { |sp| seen[sp] } && old_spec[i] && base.(s) != base.(old_spec[i])
+        log << "slot #{i}: reverted (Species Clause: #{base.(s).join('/')} duplicates a teammate)"
+        keep = old_spec[i]
+      end
+      base.(keep).each { |sp| seen[sp] = true }
+      keep
+    end
     [validated, log]
   end
 end

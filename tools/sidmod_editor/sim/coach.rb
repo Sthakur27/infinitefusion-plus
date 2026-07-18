@@ -41,6 +41,11 @@ module SimCoach
       than one or two teams. Tailor each recommendation to that specific team's roster, types,
       and playstyle. If two teams share a hole, give each a DIFFERENT archetype-appropriate fix.
 
+      SPECIES CLAUSE (hard rule): a team's 6 fusions must use 6 DISTINCT base species per
+      component - NEVER recommend adding a fusion whose head OR body species already appears
+      (as a head or body) on another mon of that team. E.g., if the team has Tyranitar/Aerodactyl,
+      do not also recommend Tyranitar/Dragonite (two Tyranitar). Pick a different base.
+
       For EACH team, produce:
         - one-line record + biggest GENUINE weakness (or "none - losses were blunders"),
         - WHY it won/lost its key matchups, tagging each loss [BLUNDER] or [TEAM FLAW] with
