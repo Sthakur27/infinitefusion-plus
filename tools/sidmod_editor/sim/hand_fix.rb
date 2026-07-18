@@ -38,6 +38,10 @@ GARCHOMP_HAXORUS = { "head"=>"GARCHOMP","body"=>"HAXORUS","ability"=>"MOLDBREAKE
 # mono Hydreigon: no fusion beats its SpA/typing/Levitate for this slot (body would only dilute it)
 MONO_HYDREIGON = { "species"=>"HYDREIGON","ability"=>"LEVITATE","item"=>"LIFEORB","nature"=>"MODEST",
   "moves"=>["NASTYPLOT","DRACOMETEOR","DARKPULSE","FLAMETHROWER"], "evs"=>{"SPECIAL_ATTACK"=>252,"SPEED"=>252,"HP"=>4}, "level"=>100 }
+# Box15B: Kyurem/Salamence was a stat-stick 2nd 4x-Ice Flyer next to Groudon. Dialga body =
+# Dragon/Steel = Ice-NEUTRAL, de-stacks the quad-Ice seam; keeps Moxie Scarf + Icicle Crash.
+KYUREM_DIALGA = { "head"=>"KYUREM","body"=>"DIALGA","ability"=>"MOXIE","item"=>"CHOICESCARF","nature"=>"JOLLY",
+  "moves"=>["DRAGONCLAW","ICICLECRASH","IRONHEAD","EARTHQUAKE"], "evs"=>{"ATTACK"=>252,"SPEED"=>252,"HP"=>4}, "level"=>100 }
 DRAGONITE_SCIZOR = { "head"=>"DRAGONITE","body"=>"SCIZOR","ability"=>"MULTISCALE","item"=>"LEFTOVERS","nature"=>"ADAMANT",
   "moves"=>["DRAGONDANCE","DRAGONCLAW","EARTHQUAKE","ROOST"], "evs"=>{"ATTACK"=>252,"SPEED"=>252,"HP"=>4}, "level"=>100 }
 
@@ -90,6 +94,27 @@ s.find { |x| x['head'] == 'METAGROSS' && x['body'] == 'HAXORUS' }['item'] = 'LUM
 # Sun: Charizard/Hydreigon is all-Fire (walled) -> Draco Meteor = weather-independent breaker
 su = field['Sun']
 edit_moves(su, 'CHARIZARD', 'HYDREIGON', %w[FLAMETHROWER FIREBLAST DRACOMETEOR UTURN])
+# Box15B: de-stack the quad-Ice (Kyurem/Salamence -> Kyurem/Dialga, Ice-neutral)
+bb = field['Box15B']
+bb[idx(bb, 'KYUREM', 'SALAMENCE')] = KYUREM_DIALGA
+
+# ===== Control: 2 vanilla (non-fusion) Gen 5 Ubers teams — benchmark, sim-only, NOT materialized =====
+field['UbersOff'] = [
+  { "species"=>"KYOGRE","ability"=>"DRIZZLE","item"=>"CHOICESCARF","nature"=>"MODEST","moves"=>%w[WATERSPOUT THUNDER ICEBEAM SURF],"evs"=>{"SPECIAL_ATTACK"=>252,"SPEED"=>252,"HP"=>4},"level"=>100 },
+  { "species"=>"RAYQUAZA","ability"=>"AIRLOCK","item"=>"LIFEORB","nature"=>"JOLLY","moves"=>%w[DRAGONDANCE EXTREMESPEED EARTHQUAKE OUTRAGE],"evs"=>{"ATTACK"=>252,"SPEED"=>252,"HP"=>4},"level"=>100 },
+  { "species"=>"ARCEUS","ability"=>"MULTITYPE","item"=>"LIFEORB","nature"=>"JOLLY","moves"=>%w[SWORDSDANCE EXTREMESPEED EARTHQUAKE SHADOWCLAW],"evs"=>{"ATTACK"=>252,"SPEED"=>252,"HP"=>4},"level"=>100 },
+  { "species"=>"DARKRAI","ability"=>"BADDREAMS","item"=>"LIFEORB","nature"=>"TIMID","moves"=>%w[DARKVOID NASTYPLOT DARKPULSE FOCUSBLAST],"evs"=>{"SPECIAL_ATTACK"=>252,"SPEED"=>252,"HP"=>4},"level"=>100 },
+  { "species"=>"DIALGA","ability"=>"PRESSURE","item"=>"CHOICESPECS","nature"=>"MODEST","moves"=>%w[DRACOMETEOR FIREBLAST THUNDER FLASHCANNON],"evs"=>{"SPECIAL_ATTACK"=>252,"SPEED"=>252,"HP"=>4},"level"=>100 },
+  { "species"=>"FERROTHORN","ability"=>"IRONBARBS","item"=>"LEFTOVERS","nature"=>"RELAXED","moves"=>%w[STEALTHROCK SPIKES LEECHSEED POWERWHIP],"evs"=>{"HP"=>252,"DEFENSE"=>252,"SPECIAL_DEFENSE"=>4},"level"=>100 },
+]
+field['UbersBal'] = [
+  { "species"=>"GROUDON","ability"=>"DROUGHT","item"=>"LEFTOVERS","nature"=>"IMPISH","moves"=>%w[STEALTHROCK EARTHQUAKE DRAGONTAIL FIREPUNCH],"evs"=>{"HP"=>252,"DEFENSE"=>252,"ATTACK"=>4},"level"=>100 },
+  { "species"=>"KYOGRE","ability"=>"DRIZZLE","item"=>"CHOICESPECS","nature"=>"MODEST","moves"=>%w[WATERSPOUT SURF THUNDER ICEBEAM],"evs"=>{"SPECIAL_ATTACK"=>252,"SPEED"=>252,"HP"=>4},"level"=>100 },
+  { "species"=>"GIRATINA","ability"=>"PRESSURE","item"=>"LEFTOVERS","nature"=>"IMPISH","moves"=>%w[DRAGONTAIL WILLOWISP REST SLEEPTALK],"evs"=>{"HP"=>252,"DEFENSE"=>252,"SPECIAL_DEFENSE"=>4},"level"=>100 },
+  { "species"=>"SCIZOR","ability"=>"TECHNICIAN","item"=>"CHOICEBAND","nature"=>"ADAMANT","moves"=>%w[BULLETPUNCH UTURN SUPERPOWER PURSUIT],"evs"=>{"ATTACK"=>252,"HP"=>252,"SPEED"=>4},"level"=>100 },
+  { "species"=>"LATIAS","ability"=>"LEVITATE","item"=>"LEFTOVERS","nature"=>"TIMID","moves"=>%w[CALMMIND DRAGONPULSE PSYSHOCK ROOST],"evs"=>{"SPECIAL_ATTACK"=>252,"SPEED"=>252,"HP"=>4},"level"=>100 },
+  { "species"=>"MEWTWO","ability"=>"PRESSURE","item"=>"LIFEORB","nature"=>"TIMID","moves"=>%w[NASTYPLOT AURASPHERE ICEBEAM FIREBLAST],"evs"=>{"SPECIAL_ATTACK"=>252,"SPEED"=>252,"HP"=>4},"level"=>100 },
+]
 
 File.write(File.join(OUT_DIR, 'field_specs.json'), JSON.generate(field))
 puts "wrote hf/field_specs.json"
@@ -100,7 +125,7 @@ require_relative 'editor'
 SimEngine.boot
 $DEBUG = false
 bad_species = []
-%w[Box15A Box15C Bunker Rain Momentum Overload Sand Sun].each do |name|
+%w[Box15A Box15C Bunker Rain Momentum Overload Sand Sun Box15B UbersOff UbersBal].each do |name|
   puts "\n===== #{name} ====="
   team = field[name].map { |m| Editor.normalize(m) }
   team.each do |s|

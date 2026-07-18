@@ -212,6 +212,12 @@ Roster: Ferrothorn/Cofagrigus (IronBarbs, Spikes/LeechSeed/WoW) · **Dragonite/G
 
 **Tier-2 decisions waiting for you** (all with concrete recs above): Box15C (retire/rebuild Trick Room), Bunker (stall→bulky-offense), the 3 stat-stick re-fuses (Box15B Kyurem/Salamence, Bunker Bisharp/Scizor, Sand Tyrantrum/Aerodactyl), Squads double-weather (Ninetales/Celebi), and **whether to keep your Marowak/Arceus** (I kept it — huge Atk, but redundant with Dragonite/Arceus and its ExtremeSpeed is Ghost-blanked).
 
+## Pilot upgrade + Ubers control (Sid's ideas)
+- **Sleep handling added to the pilot system prompt** (`agent_battle.rb`): if asleep, STAY IN (don't switch-loop — the #1 pilot flaw the audits found); a statused mon still attacks; only switch for a real reason. Fixes the sleep losses at the source across ALL teams instead of patching each with Lum Berries.
+- **Real per-team game plans** (`roster.rb PLANS`): each team now gets a 2-3 sentence strategy (wincon, sequencing, weather-war handling, key threats) piped into every turn, replacing the terse one-liners.
+- **2 vanilla Gen-5 Ubers control teams** added (sim-only, not materialized): **UbersOff** (Scarf Kyogre / DD Rayquaza / Extreme-Killer Arceus / Darkrai Dark Void / Specs Dialga / Ferrothorn) and **UbersBal** (Groudon+Kyogre weather / Giratina / Band Scizor / CM Latias / NP Mewtwo). Benchmark: can the fusion teams beat real competitive teams? Also — Kyurem/Salamence re-fused to **Kyurem/Dialga** (Dragon/Steel, Ice-neutral, de-stacks Box15B's quad-Ice).
+- **KEY EXPERIMENT (running):** 12-team round-robin under the new pilot. If the sleep-crippled teams (Sand/Box15C/Bunker) recover, it proves those were *pilot* flaws, not team flaws — and several audit "fixes" become unnecessary.
+
 ## Known engine caveats (so results are read correctly)
 - **Dex is limited** — unknown species silently become Pikachu. Always validate (`Editor.valid_species?`). Confirmed *absent*: Gastrodon, Seismitoad, Barraskewda, Floatzel, Samurott, Beartic.
 - **Fusion typing is unpredictable** — always build-check the actual type (Ferrothorn/Rhyperior came out Steel/Rock, Ludicolo/Politoed pure Water, Gastrodon/Quagsire Electric/Ground = the Pikachu fallback).
