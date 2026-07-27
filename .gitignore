@@ -33,6 +33,14 @@ tools/sidmod_editor/sim/reports/
 tools/sidmod_editor/reports/
 tools/sidmod_editor/sim/upgrade_sets/
 
+# Sprite pipeline: keep the code, the descriptions and the game-ready *_fit sprites.
+# Drop the 1024px model intermediates, the review comparison strips, and the autogen
+# baselines (re-extractable from Graphics/Battlers/spritesheets_autogen in seconds).
+tools/sidmod_editor/sprites/out/*_raw.png
+tools/sidmod_editor/sprites/out/cmp_*.png
+tools/sidmod_editor/sprites/out/compare*.png
+tools/sidmod_editor/sprites/autogen/
+
 # Save files. The one deliberately shipped save is force-added (see saves/).
 File [A-H].rxdata
 save_snapshot.rxdata

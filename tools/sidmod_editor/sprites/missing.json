@@ -1,0 +1,145 @@
+[
+  {
+    "where": "box0 Apple Woods",
+    "slot": 13,
+    "head": 214,
+    "body": 304,
+    "head_name": "Heracross",
+    "body_name": "Armaldo",
+    "nick": null,
+    "level": 87,
+    "fusion": true
+  },
+  {
+    "where": "box0 Apple Woods",
+    "slot": 17,
+    "head": 355,
+    "body": 360,
+    "head_name": "Breloom",
+    "body_name": "Whimsicott",
+    "nick": null,
+    "level": 68,
+    "fusion": true
+  },
+  {
+    "where": "box7 Haina Desert",
+    "slot": 21,
+    "head": 105,
+    "body": 212,
+    "head_name": "Marowak",
+    "body_name": "Scizor",
+    "nick": null,
+    "level": 40,
+    "fusion": true
+  },
+  {
+    "where": "box12 Crystal Cave",
+    "slot": 16,
+    "head": 357,
+    "body": 377,
+    "head_name": "Banette",
+    "body_name": "Hydreigon",
+    "nick": null,
+    "level": 100,
+    "fusion": true
+  },
+  {
+    "where": "box15 Deep Abyss",
+    "slot": 17,
+    "head": 211,
+    "body": 224,
+    "head_name": "Qwilfish",
+    "body_name": "Octillery",
+    "nick": null,
+    "level": 76,
+    "fusion": true
+  },
+  {
+    "where": "box17 Rain",
+    "slot": 23,
+    "head": 230,
+    "body": 324,
+    "head_name": "Kingdra",
+    "body_name": "Empoleon",
+    "nick": "Hydroking",
+    "level": 100,
+    "fusion": true
+  },
+  {
+    "where": "box19 Bench",
+    "slot": 2,
+    "head": 134,
+    "body": 449,
+    "head_name": "Vaporeon",
+    "body_name": "Registeel",
+    "nick": null,
+    "level": 100,
+    "fusion": true
+  },
+  {
+    "where": "box20 OU",
+    "slot": 7,
+    "head": 227,
+    "body": 364,
+    "head_name": "Skarmory",
+    "body_name": "Ferrothorn",
+    "nick": null,
+    "level": 100,
+    "fusion": true
+  },
+  {
+    "where": "box20 OU",
+    "slot": 13,
+    "head": 196,
+    "body": 293,
+    "head_name": "Espeon",
+    "body_name": "Metagross",
+    "nick": null,
+    "level": 100,
+    "fusion": true
+  },
+  {
+    "where": "box22 Ubers",
+    "slot": 15,
+    "head": 243,
+    "body": 379,
+    "head_name": "Raikou",
+    "body_name": "Latios",
+    "nick": "Voltseer",
+    "level": 100,
+    "fusion": true
+  },
+  {
+    "where": "box33 Squads 3",
+    "slot": 12,
+    "head": 467,
+    "body": 348,
+    "head_name": "Meloetta",
+    "body_name": "Genesect",
+    "nick": null,
+    "level": 100,
+    "fusion": true
+  },
+  {
+    "where": "box38 OU",
+    "slot": 14,
+    "head": 344,
+    "body": 374,
+    "head_name": "Palkia",
+    "body_name": "Volcarona",
+    "nick": null,
+    "level": 100,
+    "fusion": true
+  },
+  {
+    "where": "box39 Ubers",
+    "slot": 9,
+    "head": 347,
+    "body": 349,
+    "head_name": "Darkrai",
+    "body_name": "Reshiram",
+    "nick": null,
+    "level": 100,
+    "fusion": true
+  }
+]
