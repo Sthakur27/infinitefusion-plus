@@ -10,13 +10,15 @@ param(
 $ErrorActionPreference = "Stop"
 $rb  = "C:\Ruby31-x64\bin\ruby.exe"
 $dir = $PSScriptRoot
+# Engine boot reads a RELATIVE "Data/Scripts.rxdata", so workers must run from the game root.
+$gameRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..")).Path
 $logDir = Join-Path $env:TEMP "sim_workers"
 New-Item -ItemType Directory -Force -Path $logDir | Out-Null
 
 $procs = @()
 for ($i = 0; $i -lt $Workers; $i++) {
   $args = @("`"$dir\battle_worker.rb`"", $Tag, $Model, $Cap, $i, $Workers, $Games)
-  $procs += Start-Process -FilePath $rb -ArgumentList $args -PassThru -WindowStyle Hidden `
+  $procs += Start-Process -FilePath $rb -ArgumentList $args -PassThru -WindowStyle Hidden -WorkingDirectory $gameRoot `
               -RedirectStandardError (Join-Path $logDir "w$i.err") -RedirectStandardOutput (Join-Path $logDir "w$i.out")
 }
 Write-Output "launched $Workers workers for '$Tag' (cap $Cap, model $Model); waiting..."

@@ -4,8 +4,8 @@ require_relative 'agent_battle'
 require_relative 'roster'
 SimEngine.boot
 $DEBUG = false
-field = Roster.field(File.join(__dir__, 'reports', 'round2'))
-a, b = 'Squads', 'Sun'
+field = Roster.field(File.join(__dir__, 'reports', 'hf'))
+a, b = 'Sand', 'Squads'
 dec, log, tally = SimAgent.series(-> { BuildTeam.team(field[a]) }, -> { BuildTeam.team(field[b]) },
                                   SimAgent.claude_policy(Roster.plan(a), model: 'claude-haiku-4-5-20251001'),
                                   SimAgent.claude_policy(Roster.plan(b), model: 'claude-haiku-4-5-20251001'),

@@ -1,0 +1,1342 @@
+{
+  "pokemon": [
+    {
+      "box": 17,
+      "slot": 11,
+      "label": "Gengar/Omastar",
+      "level": 100,
+      "nature": "MODEST",
+      "ability": "LEVITATE",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 0,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 252,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "ivs": {
+        "ATTACK": 0
+      },
+      "moves": [
+        "SHELLSMASH",
+        "SHADOWBALL",
+        "HYDROPUMP",
+        "ICEBEAM"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 17,
+      "slot": 14,
+      "label": "Goodra/Slaking",
+      "level": 100,
+      "nature": "ADAMANT",
+      "ability": "SAPSIPPER",
+      "item": "LEFTOVERS",
+      "evs": {
+        "HP": 252,
+        "ATTACK": 252,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 4,
+        "SPEED": 0
+      },
+      "moves": [
+        "BULKUP",
+        "RETURN",
+        "EARTHQUAKE",
+        "ICEPUNCH"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 17,
+      "slot": 16,
+      "label": "Gyarados/Scizor",
+      "level": 100,
+      "nature": "JOLLY",
+      "ability": "MOXIE",
+      "item": "LEFTOVERS",
+      "evs": {
+        "HP": 0,
+        "ATTACK": 252,
+        "DEFENSE": 4,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "DRAGONDANCE",
+        "WATERFALL",
+        "IRONHEAD",
+        "EARTHQUAKE"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 17,
+      "slot": 17,
+      "label": "Ninjask/Bisharp",
+      "level": 100,
+      "nature": "ADAMANT",
+      "ability": "SPEEDBOOST",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 252,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "SWORDSDANCE",
+        "IRONHEAD",
+        "KNOCKOFF",
+        "XSCISSOR"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 17,
+      "slot": 18,
+      "label": "Raikou/Suicune",
+      "level": 100,
+      "nature": "TIMID",
+      "ability": "VOLTABSORB",
+      "item": "LEFTOVERS",
+      "evs": {
+        "HP": 0,
+        "ATTACK": 0,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 252,
+        "SPECIAL_DEFENSE": 4,
+        "SPEED": 252
+      },
+      "ivs": {
+        "ATTACK": 0
+      },
+      "moves": [
+        "CALMMIND",
+        "THUNDERBOLT",
+        "SURF",
+        "ICEBEAM"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 17,
+      "slot": 19,
+      "label": "Gyarados/Garchomp",
+      "level": 100,
+      "nature": "JOLLY",
+      "ability": "MOXIE",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 0,
+        "ATTACK": 252,
+        "DEFENSE": 4,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "DRAGONDANCE",
+        "WATERFALL",
+        "EARTHQUAKE",
+        "ICEFANG"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 18,
+      "slot": 28,
+      "label": "Gliscor/Regigigas",
+      "level": 100,
+      "nature": "ADAMANT",
+      "ability": "POISONHEAL",
+      "item": "TOXICORB",
+      "evs": {
+        "HP": 252,
+        "ATTACK": 252,
+        "DEFENSE": 4,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 0
+      },
+      "moves": [
+        "SWORDSDANCE",
+        "EARTHQUAKE",
+        "FACADE",
+        "KNOCKOFF"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 19,
+      "slot": 6,
+      "label": "Golisopod/Blaziken",
+      "level": 100,
+      "nature": "ADAMANT",
+      "ability": "SPEEDBOOST",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 252,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "SWORDSDANCE",
+        "DRAINPUNCH",
+        "XSCISSOR",
+        "FLAREBLITZ"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 19,
+      "slot": 7,
+      "label": "Lurantis/Infernape",
+      "level": 100,
+      "nature": "ADAMANT",
+      "ability": "CONTRARY",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 252,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "SUPERPOWER",
+        "LEAFBLADE",
+        "KNOCKOFF",
+        "POISONJAB"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 19,
+      "slot": 9,
+      "label": "Metagross/Salamence",
+      "level": 100,
+      "nature": "ADAMANT",
+      "ability": "MOXIE",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 252,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "DRAGONDANCE",
+        "METEORMASH",
+        "EARTHQUAKE",
+        "ICEPUNCH"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 21,
+      "slot": 0,
+      "label": "Zoroark/Alakazam",
+      "level": 100,
+      "nature": "TIMID",
+      "ability": "MAGICGUARD",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 0,
+        "ATTACK": 0,
+        "DEFENSE": 4,
+        "SPECIAL_ATTACK": 252,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "ivs": {
+        "ATTACK": 0
+      },
+      "moves": [
+        "NASTYPLOT",
+        "DARKPULSE",
+        "PSYCHIC",
+        "FOCUSBLAST"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 21,
+      "slot": 2,
+      "label": "Golem/Steelix",
+      "level": 100,
+      "nature": "CAREFUL",
+      "ability": "STURDY",
+      "item": "LEFTOVERS",
+      "evs": {
+        "HP": 252,
+        "ATTACK": 0,
+        "DEFENSE": 4,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 252,
+        "SPEED": 0
+      },
+      "moves": [
+        "STEALTHROCK",
+        "EARTHQUAKE",
+        "ROCKSLIDE",
+        "TOXIC"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 21,
+      "slot": 9,
+      "label": "Noivern/Blaziken",
+      "level": 100,
+      "nature": "ADAMANT",
+      "ability": "SPEEDBOOST",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 252,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "SWORDSDANCE",
+        "BRAVEBIRD",
+        "HIJUMPKICK",
+        "EARTHQUAKE"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 21,
+      "slot": 13,
+      "label": "Hakamo-o/Talonflame",
+      "level": 100,
+      "nature": "ADAMANT",
+      "ability": "GALEWINGS",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 252,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "DRAGONDANCE",
+        "BRAVEBIRD",
+        "DRAGONCLAW",
+        "CLOSECOMBAT"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 21,
+      "slot": 20,
+      "label": "Dusknoir/Blaziken",
+      "level": 100,
+      "nature": "ADAMANT",
+      "ability": "SPEEDBOOST",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 252,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "SWORDSDANCE",
+        "SHADOWCLAW",
+        "HIJUMPKICK",
+        "EARTHQUAKE"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 23,
+      "slot": 0,
+      "label": "Ninetales/Whimsicott",
+      "level": 100,
+      "nature": "TIMID",
+      "ability": "DROUGHT",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 0,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 252,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "ivs": {
+        "ATTACK": 0
+      },
+      "moves": [
+        "NASTYPLOT",
+        "FIREBLAST",
+        "MOONBLAST",
+        "SOLARBEAM"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 23,
+      "slot": 8,
+      "label": "Dragonite/Slaking",
+      "level": 100,
+      "nature": "ADAMANT",
+      "ability": "MULTISCALE",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 252,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "DRAGONDANCE",
+        "DRAGONCLAW",
+        "EARTHQUAKE",
+        "RETURN"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 23,
+      "slot": 9,
+      "label": "Volcarona/Ninetales",
+      "level": 100,
+      "nature": "TIMID",
+      "ability": "DROUGHT",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 0,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 252,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "ivs": {
+        "ATTACK": 0
+      },
+      "moves": [
+        "QUIVERDANCE",
+        "FIREBLAST",
+        "BUGBUZZ",
+        "GIGADRAIN"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 33,
+      "slot": 0,
+      "label": "Regiregi",
+      "level": 100,
+      "nature": "CALM",
+      "ability": "CLEARBODY",
+      "item": "LEFTOVERS",
+      "evs": {
+        "HP": 252,
+        "ATTACK": 0,
+        "DEFENSE": 4,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 252,
+        "SPEED": 0
+      },
+      "ivs": {
+        "ATTACK": 0
+      },
+      "moves": [
+        "STEALTHROCK",
+        "ICEBEAM",
+        "FLASHCANNON",
+        "TOXIC"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 33,
+      "slot": 12,
+      "label": "Lapras/Zekrom",
+      "level": 100,
+      "nature": "ADAMANT",
+      "ability": "TERAVOLT",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 252,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "DRAGONDANCE",
+        "BOLTSTRIKE",
+        "WATERFALL",
+        "DRAGONCLAW"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 34,
+      "slot": 11,
+      "label": "Deoxys/Ninetales",
+      "level": 100,
+      "nature": "TIMID",
+      "ability": "DROUGHT",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 0,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 252,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "ivs": {
+        "ATTACK": 0
+      },
+      "moves": [
+        "NASTYPLOT",
+        "FIREBLAST",
+        "PSYSHOCK",
+        "FOCUSBLAST"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 34,
+      "slot": 13,
+      "label": "Salamence/Groudon",
+      "level": 100,
+      "nature": "ADAMANT",
+      "ability": "MOXIE",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 252,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "SWORDSDANCE",
+        "PRECIPICEBLADES",
+        "DRAGONCLAW",
+        "FIREPUNCH"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 34,
+      "slot": 15,
+      "label": "Goodra/Espeon",
+      "level": 100,
+      "nature": "TIMID",
+      "ability": "MAGICBOUNCE",
+      "item": "LEFTOVERS",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 0,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 252,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "ivs": {
+        "ATTACK": 0
+      },
+      "moves": [
+        "CALMMIND",
+        "DRAGONPULSE",
+        "PSYSHOCK",
+        "FLAMETHROWER"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 37,
+      "slot": 1,
+      "label": "Lucario/Espeon",
+      "level": 100,
+      "nature": "TIMID",
+      "ability": "MAGICBOUNCE",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 0,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 252,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "ivs": {
+        "ATTACK": 0
+      },
+      "moves": [
+        "NASTYPLOT",
+        "AURASPHERE",
+        "PSYSHOCK",
+        "SHADOWBALL"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 37,
+      "slot": 2,
+      "label": "Gliscor/Dusknoir",
+      "level": 100,
+      "nature": "ADAMANT",
+      "ability": "POISONHEAL",
+      "item": "TOXICORB",
+      "evs": {
+        "HP": 252,
+        "ATTACK": 252,
+        "DEFENSE": 4,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 0
+      },
+      "moves": [
+        "SWORDSDANCE",
+        "EARTHQUAKE",
+        "KNOCKOFF",
+        "ROOST"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 37,
+      "slot": 3,
+      "label": "Flygon/Salamence",
+      "level": 100,
+      "nature": "JOLLY",
+      "ability": "MOXIE",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 0,
+        "ATTACK": 252,
+        "DEFENSE": 4,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "DRAGONDANCE",
+        "EARTHQUAKE",
+        "DRAGONCLAW",
+        "FIREPUNCH"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 37,
+      "slot": 6,
+      "label": "Mew/Starmie",
+      "level": 100,
+      "nature": "TIMID",
+      "ability": "NATURALCURE",
+      "item": "LEFTOVERS",
+      "evs": {
+        "HP": 0,
+        "ATTACK": 0,
+        "DEFENSE": 4,
+        "SPECIAL_ATTACK": 252,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "ivs": {
+        "ATTACK": 0
+      },
+      "moves": [
+        "CALMMIND",
+        "PSYSHOCK",
+        "SURF",
+        "RECOVER"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 37,
+      "slot": 7,
+      "label": "Hawlucha/Slaking",
+      "level": 100,
+      "nature": "JOLLY",
+      "ability": "MOLDBREAKER",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 0,
+        "ATTACK": 252,
+        "DEFENSE": 4,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "SWORDSDANCE",
+        "HIJUMPKICK",
+        "RETURN",
+        "SHADOWCLAW"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 37,
+      "slot": 11,
+      "label": "Swamptiliken",
+      "level": 100,
+      "nature": "ADAMANT",
+      "ability": "SPEEDBOOST",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 252,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "PROTECT",
+        "SWORDSDANCE",
+        "FLAREBLITZ",
+        "EARTHQUAKE"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 37,
+      "slot": 12,
+      "label": "Togekiss/Milotic",
+      "level": 100,
+      "nature": "MODEST",
+      "ability": "SERENEGRACE",
+      "item": "LEFTOVERS",
+      "evs": {
+        "HP": 252,
+        "ATTACK": 0,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 252,
+        "SPECIAL_DEFENSE": 4,
+        "SPEED": 0
+      },
+      "ivs": {
+        "ATTACK": 0
+      },
+      "moves": [
+        "MOONBLAST",
+        "SCALD",
+        "AIRSLASH",
+        "ROOST"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 37,
+      "slot": 14,
+      "label": "Azumarill/Electivire",
+      "level": 100,
+      "nature": "ADAMANT",
+      "ability": "HUGEPOWER",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 252,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "AQUAJET",
+        "LIQUIDATION",
+        "PLAYROUGH",
+        "WILDCHARGE"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 37,
+      "slot": 17,
+      "label": "Kyogre/Pikachu",
+      "level": 100,
+      "nature": "MODEST",
+      "ability": "DRIZZLE",
+      "item": "DAMPROCK",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 0,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 252,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "ivs": {
+        "ATTACK": 0
+      },
+      "moves": [
+        "ORIGINPULSE",
+        "THUNDER",
+        "ICEBEAM",
+        "CALMMIND"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 37,
+      "slot": 18,
+      "label": "Dialga/Lucario",
+      "level": 100,
+      "nature": "TIMID",
+      "ability": "INNERFOCUS",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 0,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 252,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "ivs": {
+        "ATTACK": 0
+      },
+      "moves": [
+        "FLASHCANNON",
+        "AURASPHERE",
+        "EARTHPOWER",
+        "NASTYPLOT"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 37,
+      "slot": 21,
+      "label": "Sylveon/Togekiss",
+      "level": 100,
+      "nature": "MODEST",
+      "ability": "PIXILATE",
+      "item": "LEFTOVERS",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 0,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 252,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "ivs": {
+        "ATTACK": 0
+      },
+      "moves": [
+        "HYPERVOICE",
+        "AIRSLASH",
+        "FLAMETHROWER",
+        "CALMMIND"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 37,
+      "slot": 23,
+      "label": "Jirachi/Celebi",
+      "level": 100,
+      "nature": "ADAMANT",
+      "ability": "SERENEGRACE",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 252,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "SWORDSDANCE",
+        "IRONHEAD",
+        "SEEDBOMB",
+        "FIREPUNCH"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 37,
+      "slot": 25,
+      "label": "Sylveon/Genesect",
+      "level": 100,
+      "nature": "MODEST",
+      "ability": "PIXILATE",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 0,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 252,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "ivs": {
+        "ATTACK": 0
+      },
+      "moves": [
+        "HYPERVOICE",
+        "FLASHCANNON",
+        "FLAMETHROWER",
+        "CALMMIND"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 37,
+      "slot": 29,
+      "label": "Rayquaza/Deoxys",
+      "level": 100,
+      "nature": "JOLLY",
+      "ability": "AIRLOCK",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 252,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "DRAGONDANCE",
+        "DRAGONCLAW",
+        "EARTHQUAKE",
+        "EXTREMESPEED"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 38,
+      "slot": 7,
+      "label": "Ampharos/Goodra",
+      "level": 100,
+      "nature": "MODEST",
+      "ability": "SAPSIPPER",
+      "item": "ASSAULTVEST",
+      "evs": {
+        "HP": 252,
+        "ATTACK": 0,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 252,
+        "SPECIAL_DEFENSE": 4,
+        "SPEED": 0
+      },
+      "ivs": {
+        "ATTACK": 0
+      },
+      "moves": [
+        "THUNDERBOLT",
+        "DRAGONPULSE",
+        "ICEBEAM",
+        "FLAMETHROWER"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 38,
+      "slot": 8,
+      "label": "Gallade/Metagross",
+      "level": 100,
+      "nature": "ADAMANT",
+      "ability": "CLEARBODY",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 252,
+        "ATTACK": 252,
+        "DEFENSE": 4,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 0
+      },
+      "moves": [
+        "SWORDSDANCE",
+        "METEORMASH",
+        "CLOSECOMBAT",
+        "BULLETPUNCH"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 38,
+      "slot": 9,
+      "label": "Mewtwo/Darkrai",
+      "level": 100,
+      "nature": "TIMID",
+      "ability": "PRESSURE",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 0,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 252,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "ivs": {
+        "ATTACK": 0
+      },
+      "moves": [
+        "NASTYPLOT",
+        "PSYSTRIKE",
+        "DARKPULSE",
+        "AURASPHERE"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 38,
+      "slot": 11,
+      "label": "Rayquaza/Entei",
+      "level": 100,
+      "nature": "JOLLY",
+      "ability": "FLASHFIRE",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 252,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "DRAGONDANCE",
+        "SACREDFIRE",
+        "DRAGONCLAW",
+        "EARTHQUAKE"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 38,
+      "slot": 14,
+      "label": "Porygon-Z/Greninja",
+      "level": 100,
+      "nature": "TIMID",
+      "ability": "PROTEAN",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 0,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 252,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "ivs": {
+        "ATTACK": 0
+      },
+      "moves": [
+        "NASTYPLOT",
+        "DARKPULSE",
+        "ICEBEAM",
+        "THUNDERBOLT"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 38,
+      "slot": 15,
+      "label": "Rayquaza/Garchomp",
+      "level": 100,
+      "nature": "JOLLY",
+      "ability": "ROUGHSKIN",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 0,
+        "ATTACK": 252,
+        "DEFENSE": 4,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "DRAGONDANCE",
+        "EARTHQUAKE",
+        "DRAGONCLAW",
+        "EXTREMESPEED"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 38,
+      "slot": 26,
+      "label": "Zoroark/Jirachi",
+      "level": 100,
+      "nature": "TIMID",
+      "ability": "SERENEGRACE",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 0,
+        "ATTACK": 0,
+        "DEFENSE": 4,
+        "SPECIAL_ATTACK": 252,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "ivs": {
+        "ATTACK": 0
+      },
+      "moves": [
+        "NASTYPLOT",
+        "DARKPULSE",
+        "PSYSHOCK",
+        "FOCUSBLAST"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 38,
+      "slot": 29,
+      "label": "Giratina/Espeon",
+      "level": 100,
+      "nature": "TIMID",
+      "ability": "MAGICBOUNCE",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 0,
+        "ATTACK": 0,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 252,
+        "SPECIAL_DEFENSE": 4,
+        "SPEED": 252
+      },
+      "ivs": {
+        "ATTACK": 0
+      },
+      "moves": [
+        "CALMMIND",
+        "SHADOWBALL",
+        "PSYSHOCK",
+        "AURASPHERE"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 39,
+      "slot": 8,
+      "label": "Darkrai/Reshiram",
+      "level": 100,
+      "nature": "TIMID",
+      "ability": "TURBOBLAZE",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 0,
+        "ATTACK": 0,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 252,
+        "SPECIAL_DEFENSE": 4,
+        "SPEED": 252
+      },
+      "ivs": {
+        "ATTACK": 0
+      },
+      "moves": [
+        "NASTYPLOT",
+        "BLUEFLARE",
+        "DARKPULSE",
+        "FOCUSBLAST"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 39,
+      "slot": 27,
+      "label": "Ho-Oh/Haxorus",
+      "level": 100,
+      "nature": "JOLLY",
+      "ability": "MOLDBREAKER",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 0,
+        "ATTACK": 252,
+        "DEFENSE": 4,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "DRAGONDANCE",
+        "SACREDFIRE",
+        "DRAGONCLAW",
+        "EARTHQUAKE"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 17,
+      "slot": 23,
+      "label": "Feraligatr/Slaking",
+      "level": 100,
+      "nature": "ADAMANT",
+      "ability": "SHEERFORCE",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 252,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "DRAGONDANCE",
+        "LIQUIDATION",
+        "ICEPUNCH",
+        "CRUNCH"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 17,
+      "slot": 24,
+      "label": "Vaporeon/Dragonite",
+      "level": 100,
+      "nature": "MODEST",
+      "ability": "MULTISCALE",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 252,
+        "ATTACK": 0,
+        "DEFENSE": 4,
+        "SPECIAL_ATTACK": 252,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 0
+      },
+      "ivs": {
+        "ATTACK": 0
+      },
+      "moves": [
+        "SURF",
+        "HURRICANE",
+        "ICEBEAM",
+        "ROOST"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 17,
+      "slot": 25,
+      "label": "Goodra/Toxapex",
+      "level": 100,
+      "nature": "BOLD",
+      "ability": "REGENERATOR",
+      "item": "LEFTOVERS",
+      "evs": {
+        "HP": 252,
+        "ATTACK": 0,
+        "DEFENSE": 252,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 4,
+        "SPEED": 0
+      },
+      "moves": [
+        "SCALD",
+        "DRAGONTAIL",
+        "TOXICSPIKES",
+        "RECOVER"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 17,
+      "slot": 29,
+      "label": "Metagross/Feraligatr",
+      "level": 100,
+      "nature": "ADAMANT",
+      "ability": "SHEERFORCE",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 252,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "DRAGONDANCE",
+        "METEORMASH",
+        "LIQUIDATION",
+        "EARTHQUAKE"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 18,
+      "slot": 25,
+      "label": "Ninjask/Bisharp",
+      "level": 100,
+      "nature": "JOLLY",
+      "ability": "SPEEDBOOST",
+      "item": "LIFEORB",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 252,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "SWORDSDANCE",
+        "IRONHEAD",
+        "KNOCKOFF",
+        "LEECHLIFE"
+      ],
+      "mode": "edit"
+    },
+    {
+      "box": 18,
+      "slot": 26,
+      "label": "Tyranitar/Slaking",
+      "level": 100,
+      "nature": "ADAMANT",
+      "ability": "SANDSTREAM",
+      "item": "LEFTOVERS",
+      "evs": {
+        "HP": 4,
+        "ATTACK": 252,
+        "DEFENSE": 0,
+        "SPECIAL_ATTACK": 0,
+        "SPECIAL_DEFENSE": 0,
+        "SPEED": 252
+      },
+      "moves": [
+        "BULKUP",
+        "STONEEDGE",
+        "RETURN",
+        "EARTHQUAKE"
+      ],
+      "mode": "edit"
+    }
+  ]
+}

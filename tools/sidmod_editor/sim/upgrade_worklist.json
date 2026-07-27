@@ -1,0 +1,1007 @@
+[
+  {
+    "box": 17,
+    "slot": 11,
+    "grp": "fusion",
+    "label": "Gengar/Omastar",
+    "reason": "L74",
+    "level": 74,
+    "item": "REDCARD",
+    "ev_total": 510,
+    "moves": [
+      "SURF",
+      "SHADOWBALL",
+      "NASTYPLOT",
+      "DESTINYBOND"
+    ],
+    "head": 94,
+    "body": 139,
+    "kind": "fusion"
+  },
+  {
+    "box": 17,
+    "slot": 14,
+    "grp": "fusion",
+    "label": "Goodra/Slaking",
+    "reason": "L93",
+    "level": 93,
+    "item": "LEFTOVERS",
+    "ev_total": 510,
+    "moves": [
+      "BULKUP",
+      "RETURN",
+      "POWERWHIP",
+      "EARTHQUAKE"
+    ],
+    "head": 446,
+    "body": 309,
+    "kind": "fusion"
+  },
+  {
+    "box": 17,
+    "slot": 16,
+    "grp": "fusion",
+    "label": "Gyarados/Scizor",
+    "reason": "L68",
+    "level": 68,
+    "item": "LEFTOVERS",
+    "ev_total": 510,
+    "moves": [
+      "WATERFALL",
+      "IRONHEAD",
+      "DRAGONDANCE",
+      "POISONJAB"
+    ],
+    "head": 130,
+    "body": 212,
+    "kind": "fusion"
+  },
+  {
+    "box": 17,
+    "slot": 17,
+    "grp": "fusion",
+    "label": "Ninjask/Bisharp",
+    "reason": "L67",
+    "level": 67,
+    "item": "FOCUSSASH",
+    "ev_total": 510,
+    "moves": [
+      "BATONPASS",
+      "SWORDSDANCE",
+      "PROTECT",
+      "IRONHEAD"
+    ],
+    "head": 356,
+    "body": 331,
+    "kind": "fusion"
+  },
+  {
+    "box": 17,
+    "slot": 18,
+    "grp": "fusion",
+    "label": "Raikou/Suicune",
+    "reason": "L86",
+    "level": 86,
+    "item": "LEFTOVERS",
+    "ev_total": 510,
+    "moves": [
+      "SURF",
+      "ICEBEAM",
+      "THUNDER",
+      "CALMMIND"
+    ],
+    "head": 243,
+    "body": 245,
+    "kind": "fusion"
+  },
+  {
+    "box": 17,
+    "slot": 19,
+    "grp": "fusion",
+    "label": "Gyarados/Garchomp",
+    "reason": "L67",
+    "level": 67,
+    "item": "LEFTOVERS",
+    "ev_total": 510,
+    "moves": [
+      "WATERFALL",
+      "EARTHQUAKE",
+      "CRUNCH",
+      "DRAGONDANCE"
+    ],
+    "head": 130,
+    "body": 299,
+    "kind": "fusion"
+  },
+  {
+    "box": 17,
+    "slot": 23,
+    "grp": "fusion",
+    "label": "Feraligatr/Slaking",
+    "reason": "L69",
+    "level": 69,
+    "item": "LIFEORB",
+    "ev_total": 510,
+    "moves": [
+      "WATERFALL",
+      "DRAGONDANCE",
+      "BODYSLAM",
+      "FIREPUNCH"
+    ],
+    "head": 160,
+    "body": 309,
+    "kind": "fusion"
+  },
+  {
+    "box": 17,
+    "slot": 24,
+    "grp": "fusion",
+    "label": "Vaporeon/Dragonite",
+    "reason": "L68",
+    "level": 68,
+    "item": "LEFTOVERS",
+    "ev_total": 510,
+    "moves": [
+      "HURRICANE",
+      "SURF",
+      "CALMMIND",
+      "THUNDER"
+    ],
+    "head": 134,
+    "body": 149,
+    "kind": "fusion"
+  },
+  {
+    "box": 17,
+    "slot": 25,
+    "grp": "fusion",
+    "label": "Goodra/Toxapex",
+    "reason": "L75",
+    "level": 75,
+    "item": "LEFTOVERS",
+    "ev_total": 510,
+    "moves": [
+      "DRAGONTAIL",
+      "SCALD",
+      "TOXICSPIKES",
+      "REST"
+    ],
+    "head": 446,
+    "body": 455,
+    "kind": "fusion"
+  },
+  {
+    "box": 17,
+    "slot": 29,
+    "grp": "fusion",
+    "label": "Metagross/Feraligatr",
+    "reason": "L50",
+    "level": 50,
+    "item": "LEFTOVERS",
+    "ev_total": 510,
+    "moves": [
+      "CRUNCH",
+      "DRAGONDANCE",
+      "EARTHQUAKE",
+      "IRONHEAD"
+    ],
+    "head": 293,
+    "body": 160,
+    "kind": "fusion"
+  },
+  {
+    "box": 18,
+    "slot": 25,
+    "grp": "fusion",
+    "label": "Ninjask/Bisharp",
+    "reason": "L65",
+    "level": 65,
+    "item": "FOCUSSASH",
+    "ev_total": 510,
+    "moves": [
+      "BATONPASS",
+      "SWORDSDANCE",
+      "PROTECT",
+      "IRONHEAD"
+    ],
+    "head": 356,
+    "body": 331,
+    "kind": "fusion"
+  },
+  {
+    "box": 18,
+    "slot": 26,
+    "grp": "fusion",
+    "label": "Tyranitar/Slaking",
+    "reason": "L96",
+    "level": 96,
+    "item": "LEFTOVERS",
+    "ev_total": 510,
+    "moves": [
+      "DRAGONDANCE",
+      "ROCKSLIDE",
+      "RETURN",
+      "EARTHQUAKE"
+    ],
+    "head": 248,
+    "body": 309,
+    "kind": "fusion"
+  },
+  {
+    "box": 18,
+    "slot": 28,
+    "grp": "fusion",
+    "label": "Gliscor/Regigigas",
+    "reason": "L86",
+    "level": 86,
+    "item": "TOXICORB",
+    "ev_total": 510,
+    "moves": [
+      "SWORDSDANCE",
+      "FACADE",
+      "KNOCKOFF",
+      "EARTHQUAKE"
+    ],
+    "head": 273,
+    "body": 346,
+    "kind": "fusion"
+  },
+  {
+    "box": 19,
+    "slot": 6,
+    "grp": "fusion",
+    "label": "Golisopod/Blaziken",
+    "reason": "L87",
+    "level": 87,
+    "item": "LEFTOVERS",
+    "ev_total": 510,
+    "moves": [
+      "DRAINPUNCH",
+      "SWORDSDANCE",
+      "PSYCHOCUT",
+      "LEAFBLADE"
+    ],
+    "head": 475,
+    "body": 281,
+    "kind": "fusion"
+  },
+  {
+    "box": 19,
+    "slot": 7,
+    "grp": "fusion",
+    "label": "Lurantis/Infernape",
+    "reason": "L87",
+    "level": 87,
+    "item": "LEFTOVERS",
+    "ev_total": 510,
+    "moves": [
+      "SUPERPOWER",
+      "LEAFBLADE",
+      "UTURN",
+      "THUNDERPUNCH"
+    ],
+    "head": 477,
+    "body": 321,
+    "kind": "fusion"
+  },
+  {
+    "box": 19,
+    "slot": 9,
+    "grp": "fusion",
+    "label": "Metagross/Salamence",
+    "reason": "L93",
+    "level": 93,
+    "item": "LEFTOVERS",
+    "ev_total": 510,
+    "moves": [
+      "ICEPUNCH",
+      "DRAGONDANCE",
+      "IRONHEAD",
+      "EARTHQUAKE"
+    ],
+    "head": 293,
+    "body": 336,
+    "kind": "fusion"
+  },
+  {
+    "box": 21,
+    "slot": 0,
+    "grp": "fusion",
+    "label": "Zoroark/Alakazam",
+    "reason": "L69",
+    "level": 69,
+    "item": "",
+    "ev_total": 510,
+    "moves": [
+      "NOBLEROAR",
+      "DRAGONDANCE",
+      "OUTRAGE",
+      "CLOSECOMBAT"
+    ],
+    "head": 338,
+    "body": 65,
+    "kind": "fusion"
+  },
+  {
+    "box": 21,
+    "slot": 2,
+    "grp": "fusion",
+    "label": "Golem/Steelix",
+    "reason": "L46",
+    "level": 46,
+    "item": "",
+    "ev_total": 0,
+    "moves": [
+      "STEALTHROCK",
+      "ROCKBLAST",
+      "EARTHQUAKE",
+      "EXPLOSION"
+    ],
+    "head": 76,
+    "body": 208,
+    "kind": "fusion"
+  },
+  {
+    "box": 21,
+    "slot": 9,
+    "grp": "fusion",
+    "label": "Noivern/Blaziken",
+    "reason": "L87",
+    "level": 87,
+    "item": "LEFTOVERS",
+    "ev_total": 510,
+    "moves": [
+      "DRAINPUNCH",
+      "SWORDSDANCE",
+      "PSYCHOCUT",
+      "LEAFBLADE"
+    ],
+    "head": 441,
+    "body": 281,
+    "kind": "fusion"
+  },
+  {
+    "box": 21,
+    "slot": 13,
+    "grp": "fusion",
+    "label": "Hakamo-o/Talonflame",
+    "reason": "L69",
+    "level": 69,
+    "item": "",
+    "ev_total": 510,
+    "moves": [
+      "NOBLEROAR",
+      "DRAGONDANCE",
+      "OUTRAGE",
+      "CLOSECOMBAT"
+    ],
+    "head": 472,
+    "body": 372,
+    "kind": "fusion"
+  },
+  {
+    "box": 21,
+    "slot": 20,
+    "grp": "fusion",
+    "label": "Dusknoir/Blaziken",
+    "reason": "L94",
+    "level": 94,
+    "item": "LEFTOVERS",
+    "ev_total": 510,
+    "moves": [
+      "CLOSECOMBAT",
+      "SWORDSDANCE",
+      "PROTECT",
+      "SHADOWPUNCH"
+    ],
+    "head": 313,
+    "body": 281,
+    "kind": "fusion"
+  },
+  {
+    "box": 23,
+    "slot": 0,
+    "grp": "fusion",
+    "label": "Ninetales/Whimsicott",
+    "reason": "L90",
+    "level": 90,
+    "item": "LEFTOVERS",
+    "ev_total": 510,
+    "moves": [
+      "UTURN",
+      "TAUNT",
+      "SPORE",
+      "WORRYSEED"
+    ],
+    "head": 38,
+    "body": 360,
+    "kind": "fusion"
+  },
+  {
+    "box": 23,
+    "slot": 8,
+    "grp": "fusion",
+    "label": "Dragonite/Slaking",
+    "reason": "L93",
+    "level": 93,
+    "item": "LEFTOVERS",
+    "ev_total": 510,
+    "moves": [
+      "DRAGONDANCE",
+      "RETURN",
+      "DRAGONCLAW",
+      "EARTHQUAKE"
+    ],
+    "head": 149,
+    "body": 309,
+    "kind": "fusion"
+  },
+  {
+    "box": 23,
+    "slot": 9,
+    "grp": "fusion",
+    "label": "Volcarona/Ninetales",
+    "reason": "L69",
+    "level": 69,
+    "item": "LEFTOVERS",
+    "ev_total": 510,
+    "moves": [
+      "FIERYDANCE",
+      "QUIVERDANCE",
+      "BUGBUZZ",
+      "PSYCHIC"
+    ],
+    "head": 374,
+    "body": 38,
+    "kind": "fusion"
+  },
+  {
+    "box": 33,
+    "slot": 0,
+    "grp": "squads",
+    "label": "Regiregi",
+    "reason": "weak-EV0",
+    "level": 100,
+    "item": "LIGHTCLAY",
+    "ev_total": 0,
+    "moves": [
+      "AURORAVEIL",
+      "ICEBEAM",
+      "FLASHCANNON",
+      "THUNDERWAVE"
+    ],
+    "species": "REGITRIO",
+    "kind": "mono"
+  },
+  {
+    "box": 33,
+    "slot": 12,
+    "grp": "squads",
+    "label": "Lapras/Zekrom",
+    "reason": "L92",
+    "level": 92,
+    "item": "LEFTOVERS",
+    "ev_total": 510,
+    "moves": [
+      "WATERFALL",
+      "PLASMAFISTS",
+      "DRAGONDANCE",
+      "IRONHEAD"
+    ],
+    "head": 131,
+    "body": 350,
+    "kind": "fusion"
+  },
+  {
+    "box": 34,
+    "slot": 11,
+    "grp": "squads",
+    "label": "Deoxys/Ninetales",
+    "reason": "L81",
+    "level": 81,
+    "item": "LEFTOVERS",
+    "ev_total": 510,
+    "moves": [
+      "FLAMETHROWER",
+      "PSYCHIC",
+      "NASTYPLOT",
+      "SOLARBEAM"
+    ],
+    "head": 380,
+    "body": 38,
+    "kind": "fusion"
+  },
+  {
+    "box": 34,
+    "slot": 13,
+    "grp": "squads",
+    "label": "Salamence/Groudon",
+    "reason": "weak-EV0",
+    "level": 100,
+    "item": "LEFTOVERS",
+    "ev_total": 0,
+    "moves": [
+      "EARTHQUAKE",
+      "ZENHEADBUTT",
+      "BULKUP",
+      "SOLARBEAM"
+    ],
+    "head": 336,
+    "body": 341,
+    "kind": "fusion"
+  },
+  {
+    "box": 34,
+    "slot": 15,
+    "grp": "squads",
+    "label": "Goodra/Espeon",
+    "reason": "L89",
+    "level": 89,
+    "item": "LEFTOVERS",
+    "ev_total": 510,
+    "moves": [
+      "PSYCHIC",
+      "DRAGONPULSE",
+      "CALMMIND",
+      "SURF"
+    ],
+    "head": 446,
+    "body": 196,
+    "kind": "fusion"
+  },
+  {
+    "box": 37,
+    "slot": 1,
+    "grp": "vanilla",
+    "label": "Lucario/Espeon",
+    "reason": "L71",
+    "level": 71,
+    "item": "TWISTEDSPOON",
+    "ev_total": 510,
+    "moves": [
+      "AURASPHERE",
+      "CALMMIND",
+      "SHADOWBALL",
+      "PSYCHIC"
+    ],
+    "head": 296,
+    "body": 196,
+    "kind": "fusion"
+  },
+  {
+    "box": 37,
+    "slot": 2,
+    "grp": "vanilla",
+    "label": "Gliscor/Dusknoir",
+    "reason": "L65",
+    "level": 65,
+    "item": "TOXICORB",
+    "ev_total": 510,
+    "moves": [
+      "NIGHTSLASH",
+      "EARTHQUAKE",
+      "SHADOWSNEAK",
+      "SKYUPPERCUT"
+    ],
+    "head": 273,
+    "body": 313,
+    "kind": "fusion"
+  },
+  {
+    "box": 37,
+    "slot": 3,
+    "grp": "vanilla",
+    "label": "Flygon/Salamence",
+    "reason": "L72",
+    "level": 72,
+    "item": "LEFTOVERS",
+    "ev_total": 510,
+    "moves": [
+      "BRICKBREAK",
+      "FLY",
+      "EARTHQUAKE",
+      "DRAGONDANCE"
+    ],
+    "head": 334,
+    "body": 336,
+    "kind": "fusion"
+  },
+  {
+    "box": 37,
+    "slot": 6,
+    "grp": "vanilla",
+    "label": "Mew/Starmie",
+    "reason": "L88",
+    "level": 88,
+    "item": "",
+    "ev_total": 0,
+    "moves": [
+      "DRAGONDANCE",
+      "MINIMIZE",
+      "BATONPASS",
+      "COSMICPOWER"
+    ],
+    "head": 151,
+    "body": 121,
+    "kind": "fusion"
+  },
+  {
+    "box": 37,
+    "slot": 7,
+    "grp": "vanilla",
+    "label": "Hawlucha/Slaking",
+    "reason": "no-item",
+    "level": 100,
+    "item": "",
+    "ev_total": 0,
+    "moves": [
+      "HIJUMPKICK",
+      "CHIPAWAY",
+      "COUNTER",
+      "FLAIL"
+    ],
+    "head": 456,
+    "body": 309,
+    "kind": "fusion"
+  },
+  {
+    "box": 37,
+    "slot": 11,
+    "grp": "vanilla",
+    "label": "Swamptiliken",
+    "reason": "L51",
+    "level": 51,
+    "item": "",
+    "ev_total": 510,
+    "moves": [
+      "BLAZEKICK",
+      "WATERFALL",
+      "LEAFBLADE",
+      "SWORDSDANCE"
+    ],
+    "species": "SWAMPTILIKEN",
+    "kind": "mono"
+  },
+  {
+    "box": 37,
+    "slot": 12,
+    "grp": "vanilla",
+    "label": "Togekiss/Milotic",
+    "reason": "L5",
+    "level": 5,
+    "item": "",
+    "ev_total": 0,
+    "moves": [
+      "SKYATTACK",
+      "EXTREMESPEED",
+      "AURASPHERE",
+      "AIRSLASH"
+    ],
+    "head": 269,
+    "body": 335,
+    "kind": "fusion"
+  },
+  {
+    "box": 37,
+    "slot": 14,
+    "grp": "vanilla",
+    "label": "Azumarill/Electivire",
+    "reason": "L72",
+    "level": 72,
+    "item": "LEFTOVERS",
+    "ev_total": 510,
+    "moves": [
+      "PLAYROUGH",
+      "BRICKBREAK",
+      "THUNDERPUNCH",
+      "WATERFALL"
+    ],
+    "head": 184,
+    "body": 267,
+    "kind": "fusion"
+  },
+  {
+    "box": 37,
+    "slot": 17,
+    "grp": "vanilla",
+    "label": "Kyogre/Pikachu",
+    "reason": "L85",
+    "level": 85,
+    "item": "LIGHTBALL",
+    "ev_total": 0,
+    "moves": [
+      "SURF",
+      "THUNDER",
+      "HYDROPUMP",
+      "CALMMIND"
+    ],
+    "head": 340,
+    "body": 25,
+    "kind": "fusion"
+  },
+  {
+    "box": 37,
+    "slot": 18,
+    "grp": "vanilla",
+    "label": "Dialga/Lucario",
+    "reason": "L75",
+    "level": 75,
+    "item": "",
+    "ev_total": 0,
+    "moves": [
+      "FLASHCANNON",
+      "QUICKGUARD",
+      "AURASPHERE",
+      "IRONTAIL"
+    ],
+    "head": 343,
+    "body": 296,
+    "kind": "fusion"
+  },
+  {
+    "box": 37,
+    "slot": 21,
+    "grp": "vanilla",
+    "label": "Sylveon/Togekiss",
+    "reason": "L5",
+    "level": 5,
+    "item": "",
+    "ev_total": 0,
+    "moves": [
+      "HELPINGHAND",
+      "TACKLE",
+      "TAILWHIP",
+      "SANDATTACK"
+    ],
+    "head": 339,
+    "body": 269,
+    "kind": "fusion"
+  },
+  {
+    "box": 37,
+    "slot": 23,
+    "grp": "vanilla",
+    "label": "Jirachi/Celebi",
+    "reason": "L43",
+    "level": 43,
+    "item": "",
+    "ev_total": 0,
+    "moves": [
+      "HEALBELL",
+      "SAFEGUARD",
+      "MAGICALLEAF",
+      "ANCIENTPOWER"
+    ],
+    "head": 381,
+    "body": 251,
+    "kind": "fusion"
+  },
+  {
+    "box": 37,
+    "slot": 25,
+    "grp": "vanilla",
+    "label": "Sylveon/Genesect",
+    "reason": "L95",
+    "level": 95,
+    "item": "",
+    "ev_total": 2,
+    "moves": [
+      "LIGHTSCREEN",
+      "MOONBLAST",
+      "TECHNOBLAST",
+      "PSYCHUP"
+    ],
+    "head": 339,
+    "body": 348,
+    "kind": "fusion"
+  },
+  {
+    "box": 37,
+    "slot": 29,
+    "grp": "vanilla",
+    "label": "Rayquaza/Deoxys",
+    "reason": "L90",
+    "level": 90,
+    "item": "",
+    "ev_total": 510,
+    "moves": [
+      "COSMICPOWER",
+      "EXTREMESPEED",
+      "DRAGONPULSE",
+      "DRAGONDANCE"
+    ],
+    "head": 342,
+    "body": 380,
+    "kind": "fusion"
+  },
+  {
+    "box": 38,
+    "slot": 7,
+    "grp": "vanilla",
+    "label": "Ampharos/Goodra",
+    "reason": "L7",
+    "level": 7,
+    "item": "",
+    "ev_total": 0,
+    "moves": [
+      "TACKLE",
+      "GROWL",
+      "THUNDERSHOCK",
+      "THUNDERWAVE"
+    ],
+    "head": 181,
+    "body": 446,
+    "kind": "fusion"
+  },
+  {
+    "box": 38,
+    "slot": 8,
+    "grp": "vanilla",
+    "label": "Gallade/Metagross",
+    "reason": "no-item",
+    "level": 100,
+    "item": "",
+    "ev_total": 510,
+    "moves": [
+      "BULKUP",
+      "BULLETPUNCH",
+      "CLOSECOMBAT",
+      "PSYCHOCUT"
+    ],
+    "head": 288,
+    "body": 293,
+    "kind": "fusion"
+  },
+  {
+    "box": 38,
+    "slot": 9,
+    "grp": "vanilla",
+    "label": "Mewtwo/Darkrai",
+    "reason": "L68",
+    "level": 68,
+    "item": "",
+    "ev_total": 0,
+    "moves": [
+      "NIGHTMARE",
+      "PSYCHIC",
+      "HAZE",
+      "DARKVOID"
+    ],
+    "head": 150,
+    "body": 347,
+    "kind": "fusion"
+  },
+  {
+    "box": 38,
+    "slot": 11,
+    "grp": "vanilla",
+    "label": "Rayquaza/Entei",
+    "reason": "weak-EV0",
+    "level": 100,
+    "item": "LEFTOVERS",
+    "ev_total": 0,
+    "moves": [
+      "DRAGONASCENT",
+      "DRAGONCLAW",
+      "SACREDFIRE",
+      "DRAGONDANCE"
+    ],
+    "head": 342,
+    "body": 244,
+    "kind": "fusion"
+  },
+  {
+    "box": 38,
+    "slot": 14,
+    "grp": "vanilla",
+    "label": "Porygon-Z/Greninja",
+    "reason": "L20",
+    "level": 20,
+    "item": "",
+    "ev_total": 0,
+    "moves": [
+      "DISCHARGE",
+      "LOCKON",
+      "TRIATTACK",
+      "MAGICCOAT"
+    ],
+    "head": 275,
+    "body": 487,
+    "kind": "fusion"
+  },
+  {
+    "box": 38,
+    "slot": 15,
+    "grp": "vanilla",
+    "label": "Rayquaza/Garchomp",
+    "reason": "L95",
+    "level": 95,
+    "item": "",
+    "ev_total": 0,
+    "moves": [
+      "FLY",
+      "HYPERVOICE",
+      "OUTRAGE",
+      "HYPERBEAM"
+    ],
+    "head": 342,
+    "body": 299,
+    "kind": "fusion"
+  },
+  {
+    "box": 38,
+    "slot": 26,
+    "grp": "vanilla",
+    "label": "Zoroark/Jirachi",
+    "reason": "L68",
+    "level": 68,
+    "item": "",
+    "ev_total": 96,
+    "moves": [
+      "REST",
+      "DARKPULSE",
+      "NASTYPLOT",
+      "PSYCHIC"
+    ],
+    "head": 338,
+    "body": 381,
+    "kind": "fusion"
+  },
+  {
+    "box": 38,
+    "slot": 29,
+    "grp": "vanilla",
+    "label": "Giratina/Espeon",
+    "reason": "L92",
+    "level": 92,
+    "item": "LEFTOVERS",
+    "ev_total": 510,
+    "moves": [
+      "SHADOWBALL",
+      "PSYCHIC",
+      "AURASPHERE",
+      "CALMMIND"
+    ],
+    "head": 345,
+    "body": 196,
+    "kind": "fusion"
+  },
+  {
+    "box": 39,
+    "slot": 8,
+    "grp": "vanilla",
+    "label": "Darkrai/Reshiram",
+    "reason": "L75",
+    "level": 75,
+    "item": "",
+    "ev_total": 510,
+    "moves": [
+      "NASTYPLOT",
+      "MOONGEISTBEAM",
+      "FUSIONFLARE",
+      "DARKPULSE"
+    ],
+    "head": 347,
+    "body": 349,
+    "kind": "fusion"
+  },
+  {
+    "box": 39,
+    "slot": 27,
+    "grp": "vanilla",
+    "label": "Ho-Oh/Haxorus",
+    "reason": "weak-EV0",
+    "level": 100,
+    "item": "LEFTOVERS",
+    "ev_total": 0,
+    "moves": [
+      "TAUNT",
+      "DRAGONPULSE",
+      "SWORDSDANCE",
+      "SACREDFIRE"
+    ],
+    "head": 250,
+    "body": 368,
+    "kind": "fusion"
+  }
+]

@@ -10,9 +10,19 @@ IN, OUT = ARGV[0], ARGV[1]
 TABLE = JSON.parse(File.read(File.join(__dir__, 'species_table.json')))
 # Optional spec (ARGV[2]): slots that replace/edit is ALLOWED to change.
 ALLOWED = Set.new
+ALLOWED_BOX = Set.new   # boxes whose @name a rename_box entry may change
 if ARGV[2] && File.exist?(ARGV[2])
   sp = JSON.parse(File.read(ARGV[2])) rescue {}
-  (sp['pokemon'] || []).each { |e| ALLOWED << "#{e['box'].to_i}:#{e['slot'].to_i}" if %w[replace edit].include?(e['mode']) }
+  (sp['pokemon'] || []).each do |e|
+    if e['mode'] == 'move'
+      ALLOWED << "#{e['from_box'].to_i}:#{e['from_slot'].to_i}"   # source becomes nil
+      ALLOWED << "#{e['box'].to_i}:#{e['slot'].to_i}"             # dest gains the mon
+    elsif e['mode'] == 'rename_box'
+      ALLOWED_BOX << e['box'].to_i                                # intended box-name change
+    elsif %w[replace edit delete].include?(e['mode'])
+      ALLOWED << "#{e['box'].to_i}:#{e['slot'].to_i}"
+    end
+  end
 end
 def ivg(o,n) o.instance_variable_get(n) end
 
@@ -61,7 +71,7 @@ problems << "box count changed" if abx.length != bbx.length
 added = []
 abx.each_index do |bi|
   as = ivg(abx[bi], :@pokemon); bs = ivg(bbx[bi], :@pokemon)
-  problems << "box #{bi+1} name changed" unless deep_eq?(ivg(abx[bi], :@name), ivg(bbx[bi], :@name))
+  problems << "box #{bi+1} name changed" unless deep_eq?(ivg(abx[bi], :@name), ivg(bbx[bi], :@name)) || ALLOWED_BOX.include?(bi)
   as.each_index do |si|
     am, bm = as[si], bs[si]
     next if am.nil? && bm.nil?

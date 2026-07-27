@@ -170,6 +170,23 @@ end
 # Edit an EXISTING mon in place (keeps species/PID/EVs/nature/level/stats).
 # Only touches item / ability / moves / nickname — so no stat recompute is needed.
 # Used for mons we can't rebuild (triple fusions) or just want to finish.
+# Base stats + growth rate for an EXISTING mon (fusion :B<body>H<head> or a mono species id),
+# so 'edit' can recompute stats when level/EVs/IVs/nature change (preserving species identity).
+def base_growth_for(pk, errors, idx)
+  s = ivg(pk, :@species)
+  if s.is_a?(Symbol) && s.to_s =~ /\AB(\d+)H(\d+)\z/
+    hd = $2; bd = $1
+    (errors << "#[#{idx}] edit: unknown fusion species #{s}"; return [nil, nil]) unless TABLE[hd] && TABLE[bd]
+    [PokeMath.fused_base_stats(TABLE[hd]['base_stats'], TABLE[bd]['base_stats']),
+     PokeMath.fusion_growth_rate(TABLE[hd]['growth_rate'], TABLE[bd]['growth_rate'])]
+  else
+    dx = species_dex(s.to_s)
+    (errors << "#[#{idx}] edit: unknown species #{s}"; return [nil, nil]) unless dx && TABLE[dx.to_s]
+    rec = TABLE[dx.to_s]
+    [rec['base_stats'], rec['growth_rate']]
+  end
+end
+
 def apply_edit(boxes, e, errors, idx)
   bi = e['box'].to_i; si = e['slot'].to_i
   box = boxes[bi]
@@ -205,6 +222,29 @@ def apply_edit(boxes, e, errors, idx)
     pk.instance_variable_set(:@moves, newmoves)
     pk.instance_variable_set(:@first_moves, syms.map(&:to_sym))
   end
+  # level / EVs / IVs / nature -> recompute stats IN PLACE (species identity preserved).
+  if e.key?('level') || e.key?('evs') || e.key?('ivs') || e.key?('nature')
+    bs, gr = base_growth_for(pk, errors, idx)
+    return nil unless bs
+    level = e['level'] ? e['level'].to_i.clamp(1, 100) : (ivg(pk, :@level) || 100)
+    ivh = {}; evh = {}
+    STAT_SYMS.each do |ssym|
+      iv_in = e['ivs'] ? (e['ivs'][ssym.to_s] || e['ivs'][ssym.to_s.upcase]) : nil
+      ev_in = e['evs'] ? (e['evs'][ssym.to_s] || e['evs'][ssym.to_s.upcase]) : nil
+      ivh[ssym] = (iv_in.nil? ? 31 : iv_in.to_i).clamp(0, 31)
+      evh[ssym] = (ev_in.nil? ? 0  : ev_in.to_i).clamp(0, 252)
+    end
+    ivs(pk, :@iv, ivh); ivs(pk, :@ev, evh); ivs(pk, :@ivMaxed, STAT_SYMS.map { |s| [s, nil] }.to_h)
+    nat = e['nature'] ? norm(e['nature']) : ivg(pk, :@nature).to_s
+    nat = 'HARDY' unless PokeMath::NATURES.key?(nat)
+    ivs(pk, :@nature, nat.to_sym); ivs(pk, :@nature_for_stats, nil)
+    ivs(pk, :@level, level); ivs(pk, :@exp, PokeMath.min_exp(gr, level))
+    ivs(pk, :@happiness, 255)   # max happiness so Return/Frustration/happiness moves work correctly
+    st = PokeMath.all_stats(bs, level, ivh, evh, nat)
+    ivs(pk, :@totalhp, st['HP']); ivs(pk, :@hp, st['HP'])
+    ivs(pk, :@attack, st['ATTACK']); ivs(pk, :@defense, st['DEFENSE'])
+    ivs(pk, :@spatk, st['SPECIAL_ATTACK']); ivs(pk, :@spdef, st['SPECIAL_DEFENSE']); ivs(pk, :@speed, st['SPEED'])
+  end
   { label: (pk.instance_variable_get(:@name) || 'mon'), box: bi + 1, slot: si + 1, mode: 'edit', box_name: (box.instance_variable_get(:@name)) }
 end
 
@@ -219,7 +259,45 @@ errors = []
 built = []
 placed = []
 (spec['pokemon'] || []).each_with_index do |e, i|
-  if (e['mode'] || 'add') == 'edit'
+  mode = e['mode'] || 'add'
+  if mode == 'delete'
+    bi = e['box'].to_i; si = e['slot'].to_i
+    box = boxes[bi]
+    slots = box ? ivg(box, :@pokemon) : nil
+    if slots && si >= 0 && si < slots.length && slots[si]
+      lbl = (slots[si].instance_variable_get(:@name) || 'mon')
+      slots[si] = nil
+      placed << { 'label' => lbl, 'box' => bi + 1, 'slot' => si + 1, 'mode' => 'delete', 'box_name' => ivg(box, :@name) }
+    end
+  elsif mode == 'move'
+    sbi = e['from_box'].to_i; ssi = e['from_slot'].to_i
+    dbi = e['box'].to_i; dsi = e['slot'].to_i
+    sbox = boxes[sbi]; dbox = boxes[dbi]
+    sslots = sbox ? ivg(sbox, :@pokemon) : nil
+    dslots = dbox ? ivg(dbox, :@pokemon) : nil
+    pk = sslots ? sslots[ssi] : nil
+    if pk.nil?
+      errors << "#[#{i + 1}] move source box #{sbi + 1} slot #{ssi + 1} is empty"
+    elsif dslots.nil? || dsi < 0 || dsi >= dslots.length
+      errors << "#[#{i + 1}] move dest box #{dbi + 1} slot #{dsi + 1} out of range"
+    elsif dslots[dsi]
+      errors << "#[#{i + 1}] move dest box #{dbi + 1} slot #{dsi + 1} already occupied"
+    else
+      lbl = (ivg(pk, :@name) || 'mon')
+      dslots[dsi] = pk; sslots[ssi] = nil
+      placed << { 'label' => lbl, 'box' => dbi + 1, 'slot' => dsi + 1, 'mode' => 'move', 'from' => "#{sbi + 1}:#{ssi + 1}", 'box_name' => ivg(dbox, :@name) }
+    end
+  elsif mode == 'rename_box'
+    bi = e['box'].to_i
+    box = boxes[bi]
+    if box.nil?
+      errors << "#[#{i + 1}] rename_box: no box #{bi + 1}"
+    else
+      old = ivg(box, :@name)
+      box.instance_variable_set(:@name, e['name'].to_s)
+      placed << { 'label' => '(box rename)', 'box' => bi + 1, 'mode' => 'rename_box', 'box_name' => e['name'].to_s, 'from' => old.to_s }
+    end
+  elsif mode == 'edit'
     r = apply_edit(boxes, e, errors, i + 1)
     placed << r if r
   else

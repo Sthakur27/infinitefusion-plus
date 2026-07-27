@@ -2,12 +2,13 @@
 # SAME nature, so the auditor can judge "does the fusion beat mono?".  Writes reports/audit/<team>.txt
 require 'json'
 require 'fileutils'
-FIELD = JSON.parse(File.read(File.join(__dir__, 'reports', 'hf', 'field_specs.json')))  # parse before boot
+TAG = ARGV[0] || 'hf'
+FIELD = JSON.parse(File.read(File.join(__dir__, 'reports', TAG, 'field_specs.json')))  # parse before boot
 require_relative 'build_team'
 require_relative 'editor'
 SimEngine.boot
 $DEBUG = false
-OUT = File.join(__dir__, 'reports', 'audit'); FileUtils.mkdir_p(OUT)
+OUT = File.join(__dir__, 'reports', "#{TAG}_audit"); FileUtils.mkdir_p(OUT)
 
 def stat_line(pk)
   types = (pk.types rescue [pk.type1, pk.type2]).compact.map(&:to_s).join('/')
