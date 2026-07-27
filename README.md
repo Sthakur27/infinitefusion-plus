@@ -31,7 +31,8 @@ Built on upstream **6.8.2**. Tracks upstream's `releases` branch — see [FORK.m
 
 | Feature | What it does |
 |---|---|
-| **Random Battle** | Pause menu → fight a 6-mon team assembled from your own **Lv100 + held-item** PC pool. Four modes: `{Chaos, Smart} × {OU, Ubers}`. Chaos is Species-Clause-legal random; Smart greedily seeds a hazard-setter, a wall and a pivot, then fills for offensive and typing variety. OU filters legendaries except the sub-600 birds/beasts/golems. |
+| **Random Battle** | Pause menu → fight a 6-mon team assembled from your own **Lv100 + held-item** PC pool. Six modes: `{Chaos, Smart, Smart v2} × {OU, Ubers}`. Chaos is Species-Clause-legal random; Smart greedily seeds a hazard-setter, a wall and a pivot, then fills for offensive and typing variety. OU filters legendaries except the sub-600 birds/beasts/golems. |
+| **Smart v2 — archetype teams** | Picking a `Smart v2` row opens a second menu: **Random archetype**, or one of eleven named plans — rain, sun, sand, hyper offense, balance, hazard stack, trick room, priority, choice scarf, bulky setup, stall. Each is built to *execute that plan* (a rain team leads its Drizzle setter and stacks Swift Swim payoff mons), not merely to look balanced. Ported from the offline ladder's team generator; it also **chooses the lead**, which the other modes don't. If your PC can't supply the parts for a plan, it says so instead of shipping a generic team with the wrong label. |
 | **Items are refunded** | A practice battle shouldn't cost you a Life Orb. Consumed held items and bag stock are restored afterwards — for both sides. |
 | **Smart Trainer AI** | A plan-based enemy AI (`055_sidmod/SmartTrainerAI.rb`) that compares attacking, setup, status, healing, phazing and switching as competing plans, with a beam search over an abstract state and an expected-damage model. |
 | **No item cheese** | Enemy trainers never use Full Restore / potions / X items mid-battle. |
@@ -45,6 +46,14 @@ regression (the original suppression multipliers were ~37–41 ELO *worse* than 
 Deeper search, switch prediction and team-level planning were all implemented, measured, and
 reverted. `sidmod.txt` records what was tried so it isn't redone blindly. It plays *visibly* better
 (it heals, statuses and phazes instead of mashing attacks) without being stronger on the scoreboard.
+
+**On Smart v2, honestly:** the eleven plans are *not* balanced against each other. Measured against
+the old Smart builder over 880 mirrored games, they ranged from **0.41** (trick room) to **0.88**
+(rain) — so "Random archetype" is partly a difficulty lottery, and picking rain is close to picking
+hard mode. The overall edge over Smart v1 is 0.599, which is real; the per-plan spread is only 80
+games each and shouldn't be read as a ranking beyond "rain strong, trick room weak *in this PC pool*".
+Because the plans are drawn from **your** boxes, the numbers are a property of your collection, not
+of the archetypes in general.
 
 ### PC & storage
 
@@ -140,6 +149,7 @@ type-to-filter:
 | `sim/fusion_inspector.rb` | The ground-truth oracle. Builds a candidate in the real engine and reports actual typing, stats vs both parents, 4×/2×/immune matchups, resolved ability, and auto-flags (stat tax, new 4× weakness, dead ability). |
 | `sim/prun.rb` | Parallel LLM-piloted battles for A/B testing team changes. |
 | `sim/nbattle.rb` + `nsearch2` / `ntourney` / `nladder` | The deterministic SmartAI plays both sides — no API calls, ~100 games/sec. Rates every mon in your PC, hill-climbs teams against a held-out field, and runs Elo ladders. |
+| `sim/narchetype.rb` + `nlead.rb` | The ladder's plan-based team generator (eleven archetypes) and lead picker. Both are now **mirrored in-game** as Random Battle's Smart v2 — the offline copy is rating-driven, the in-game copy substitutes stats and typing since live PC mons carry no ratings. |
 | `sim/interactive_battle.rb` | Drive a battle turn-by-turn yourself against the AI, with a computed turn card (real damage ranges, ability-aware effectiveness, bench answers) and deterministic rewind. |
 | `sprites/` | **Generative sprite pipeline** for fusions with no custom art: find them in a save, extract the game's autogen sprite as a baseline, write a palette-budgeted description (real sprites use 12–16 colours), generate, fit to the 96px grid, and install with a backup. |
 

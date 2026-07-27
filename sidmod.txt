@@ -1254,6 +1254,53 @@ menus silently ran the entry above "Close" instead of closing
   to revert: drop the `+ 1` back off both calls.
 
 ##############################################
+generated sprites for the 13 fusions in File A that had no custom art - fill the
+autogen-only gaps in the collection and the dex
+
+NO SCRIPT CHANGES. Pure graphics + offline tooling; the engine already supports this.
+
+  Graphics/CustomBattlers/local_sprites/indexed/<head>/<head>.<body>.png   (13 new files)
+    BattleSpriteLoader#check_for_local_sprite (~line 180) probes exactly this path and
+    runs BEFORE the spritesheet/autogen extractors, so a file here wins and the sprite
+    is served as :CUSTOM. PokedexUtils#getLocalFusionSpriteAlts reads the same folder,
+    so each one also shows up as a selectable "local_" alt on the dex sprites page.
+    Installed: 214.304 355.360 105.212 357.377 211.224 230.324 134.449 227.364
+               196.293 243.379 467.348 344.374 347.349
+
+  tools/sidmod_editor/sprites/   (new, offline - never loaded by the game)
+    missing_sprites.rb   scans a save, cross-refs Data/sprites/CUSTOM_SPRITES -> missing.json
+    extract_autogen.py   pulls the game's autogen cell (96px, 10 cols, idx = body_id)
+    descriptions.md      per-fusion art brief: prose + target footprint + colour ramps
+    gen_sprite.py        OpenAI images.edit conditioned on the autogen sprite -> 1024px
+    spritefit.py         1024px render -> 288x288 PNG8 on spec; --selftest round-trips
+                         real sprites at 0px drift as a regression check
+    refit.py             re-fit every saved raw locally (free - no API calls)
+    install.py           copy into local_sprites/, backing up anything overwritten
+    verify_install.rb    boots the real engine, calls pbResolveBitmap on the battle AND
+                         dex paths - reported 13/13 after install
+
+  spec (measured from 2755 real sprites, both customBaseSprites and indexed/ fusions):
+    96x96 art stored as a 3x nearest upscale to 288x288, PNG8 indexed, index 0
+    transparent via tRNS, 12-23 colours used, content centred cx=48 baseline y=75.
+
+  notes: the save cache was a near-miss. Pre-6.8.2 the loader read
+    $PokemonGlobal.alt_sprite_substitutions, which holds 2369 cached entries in File A
+    and covered 12 of these 13 - a cached entry skips check_for_local_sprite entirely,
+    so the new files would have been silently ignored. 6.8.2 moved the read to
+    $PokemonSystem.alt_sprite_substitutions, which is nil in this save, so the cache
+    starts empty and every fusion re-probes. No patch was needed. If a future upstream
+    change reverts that, the fix is to re-probe on the cached branch of
+    BattleSpriteLoader#obtain_fusion_pif_sprite (~line 91).
+  notes: quality is honestly mixed and per-sprite - clearly better than autogen where
+    autogen loses the concept (357.377, 211.224, 344.374, 105.212, 230.324, 467.348),
+    clearly worse where the render came out pale and spindly (227.364, 243.379,
+    347.349, 355.360). Judge from tools/sidmod_editor/sprites/out/ALL13.png.
+  to revert: delete the file(s) under local_sprites/indexed/ - the game falls straight
+    back to autogen with no other change. All 13: `python install.py --uninstall`.
+    Specific ones: `python install.py --uninstall 227.364 243.379`.
+
+
+##############################################
 # old commented-out reference impl kept below for future tweaks
 # max vals
 # PokemonDebugMenuCommands.register("hiddenvalues", {
@@ -1539,4 +1586,91 @@ pause-menu icons on the sidmod entries - match upstream 6.8's icon-ified stock r
   references optionIcons/AUDIO|GAMEPLAY|VISUALS|CHALLENGE|RANDOMIZER but
   Graphics/Icons/optionIcons/ does not exist in this install - those tags would hit the
   same Bitmap.new raise if that menu draws them. Untouched here.
+#############################################
+
+
+#############################################
+random battle "smart v2" - opponent teams built around ONE named PLAN (sand/rain/trick room/
+  stall/...) - end goal: bring the offline ladder's archetype builder in-game
+055_sidmod/RandomOpponent.rb  (only game file touched)
+  WHY: the pause-menu Random Battle had CHAOS (pure random) and SMART (role/type balance).
+  SMART is effectively the single archetype "balance" - it fills hazard/wall/pivot then
+  rounds out on type freshness, and knows nothing about weather, Trick Room, hazard stack
+  or stall. The offline king-of-the-hill ladder (tools/sidmod_editor/sim/nladder.rb) has had
+  an 11-plan archetype generator (sim/narchetype.rb, Gen#archetype) since it was built; it
+  was never wired into the game. This ports it.
+  MODES ~line 25: 4 entries -> 6. Added "Smart v2 - OU" and "Smart v2 - Ubers"; added
+    MODE_SEL = %i[chaos smart smart2 chaos smart smart2] so run() maps index -> selector
+    by table instead of the old `(idx == 1 || idx == 3)` arithmetic. Tier is now idx <= 2.
+  run ~line 470 + pick_archetype: choosing a "Smart v2" row opens a SECOND pbShowCommands
+    menu - "Random archetype" + the 11 plans by name. B on that menu backs out of the
+    whole thing (returns without battling).
+  ARCHETYPES ~line 105: rain sun sand hyperoffense balance hazardstack trickroom priority
+    scarf bulkysetup stall. select_archetype(cands, name, rng) mirrors Gen#archetype's fill
+    order per plan; returns nil when the pool lacks the parts (no Drizzle mon -> no rain).
+  select_smart2: :random / nil tries all 11 in a shuffled order and takes the first the
+    pool supports; a named plan tries only that one. plan_intact? is the extra in-game
+    guard - a plan needs a minimum of its own pieces (>=1 weather abuser, >=3 slow mons for
+    trick room, >=2 hazard setters, ...) before it's returned as that plan, so Random moves
+    on instead of shipping a generic team labelled "Sand".
+  lead_order (ported from sim/nlead.rb): SMART v2 also CHOOSES THE LEAD, which CHAOS and
+    SMART never did - they battle in fill order. party[0] is sent out first, so a weather
+    or Trick Room team that leads the wrong mon throws the plan away on turn 1. Rule order:
+    trick-room setter (on a TR plan) > weather setter > hazards > free-turn setup sweeper >
+    pivot > fastest.
+  candidate() ~line 200: added :ability (ability_sym) and :stats (stat_array = the real
+    Lv100 [HP,Atk,Def,SpA,SpD,Spe]). PURELY ADDITIVE - CHAOS, SMART and the offline sim
+    harness that reuses candidate() (sim/nbattle.rb) ignore the new keys.
+  build_team_named(sel, tier, seed, arch) is the new entry point and returns
+    [refs, archetype_used]; build_team(sel, tier, seed, arch=nil) is kept as a thin wrapper
+    because sim/nbattle.rb, nmodes.rb, nladder.rb and nbuild_ou.rb all call the old
+    3-arg form. Those call sites are untouched and still work.
+  TWO DELIBERATE DIVERGENCES from narchetype.rb, both forced by what a live PC pool has:
+   1. NO RATINGS. Offline `best()` sorts by each mon's measured rating coef from
+      ratings.csv (mass native-AI sims). Nothing in-game has that, so `best()` here sorts
+      by raw Lv100 stat total - a weaker signal - and the leftover slots fall back to
+      SMART's TYPE FRESHNESS heuristic instead of a rating shortlist.
+   2. Offline predicates match DISPLAY NAMES ('Sand Stream'); the engine uses SYMBOLS
+      (:SANDSTREAM). All the new tag lists are the symbol equivalents. The existing
+      SETUP / HAZARD / PIVOT / RECOVER / PHAZE lists in this file are reused as-is.
+  TWO BUGS FOUND AND FIXED DURING THE HEAD-LESS TEST (both were in the naive port):
+   - a weather plan's tail fill could draft a SECOND weather setter, whose ability
+     overwrites the plan's own weather on entry. Weather plans now narrow the fill pool
+     to exclude every other setter.
+   - lead_order's weather rule hijacked the lead on NON-weather plans: trick room and
+     stall teams were both leading a Sand Stream mon (its "only weather source" fallback
+     fired on any team that happened to contain a setter). That fallback is now gated to
+     weather plans only, and the trick-room rule runs first on a trick-room plan.
+  NOT CHANGED: CHAOS and SMART behave exactly as before; the OU legendary filter, Species
+    Clause (incl. triple-fusion components), Spore clause, the item/bag safety net and the
+    pause-menu entry are all untouched.
+  revert: this is additive - to drop just Smart v2, restore MODES to the 4 original entries
+    and the old two-line run() body; the archetype block can stay dead or be deleted.
+    To drop Random Battle entirely, the older block above still applies.
+  VERIFIED (head-less, real engine + a SNAPSHOT of File A, read-only - live save untouched):
+    static, 20 seeds x 11 archetypes x both tiers (440 builds): every plan built 20/20 with
+      plan_intact? true, 0 nil, 0 Species-Clause violations, 0 OU-legend leaks, 0 Spore
+      leaks, 0 conflicting weather setters. ability+stats parsed 337/337 (OU) and 467/467
+      (Ubers). Lead matched the plan every time: rain/sun/sand 20/20 lead their own setter,
+      trickroom 20/20 leads the Trick Room user, hazardstack/stall/bulkysetup lead hazards.
+    regression: chaos and smart still build 10/10 in both tiers.
+    battle (native sim, SmartAI both sides, OU, 80 games per plan, sides mirrored, 880 total,
+      0 engine errors): v2 527.0/880 = 0.599 overall vs SMART v1. Per plan -
+        rain 0.88  balance 0.72  priority 0.72  scarf 0.72  hyperoffense 0.68
+        stall 0.56  sand 0.52  bulkysetup 0.51  sun 0.42  hazardstack 0.42  trickroom 0.41
+      READ THESE CAREFULLY: 880 games gives the OVERALL number ~0.017 SE, so 0.599 is a real
+      edge over v1. But each PLAN is only 80 games (~0.056 SE, +-0.11 at 2SE) against one
+      fixed set of v1 opponents, so the per-plan ordering is indicative, NOT a ranking - the
+      only safe reads are "rain is genuinely strong in this pool" and "sun / hazardstack /
+      trickroom are at best parity". Do not tune archetypes off this table; re-measure with
+      sim/nladder.rb if it matters.
+    IN-GAME (2026-07-27, Sid, live playthrough): booted, pause menu -> Random Battle ->
+      "Smart v2 - OU" -> "Random archetype" produced a RAIN team that swept the player's
+      party. Two-menu flow, archetype build, lead choice and the battle itself all work on
+      a real controller. Matches the sim: rain is this pool's strongest plan by a distance.
+    DIFFICULTY NOTE: because the plans are NOT balanced against each other (0.41 trickroom
+      to 0.88 rain vs SMART v1), the archetype menu doubles as a difficulty dial - "Random
+      archetype" can hand you anything from a coinflip to rain. If it ever wants evening
+      out, the lever is plan_intact?'s thresholds plus the tail-fill quality proxy, NOT the
+      fill order (which is deliberately kept identical to sim/narchetype.rb).
 #############################################

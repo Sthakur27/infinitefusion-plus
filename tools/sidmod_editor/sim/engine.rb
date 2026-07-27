@@ -58,6 +58,26 @@ module SimEngine
         def method_missing(*); nil; end
         def respond_to_missing?(*); true; end
       end
+      # $Trainer here is an NPCTrainer (setup_globals below), but the battle path
+      # calls PLAYER-ONLY progression APIs on it, and those raise NoMethodError:
+      #   * play stats - `$Trainer.stats&.incr_nb_pokemon_defeated` on every KO
+      #     (011_Battle/001_Battler/003_Battler_ChangeSelf.rb ~57), `&.incr_nb_battles_lost`
+      #     at battle end (003_Battle_StartAndEnd.rb ~476). The `&.` does NOT save it:
+      #     the receiver is the problem, not the value.
+      #   * PokeNav challenges - `$Trainer.complete_challenge(...)` from the in-battle
+      #     hooks (053_PIF_Hoenn/PokeNav/Challenges/ChallengeHooks_Battle.rb: stat
+      #     boosts, flinches, enemy-at-1-HP, resisted KOs). Defined on Player only.
+      # The raise was swallowed by nbattle.rb's `rescue => dec = 5`, so EVERY sim
+      # battle silently scored a DRAW. All of this is player progression that a sim
+      # has no business recording, so stub it out rather than emulate it.
+      class NPCTrainer
+        def stats; nil; end unless method_defined?(:stats)
+        def complete_challenge(*); nil; end unless method_defined?(:complete_challenge)
+        def completed_challenge?(*); false; end unless method_defined?(:completed_challenge?)
+        def add_challenge(*); nil; end unless method_defined?(:add_challenge)
+        def nb_completed_challenges; 0; end unless method_defined?(:nb_completed_challenges)
+        def nb_completed_challenges=(_v); end unless method_defined?(:nb_completed_challenges=)
+      end
     RUBY
   end
 

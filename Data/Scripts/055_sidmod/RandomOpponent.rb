@@ -3,11 +3,16 @@
 #
 # Debug battle command that assembles an opposing team of 6 drawn from your
 # "battle-ready" PC Pokemon (Level 100 AND holding an item), then fights you
-# with the SmartTrainerAI. Two modes:
+# with the SmartTrainerAI. Three selection modes:
 #   - CHAOS: pure random 6 (Species Clause: no repeated base species).
 #   - SMART: deterministic role/type-balanced comp - fills a hazard-setter, a
 #     wall, and a pivot first, then rounds out with offensive variety and fresh
 #     typing (still Species-Clause legal). Seeded, so every fight differs.
+#   - SMART v2: builds a team around ONE named PLAN (rain/sand/trick room/stall/
+#     hazard stack/...) picked from a second menu, or a random plan. Ported from
+#     the offline ladder's archetype generator (tools/sidmod_editor/sim/
+#     narchetype.rb) - see the SMART v2 section below for what changed and why.
+#     Also picks the lead, which SMART does not.
 #
 # The classification + selection algorithm is PURE (operates on plain data), so
 # it is unit-testable outside the engine. The `if defined?(DebugMenuCommands)`
@@ -20,10 +25,13 @@ module SidmodRandomOpp
   module_function
 
   MODES = begin
-    [_INTL("Chaos - OU"), _INTL("Smart - OU"), _INTL("Chaos - Ubers"), _INTL("Smart - Ubers")]
+    [_INTL("Chaos - OU"), _INTL("Smart - OU"), _INTL("Smart v2 - OU"),
+     _INTL("Chaos - Ubers"), _INTL("Smart - Ubers"), _INTL("Smart v2 - Ubers")]
   rescue
-    ["Chaos - OU", "Smart - OU", "Chaos - Ubers", "Smart - Ubers"]
+    ["Chaos - OU", "Smart - OU", "Smart v2 - OU",
+     "Chaos - Ubers", "Smart - Ubers", "Smart v2 - Ubers"]
   end
+  MODE_SEL = %i[chaos smart smart2 chaos smart smart2]
 
   # TIER FILTER. OU excludes any fusion whose head OR body is a legendary that ISN'T one of these
   # sub-600 "OU-legal" legendaries (the birds/beasts/golems + Regigigas special-case). Ubers = no filter.
@@ -101,6 +109,263 @@ module SidmodRandomOpp
     chosen
   end
 
+  # =============================================================================
+  # SMART v2 - archetype ("plan") team builders
+  #
+  # Ported from tools/sidmod_editor/sim/narchetype.rb (Gen#archetype), the generator
+  # the offline king-of-the-hill ladder uses to explore plans a greedy build never
+  # finds. Same plans, same fill order. TWO deliberate differences, both forced by
+  # what a live PC pool has that the sim does not:
+  #   1. NO RATINGS. Offline `best()` sorts candidates by their measured rating coef
+  #      (from mass native-AI sims, ratings.csv). Nothing in-game has that, so `best`
+  #      here sorts by raw Lv100 stat total - a much weaker signal, hence the jitter
+  #      is kept and the tail slots fall back to TYPE FRESHNESS (the SMART heuristic)
+  #      rather than to a rating shortlist.
+  #   2. Offline predicates match ability/move DISPLAY NAMES ('Sand Stream'); in the
+  #      engine these are SYMBOLS (:SANDSTREAM). All the tag lists below are the
+  #      symbol equivalents.
+  # The existing SETUP / HAZARD / PIVOT / RECOVER / PHAZE lists above are reused as-is.
+  # =============================================================================
+
+  ARCHETYPES = %i[rain sun sand hyperoffense balance hazardstack trickroom priority
+                  scarf bulkysetup stall]
+  ARCH_LABELS = { rain: "Rain", sun: "Sun", sand: "Sand", hyperoffense: "Hyper Offense",
+                  balance: "Balance", hazardstack: "Hazard Stack", trickroom: "Trick Room",
+                  priority: "Priority", scarf: "Choice Scarf", bulkysetup: "Bulky Setup",
+                  stall: "Stall" }
+
+  WEATHER_ABILITY = { DRIZZLE: :rain, PRIMORDIALSEA: :rain, DROUGHT: :sun,
+                      DESOLATELAND: :sun, SANDSTREAM: :sand, SNOWWARNING: :hail }
+  # abilities that only pay off under a specific weather
+  ABUSER = { rain: %i[SWIFTSWIM RAINDISH DRYSKIN HYDRATION],
+             sun:  %i[CHLOROPHYLL SOLARPOWER LEAFGUARD FLOWERGIFT HARVEST],
+             sand: %i[SANDRUSH SANDFORCE SANDVEIL],
+             hail: %i[SLUSHRUSH SNOWCLOAK ICEBODY] }
+  PRIORITY = %i[EXTREMESPEED AQUAJET BULLETPUNCH ICESHARD SHADOWSNEAK SUCKERPUNCH
+                MACHPUNCH VACUUMWAVE ACCELEROCK JETPUNCH FIRSTIMPRESSION QUICKATTACK FAKEOUT]
+  # things that buy a setup sweeper a guaranteed free turn on the lead
+  FREE_TURN_ABILITY = %i[DISGUISE MULTISCALE SPEEDBOOST CONTRARY MAGICBOUNCE]
+  FREE_TURN_ITEM    = %i[FOCUSSASH FOCUSBAND]
+  # a hazard lead that also threatens is better than a passive one
+  SUICIDE_OK = %i[TAUNT EXPLOSION MEMENTO DESTINYBOND]
+
+  # ---- predicates over a candidate hash ---------------------------------------
+  # stats are the mon's real Lv100 stats [HP, Atk, Def, SpA, SpD, Spe], so the
+  # offline thresholds (the pool is Lv100-only) carry over unchanged.
+  def mvs(c);  c[:moves] || []; end
+  def abil(c); c[:ability]; end
+  def st(c, i); (c[:stats] || [])[i].to_i; end
+  def bulk(c); st(c, 0) + st(c, 2) + st(c, 4); end
+  def bulky?(c); st(c, 0) >= 330 && (st(c, 2) >= 250 || st(c, 4) >= 250); end
+  def slow?(c);  s = st(c, 5); s > 0 && s <= 180; end
+  def setter?(c, w); WEATHER_ABILITY[abil(c)] == w; end
+  def abuser?(c, w); ABUSER[w].to_a.include?(abil(c)); end
+  def hazard?(c);    (mvs(c) & HAZARD).any?; end
+  def setup?(c);     (mvs(c) & SETUP).any?; end
+  def pivot?(c);     (mvs(c) & PIVOT).any?; end
+  def recovery?(c);  (mvs(c) & RECOVER).any?; end
+  def phaze?(c);     (mvs(c) & PHAZE).any?; end
+  def priority?(c);  (mvs(c) & PRIORITY).any?; end
+  def trickroom?(c); mvs(c).include?(:TRICKROOM); end
+  def scarf?(c);     c[:item] == :CHOICESCARF; end
+  def offensive?(c); ((c[:roles] || classify(c)) & %i[sweeper breaker scarfer attacker]).any?; end
+
+  # Stand-in for the offline rating: total Lv100 stats, scaled so the jitter values
+  # inherited from narchetype.rb (0.15-0.4) still shuffle near-equal candidates.
+  def power(c); ((c[:stats] || []).sum) / 2000.0; end
+  def best(cands, rng, jitter = 0.15, &pred)
+    cands.select { |c| pred.call(c) }
+         .sort_by { |c| -(power(c) + (rng.rand - 0.5) * jitter) }
+  end
+
+  # ---- Species-Clause-safe fills ----------------------------------------------
+  # Candidates are compared by IDENTITY (equal?), not ==: two different PC mons can
+  # produce equal candidate hashes, and == would silently treat them as one slot.
+  def team_bases(team); team.flat_map { |c| c[:bases] || [] }; end
+  # Add UP TO n candidates that pass Species Clause. (narchetype.rb note: handing
+  # `fill` exactly n candidates is wrong - one clause conflict then yields n-1 and a
+  # 3-hazard build lands with 2.)
+  def fill_upto(team, cands, n)
+    used = team_bases(team)
+    added = 0
+    cands.each do |c|
+      break if added >= n || team.length >= 6
+      next if team.any? { |x| x.equal?(c) }
+      bs = c[:bases] || []
+      next if bs.any? { |b| used.include?(b) }
+      team << c; used.concat(bs); added += 1
+    end
+    team
+  end
+  def fill(team, cands); fill_upto(team, cands, 6); end
+
+  # Tail slots: no ratings to fall back on, so reuse SMART's signal - freshest typing,
+  # offence preferred. Recomputes the type census each pass so the 5th pick reacts to
+  # the 4th.
+  def fill_fresh(team, cands, rng)
+    until team.length >= 6
+      tc = Hash.new(0)
+      team.each { |c| (c[:types] || []).each { |t| tc[t] += 1 } }
+      used = team_bases(team)
+      pool = cands.reject { |c|
+        team.any? { |x| x.equal?(c) } || (c[:bases] || []).any? { |b| used.include?(b) } }
+      break if pool.empty?
+      team << pool.shuffle(random: rng).min_by { |c|
+        (c[:types] || []).sum { |t| tc[t] } + (offensive?(c) ? -1 : 0) }
+    end
+    team
+  end
+
+  # ---- the plans ---------------------------------------------------------------
+  # Returns nil when the pool cannot support the plan (e.g. no Drizzle mon at Lv100
+  # holding an item). Offline the ladder just skips those; here the caller either
+  # tries another archetype (Random) or tells the player which one is missing.
+  def select_archetype(cands, name, rng)
+    cands = cands.map { |c| c.merge(roles: classify(c)) }
+    pool  = cands   # what the tail fill may draw from; weather plans narrow it
+    team =
+      case name
+      when :rain, :sun, :sand
+        w = name
+        set = best(cands, rng) { |c| setter?(c, w) }.first
+        return nil if !set
+        # A SECOND weather ability on the team overwrites the plan's own weather on
+        # entry, so no other setter may be drafted - including by the tail fill.
+        pool = cands.reject { |c| WEATHER_ABILITY.key?(abil(c)) && !setter?(c, w) }
+        t = [set]
+        fill(t, best(pool, rng) { |c| abuser?(c, w) })              # the payoff mons
+        fill(t, best(pool, rng) { |c| hazard?(c) || pivot?(c) })    # support
+        t
+      when :hyperoffense
+        t = fill([], best(cands, rng, 0.4) { |c| setup?(c) || offensive?(c) })
+        t
+      when :balance
+        t = fill_upto([], best(cands, rng) { |c| bulky?(c) && (recovery?(c) || phaze?(c)) }, 2)
+        fill_upto(t, best(cands, rng) { |c| pivot?(c) }, 1)
+        fill(t, best(cands, rng) { |c| setup?(c) })
+        t
+      when :hazardstack
+        t = fill_upto([], best(cands, rng) { |c| hazard?(c) }, 3)
+        fill_upto(t, best(cands, rng) { |c| phaze?(c) }, 1)
+        fill_upto(t, best(cands, rng) { |c| priority?(c) || scarf?(c) }, 1)
+        t
+      when :trickroom
+        tr = best(cands, rng) { |c| trickroom?(c) }.first
+        return nil if !tr
+        t = [tr]
+        fill(t, best(cands, rng) { |c| slow?(c) && offensive?(c) })
+        fill(t, best(cands, rng) { |c| slow?(c) })
+        t
+      when :priority
+        fill([], best(cands, rng, 0.3) { |c| priority?(c) })
+      when :scarf
+        t = fill_upto([], best(cands, rng, 0.3) { |c| scarf?(c) }, 3)
+        fill(t, best(cands, rng) { |c| setup?(c) })
+        t
+      when :stall
+        t = fill_upto([], best(cands, rng, 0.3) { |c| bulky?(c) && recovery?(c) }, 3)
+        fill_upto(t, best(cands, rng) { |c| hazard?(c) }, 1)
+        fill_upto(t, best(cands, rng) { |c| phaze?(c) }, 1)
+        fill(t, best(cands, rng) { |c| bulky?(c) })
+        t
+      when :bulkysetup
+        t = fill_upto([], best(cands, rng, 0.3) { |c| setup?(c) && (bulky?(c) || recovery?(c)) }, 3)
+        fill_upto(t, best(cands, rng) { |c| hazard?(c) }, 1)
+        t
+      else
+        return nil
+      end
+    fill_fresh(team, pool, rng)   # top up whatever the plan left short
+    return nil if team.length != 6
+    b = team_bases(team)
+    return nil if b.length != b.uniq.length
+    team
+  end
+
+  # A plan needs a MINIMUM of its own pieces to be worth calling by that name; below
+  # that the pool just doesn't have the parts and Random should move on to another
+  # plan instead of shipping a generic team labelled "Sand".
+  def plan_intact?(team, name)
+    case name
+    when :rain, :sun, :sand then team.count { |c| abuser?(c, name) } >= 1
+    when :trickroom         then team.count { |c| slow?(c) } >= 3
+    when :hazardstack       then team.count { |c| hazard?(c) } >= 2
+    when :stall             then team.count { |c| bulky?(c) && recovery?(c) } >= 2
+    when :scarf             then team.count { |c| scarf?(c) } >= 2
+    when :priority          then team.count { |c| priority?(c) } >= 3
+    when :bulkysetup        then team.count { |c| setup?(c) && (bulky?(c) || recovery?(c)) } >= 2
+    else true
+    end
+  end
+
+  # ---- lead selection (SMART v2 only) ------------------------------------------
+  # Ported from sim/nlead.rb. The engine sends party[0] out first, and SMART never
+  # chose a lead at all - it just battled in fill order, which for a weather or Trick
+  # Room team throws away the whole plan on turn 1.
+  # `arch` matters: a weather setter that nothing on the team abuses is still the
+  # right lead ON A WEATHER PLAN, but on a Trick Room or stall team it is just an
+  # incidental ability, and leading it throws the actual plan away. (Observed before
+  # this guard: Trick Room and stall teams both led a Sand Stream mon.)
+  def lead_order(team, arch = nil)
+    pick = nil
+    weather_plan = %i[rain sun sand].include?(arch)
+    # 1) Trick Room has to be up before the slow mons can cash in on it.
+    if arch == :trickroom
+      pick = team.select { |c| trickroom?(c) }.max_by { |c| bulk(c) }
+    end
+    # 2) Weather setter. The ability resolves on entry and the SLOWEST setter's
+    #    weather is the one that sticks, so leading it wins the weather war.
+    if !pick
+      setters = team.select { |c| WEATHER_ABILITY.key?(abil(c)) }
+      setters.each do |c|
+        w = WEATHER_ABILITY[abil(c)]
+        next unless team.any? { |o| !o.equal?(c) && abuser?(o, w) }
+        pick = c
+        break
+      end
+      # only-weather-source fallback: on a weather plan only, never as a hijack
+      pick ||= setters.max_by { |c| bulk(c) } if weather_plan && setters.any?
+    end
+    # 2b) Trick Room on a team that wasn't built around it but can still use it.
+    if !pick && team.count { |c| slow?(c) } >= 3
+      pick = team.select { |c| trickroom?(c) }.max_by { |c| bulk(c) }
+    end
+    # 3) Hazards on turn 1 tax every switch after it; prefer a setter that also
+    #    threatens (Taunt/Explosion/...) or is fast/bulky enough to get them down.
+    if !pick
+      haz = team.select { |c| hazard?(c) }
+      pick = haz.max_by { |c| [(mvs(c) & SUICIDE_OK).any? ? 1 : 0, st(c, 5) + bulk(c) / 3] } if haz.any?
+    end
+    # 4) A setup sweeper with a guaranteed free turn.
+    if !pick
+      free = team.select { |c|
+        setup?(c) && (FREE_TURN_ABILITY.include?(abil(c)) || FREE_TURN_ITEM.include?(c[:item])) }
+      pick = free.max_by { |c| st(c, 5) } if free.any?
+    end
+    # 5) A pivot scouts, then hands the matchup off.
+    if !pick
+      piv = team.select { |c| pivot?(c) }
+      pick = piv.max_by { |c| st(c, 5) } if piv.any?
+    end
+    pick ||= team.max_by { |c| st(c, 5) }
+    [pick] + team.reject { |c| c.equal?(pick) }
+  end
+
+  # `arch` is an ARCHETYPES symbol, or :random / nil to try every plan in a shuffled
+  # order and take the first one the pool actually supports.
+  # -> [team, archetype_used] | nil
+  def select_smart2(cands, arch, rng)
+    names = (arch.nil? || arch == :random) ? ARCHETYPES.shuffle(random: rng) : [arch]
+    fallback = nil
+    names.each do |n|
+      t = select_archetype(cands, n, rng)
+      next if !t
+      return [lead_order(t, n), n] if plan_intact?(t, n)
+      fallback ||= [lead_order(t, n), n]   # legal, just thin on plan pieces
+    end
+    fallback
+  end
+
   # ---- CHAOS: pure random, Species-Clause legal -------------------------------
   def select_chaos(cands, rng, n = 6)
     chosen = []; used = []
@@ -131,9 +396,21 @@ module SidmodRandomOpp
       [(pk.species rescue pk.dexNum)]
     end
   end
+  # sidmod: :ability and :stats are used only by SMART v2 (weather/Trick Room/bulk
+  # predicates). Purely additive - CHAOS, SMART and the offline sim harness that
+  # reuses candidate() (tools/sidmod_editor/sim/nbattle.rb) ignore them.
+  def ability_sym(pk); (pk.ability_id rescue nil) || (pk.ability&.id rescue nil); end
+  # Real Lv100 stats [HP, Atk, Def, SpA, SpD, Spe] - the pool is Lv100-only, so these
+  # are directly comparable against the offline thresholds.
+  def stat_array(pk)
+    [pk.totalhp, pk.attack, pk.defense, pk.spatk, pk.spdef, pk.speed].map(&:to_i)
+  rescue
+    []
+  end
   def candidate(pk)
     { types: type_syms(pk), bases: bases(pk), moves: move_syms(pk),
-      evs: ev_hash(pk), item: item_sym(pk), ref: pk }
+      evs: ev_hash(pk), item: item_sym(pk), ability: ability_sym(pk),
+      stats: stat_array(pk), ref: pk }
   end
 
   # Battle-ready pool: every PC mon at Lv100 holding an item.
@@ -150,14 +427,30 @@ module SidmodRandomOpp
     ready
   end
 
-  def build_team(sel, tier, seed)
+  # -> [[pokemon x6], archetype_used_or_nil] | nil
+  def build_team_named(sel, tier, seed, arch = nil)
     rng   = Random.new(seed)
     cands = battle_pool.map { |pk| candidate(pk) }
     cands = cands.reject { |c| ((c[:moves] || []) & BANNED_MOVES).any? }   # Spore clause (all modes)
     cands = cands.select { |c| ou_legal?(c) } if tier == :ou
     return nil if cands.length < 6
-    chosen = (sel == :smart) ? select_smart(cands, rng) : select_chaos(cands, rng)
-    chosen.length >= 6 ? chosen.map { |c| c[:ref] } : nil
+    chosen = nil
+    used   = nil
+    case sel
+    when :smart2
+      r = select_smart2(cands, arch, rng)
+      chosen, used = r if r
+    when :smart then chosen = select_smart(cands, rng)
+    else             chosen = select_chaos(cands, rng)
+    end
+    return nil if !chosen || chosen.length < 6
+    [chosen.map { |c| c[:ref] }, used]
+  end
+
+  # Kept for the offline sim harness, which calls build_team(:smart|:chaos, tier, seed).
+  def build_team(sel, tier, seed, arch = nil)
+    r = build_team_named(sel, tier, seed, arch)
+    r && r[0]
   end
 
   def trainer_type
@@ -207,13 +500,20 @@ module SidmodRandomOpp
     end
   end
 
-  def start_battle(sel, tier)
-    refs = build_team(sel, tier, rand(1_000_000))
-    unless refs
-      pbMessage(_INTL("Need 6+ battle-ready {1}PC Pokemon (Lv100 + held item). Upgrade more mons first.",
-                      tier == :ou ? "OU-legal " : ""))
+  def start_battle(sel, tier, arch = nil)
+    result = build_team_named(sel, tier, rand(1_000_000), arch)
+    unless result
+      if sel == :smart2 && arch && arch != :random
+        pbMessage(_INTL("Your battle-ready {1}pool can't build a {2} team - it's missing the pieces " \
+                        "(a weather setter, enough walls, etc.). Try another archetype.",
+                        tier == :ou ? "OU-legal " : "", ARCH_LABELS[arch]))
+      else
+        pbMessage(_INTL("Need 6+ battle-ready {1}PC Pokemon (Lv100 + held item). Upgrade more mons first.",
+                        tier == :ou ? "OU-legal " : ""))
+      end
       return
     end
+    refs, arch_used = result
     trainer = NPCTrainer.new(_INTL("Random Challenger"), trainer_type)
     refs.each do |pk|
       c = Marshal.load(Marshal.dump(pk))   # deep copy so the stored mon is never mutated
@@ -221,8 +521,12 @@ module SidmodRandomOpp
       trainer.party.push(c)
     end
     names = refs.map { |pk| pk.name || pk.speciesName }.join(", ")
+    style = if sel == :smart2 then ARCH_LABELS[arch_used] || "planned"
+            elsif sel == :smart then "balanced"
+            else "random"
+            end
     pbMessage(_INTL("A {1} {2} challenger appears with:\n{3}!",
-                    sel == :smart ? "balanced" : "random", tier == :ou ? "OU" : "Ubers", names))
+                    style, tier == :ou ? "OU" : "Ubers", names))
     # sidmod: nothing this battle consumes should survive it - see the item safety
     # net above. Covers both sides: the player's held items, and the bag stock that
     # BOTH teams' consumptions get charged to.
@@ -236,12 +540,25 @@ module SidmodRandomOpp
     $Trainer.heal_party
   end
 
+  # SMART v2 opens a second menu to choose the plan.
+  def pick_archetype
+    labels = [_INTL("Random archetype")] + ARCHETYPES.map { |a| ARCH_LABELS[a] }
+    i = pbShowCommands(nil, labels, -1)
+    return nil if i < 0
+    i.zero? ? :random : ARCHETYPES[i - 1]
+  end
+
   def run
     idx = pbShowCommands(nil, MODES, -1)
     return if idx < 0
-    sel  = (idx == 1 || idx == 3) ? :smart : :chaos
-    tier = (idx <= 1) ? :ou : :ubers
-    start_battle(sel, tier)
+    sel  = MODE_SEL[idx]
+    tier = (idx <= 2) ? :ou : :ubers
+    arch = nil
+    if sel == :smart2
+      arch = pick_archetype
+      return if arch.nil?   # B on the archetype menu backs out of the whole thing
+    end
+    start_battle(sel, tier, arch)
   end
 end
 
