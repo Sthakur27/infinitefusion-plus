@@ -1,0 +1,6 @@
+# RPG Maker data and Infinite Fusion save files are binary. core.autocrlf is true
+# on Windows clones, and a save or data file that got line-ending "converted" would
+# be silently corrupted, so never let git treat these as text.
+*.rxdata binary
+*.rxproj binary
+*.dat     binary
