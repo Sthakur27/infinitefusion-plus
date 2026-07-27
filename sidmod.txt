@@ -1674,3 +1674,53 @@ random battle "smart v2" - opponent teams built around ONE named PLAN (sand/rain
       out, the lever is plan_intact?'s thresholds plus the tail-fill quality proxy, NOT the
       fill order (which is deliberately kept identical to sim/narchetype.rb).
 #############################################
+
+#############################################
+random battle "OU Apex" - fight the best teams the offline ladder ever produced
+055_sidmod/RandomOpponent.rb  +  Data/sidmod/ou_apex.rxdata (new data pack)
+  +  tools/sidmod_editor/sim/nexport_apex.rb (new offline exporter)
+  MODES ~line 29: 6 entries -> 7, adding "OU Apex" (no tier suffix - the rosters are
+    fixed and were laddered in OU). MODE_SEL gains :apex. run() short-circuits to
+    run_apex before the tier/archetype steps.
+  run_apex: lists the pack's teams as "#<rank>  <elo> Elo  <niche>" and fights the chosen
+    one. Slot 0 of each team is the LEAD the ladder itself chose (sim/nlead.rb).
+  WHY THE PACK SHIPS FROZEN POKEMON INSTEAD OF box/slot KEYS - this is the whole design
+    decision. A ladder team is recorded in nreports/<tag>/ladder.json as pool keys
+    (b<box>s<slot>) into THAT RUN'S save_snapshot.rxdata. Those keys ROT against the live
+    save. Measured on ladder_ou4 before building this: of the 38 distinct mons the top 15
+    teams depend on, 32 still matched but 6 did NOT - four were entirely different
+    Pokemon, and b8s22 had gone from a Lv100 Blisclops wall (Eviolite / Soft-Boiled /
+    Will-O-Wisp) to a Lv50 Klefmime. Resolving keys against the live PC at battle time
+    would therefore have silently fielded WRONG teams - not the ones that earned the Elo.
+    So nexport_apex.rb pulls the real Pokemon objects out of the run's snapshot and
+    Marshal-dumps them into the pack. Consequences, all wanted:
+      - the apex teams do NOT need to exist in the player's boxes at all
+      - reorganising / re-EVing / releasing PC mons can never change them
+      - they are a historical artifact: exactly the team that earned that Elo
+  apex_pack: lazy-loads + caches; @apex_pack stays false (not nil) after a failed load so
+    a missing/corrupt pack isn't re-read on every menu open. Missing pack = a message
+    naming the exporter command, never a crash.
+  fight(mons, trainer_name, announce): extracted from start_battle so all modes share one
+    battle runner. Deep-copies every mon before the battle, so a pack entry (cached for
+    the session) is never mutated by a fight. The item/bag safety net lives inside
+    fight(), so OU Apex is covered by it too.
+  regenerate the pack after a new ladder run:
+    ruby tools/sidmod_editor/sim/nexport_apex.rb <ladder_tag> [count] [out_path]
+    ruby tools/sidmod_editor/sim/nexport_apex.rb ladder_ou4 15
+  current pack: ladder_ou4, 15 teams, 262 KB, exported 2026-07-27. Elo 1687-1890 (the
+    ladder's 100-team floor was 1251). Niches: 5 hyperoffense, 5 balance, 1 each of
+    priority / hazardstack / rain / trickroom / stall.
+  CAVEAT - RANK DOES NOT PREDICT THE MATCHUP. Fixed rosters make head-to-heads sharply
+    rock-paper-scissors: measured #1 (1890) beats #15 (1687) 6-0, but LOSES to #8 (1749)
+    0-6. Elo is an average over the whole ladder field, not a difficulty ordering for the
+    player. Do not present the list to the player as "hardest first".
+  revert: remove the "OU Apex" MODES entry + :apex from MODE_SEL + the run_apex
+    short-circuit; the OU APEX code block and the pack can stay (both inert).
+  ALSO FIXED, sim-only: nbattle.rb#run_mons swallowed in-battle raises into decision 5
+    (-> :draw) WITHOUT recording anything, so it had the same invisible-failure mode #run
+    had. It now sets @last_error, and NativeSim.last_error exposes it for both.
+  VERIFIED (head-less, real engine): pack loads in-engine and round-trips; 15/15 teams
+    structurally clean (6 mons, all Lv100, no nils, Species-Clause legal, names aligned);
+    all 15 menu labels render; three head-to-head sets (6 games each, sides mirrored) ran
+    with 0 engine errors. NOT yet fought in-game.
+#############################################

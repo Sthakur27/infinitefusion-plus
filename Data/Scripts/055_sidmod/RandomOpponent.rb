@@ -13,6 +13,11 @@
 #     the offline ladder's archetype generator (tools/sidmod_editor/sim/
 #     narchetype.rb) - see the SMART v2 section below for what changed and why.
 #     Also picks the lead, which SMART does not.
+# Plus one FIXED-ROSTER mode:
+#   - OU APEX: fight the best teams the offline king-of-the-hill ladder ever
+#     produced, picked from a menu by rank/Elo. These are shipped as frozen
+#     Pokemon in Data/sidmod/ou_apex.rxdata and do NOT come from the PC pool -
+#     see the OU APEX section below for why box/slot references can't be used.
 #
 # The classification + selection algorithm is PURE (operates on plain data), so
 # it is unit-testable outside the engine. The `if defined?(DebugMenuCommands)`
@@ -26,12 +31,13 @@ module SidmodRandomOpp
 
   MODES = begin
     [_INTL("Chaos - OU"), _INTL("Smart - OU"), _INTL("Smart v2 - OU"),
-     _INTL("Chaos - Ubers"), _INTL("Smart - Ubers"), _INTL("Smart v2 - Ubers")]
+     _INTL("Chaos - Ubers"), _INTL("Smart - Ubers"), _INTL("Smart v2 - Ubers"),
+     _INTL("OU Apex")]
   rescue
     ["Chaos - OU", "Smart - OU", "Smart v2 - OU",
-     "Chaos - Ubers", "Smart - Ubers", "Smart v2 - Ubers"]
+     "Chaos - Ubers", "Smart - Ubers", "Smart v2 - Ubers", "OU Apex"]
   end
-  MODE_SEL = %i[chaos smart smart2 chaos smart smart2]
+  MODE_SEL = %i[chaos smart smart2 chaos smart smart2 apex]
 
   # TIER FILTER. OU excludes any fusion whose head OR body is a legendary that ISN'T one of these
   # sub-600 "OU-legal" legendaries (the birds/beasts/golems + Regigigas special-case). Ubers = no filter.
@@ -514,19 +520,26 @@ module SidmodRandomOpp
       return
     end
     refs, arch_used = result
-    trainer = NPCTrainer.new(_INTL("Random Challenger"), trainer_type)
-    refs.each do |pk|
-      c = Marshal.load(Marshal.dump(pk))   # deep copy so the stored mon is never mutated
-      c.heal
-      trainer.party.push(c)
-    end
-    names = refs.map { |pk| pk.name || pk.speciesName }.join(", ")
     style = if sel == :smart2 then ARCH_LABELS[arch_used] || "planned"
             elsif sel == :smart then "balanced"
             else "random"
             end
-    pbMessage(_INTL("A {1} {2} challenger appears with:\n{3}!",
-                    style, tier == :ou ? "OU" : "Ubers", names))
+    names = refs.map { |pk| pk.name || pk.speciesName }.join(", ")
+    fight(refs, _INTL("Random Challenger"),
+          _INTL("A {1} {2} challenger appears with:\n{3}!",
+                style, tier == :ou ? "OU" : "Ubers", names))
+  end
+
+  # Shared battle runner for every mode. `mons` are TEMPLATES - each is deep-copied,
+  # so neither a stored PC mon nor a pack entry is ever mutated by a battle.
+  def fight(mons, trainer_name, announce)
+    trainer = NPCTrainer.new(trainer_name, trainer_type)
+    mons.each do |pk|
+      c = Marshal.load(Marshal.dump(pk))
+      c.heal
+      trainer.party.push(c)
+    end
+    pbMessage(announce)
     # sidmod: nothing this battle consumes should survive it - see the item safety
     # net above. Covers both sides: the player's held items, and the bag stock that
     # BOTH teams' consumptions get charged to.
@@ -540,6 +553,58 @@ module SidmodRandomOpp
     $Trainer.heal_party
   end
 
+  # =============================================================================
+  # OU APEX - fight the best teams the offline ladder ever produced
+  #
+  # The pack (Data/sidmod/ou_apex.rxdata, built by sim/nexport_apex.rb) holds the
+  # top N teams from a king-of-the-hill ladder run, WITH THE ACTUAL POKEMON FROZEN
+  # IN, not box/slot references. That matters: a ladder team is recorded as pool
+  # keys into that run's save snapshot, and those keys rot - measured on ladder_ou4,
+  # 6 of the 38 mons the top 15 depend on had already been replaced in the live save
+  # (one slot went from a Lv100 Blisclops wall to a Lv50 Klefmime). Resolving keys
+  # against the live PC would quietly field the wrong teams. So the pack is
+  # self-contained: these teams do not need to exist in the player's boxes at all,
+  # and reorganising the PC can never change them.
+  # Slot 0 of each team is the LEAD the ladder chose for it (nlead.rb).
+  # =============================================================================
+  APEX_PATH = "Data/sidmod/ou_apex.rxdata"
+
+  # Loaded once per session and cached. @apex_pack stays false until a load is
+  # attempted so a missing pack isn't re-read on every menu open.
+  def apex_pack
+    return @apex_pack unless @apex_pack.nil?
+    @apex_pack =
+      begin
+        File.exist?(APEX_PATH) ? Marshal.load(File.binread(APEX_PATH)) : false
+      rescue
+        false   # corrupt or built by an incompatible engine - treat as absent
+      end
+  end
+
+  def apex_teams; (apex_pack && apex_pack["teams"]) || []; end
+
+  def apex_label(t)
+    niche = ARCH_LABELS[t["niche"].to_s.to_sym] || t["niche"].to_s
+    format("#%d  %d Elo  %s", t["rank"], t["elo"].to_i, niche)
+  end
+
+  def run_apex
+    teams = apex_teams
+    if teams.empty?
+      pbMessage(_INTL("No OU Apex pack installed. Build one from a ladder run:\n" \
+                      "ruby tools/sidmod_editor/sim/nexport_apex.rb ladder_ou4 15"))
+      return
+    end
+    i = pbShowCommands(nil, teams.map { |t| apex_label(t) }, -1)
+    return if i < 0
+    t = teams[i]
+    fight(t["mons"], _INTL("Apex {1}", t["rank"]),
+          _INTL("Ladder team {1} ({2} Elo, {3}) accepts your challenge:\n{4}!",
+                t["rank"], t["elo"].to_i,
+                ARCH_LABELS[t["niche"].to_s.to_sym] || t["niche"],
+                t["names"].join(", ")))
+  end
+
   # SMART v2 opens a second menu to choose the plan.
   def pick_archetype
     labels = [_INTL("Random archetype")] + ARCHETYPES.map { |a| ARCH_LABELS[a] }
@@ -551,7 +616,8 @@ module SidmodRandomOpp
   def run
     idx = pbShowCommands(nil, MODES, -1)
     return if idx < 0
-    sel  = MODE_SEL[idx]
+    sel = MODE_SEL[idx]
+    return run_apex if sel == :apex   # fixed recorded rosters - no tier/archetype step
     tier = (idx <= 2) ? :ou : :ubers
     arch = nil
     if sel == :smart2

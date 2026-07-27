@@ -182,17 +182,25 @@ module NativeSim
     battle.debug = true; battle.controlPlayer = true
     battle.internalBattle = false; battle.canRun = false
     dec = nil
+    @last_error = nil
     orig = $stdout; $stdout = File.open(File::NULL, 'w')
     begin
       dec = battle.pbStartBattle
-    rescue Exception
+    rescue Exception => e
       dec = 5
+      # Record it like #run does. Without this, an engine-level raise here is
+      # indistinguishable from a legitimate draw and a whole sweep reads 0.500.
+      @last_error = "#{e.class}: #{e.message.lines.first.to_s.strip[0, 90]}"
     ensure
       $stdout.close; $stdout = orig
     end
     $NSIM_EVENTS = nil
     dec == 1 ? :a : (dec == 2 ? :b : :draw)
   end
+
+  # Set by #run / #run_mons when the engine raised mid-battle (the result is then a
+  # meaningless :draw). Drivers should check this rather than trust a draw.
+  def last_error; @last_error; end
 
   # A pool key -> a fresh Pokemon (same as `party`, for one mon)
   def mon(key)
