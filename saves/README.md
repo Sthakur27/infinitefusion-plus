@@ -40,26 +40,30 @@ Save folder is `%APPDATA%\infinitefusion` on Windows,
 `~/Library/Application Support/infinitefusion` on macOS, else
 `${XDG_CONFIG_HOME:-~/.config}/infinitefusion`. Override with `SAVE_DIR=/path` on the shell script.
 
-`sha256: 69066bd6eec2918bf4bd0f0df9c2a34c40538423f4a11a5eb6f468d31a941d9c`
+`sha256: cf3132a892c1f9d1133f3acb651b8a8969dbb1ad82576e4990bf90911696da7f`
 
 ## What's in it
 
 **Party** (all Lv100):
 
-| Fusion | Typing | Set |
-|---|---|---|
-| Registeel/Blaziken "Steelzerker" | Steel/Fighting | Speed Boost @Wide Lens · SD / Hi Jump Kick / Protect / Baton Pass |
-| Azumarill/Garchomp "Sharcrunch" | Water/Ground | Huge Power @Leftovers · EQ / Waterfall / Ice Punch / Aqua Jet |
-| Porygon-Z/Noivern "Boombox" | Normal/Dragon | Adaptability @Choice Specs · Boomburst / Nasty Plot / Dragon Pulse / Flamethrower |
-| Dragonite/Regigigas "Dragotitan" | Dragon/Normal | Multiscale @Leftovers · Dragon Dance / Extreme Speed / EQ / Ice Punch |
-| Jolteon/Nidoking "09balanc" | Electric/Ground | Sheer Force @Life Orb · Earth Power / Thunderbolt / Flamethrower / Volt Switch |
-| Blissey/Gliscor "Toxtest" | Normal/Flying | Poison Heal @Toxic Orb · Softboiled / Toxic / Stealth Rock / Knock Off |
+| # | Fusion | Typing | Set |
+|---|---|---|---|
+| 1 | Registeel/Ninjask | Steel/Flying | Speed Boost @Focus Sash · Swords Dance / Iron Head / Protect / Baton Pass |
+| 2 | Porygon-Z/Noivern "Boombox" | Normal/Dragon | Adaptability @Choice Specs · Boomburst / Nasty Plot / Dragon Pulse / Flamethrower |
+| 3 | Dragonite/Regigigas "Dragotitan" | Dragon/Normal | Multiscale @Leftovers · Dragon Dance / Extreme Speed / EQ / Ice Punch |
+| 4 | Politoed/Alakazam "Downpour" | Water/Psychic | Drizzle @Life Orb · Surf / Thunder / Ice Beam / Psychic |
+| 5 | Blissey/Gliscor "Toxtest" | Normal/Flying | Poison Heal @Toxic Orb · Softboiled / Toxic / Stealth Rock / Knock Off |
+| 6 | Azumarill/Garchomp "Sharcrunch" | Water/Ground | Huge Power @Leftovers · EQ / Waterfall / Ice Punch / Aqua Jet |
 
-**Boxes** — box 18 onward are the competitive/benchmark boxes: `Rain`, `Sand`, `Bench`, `OU`,
-`Ubers`, `Sun`, hazard-control and utility sets, plus the `Squads` boxes and vanilla `UU`/`OU`/`Ubers`
-reference teams. Boxes 1–17 are the ordinary collection from the playthrough. Nearly every mon in
-the competitive boxes is Lv100 with a held item, which is also what enrolls it in the sidmod
-**Random Battle** pool.
+A Baton Pass lead into a rain sweeper and two physical win conditions: Registeel/Ninjask sets up
+behind Protect + Focus Sash and passes the boosts, Downpour turns on rain for Thunder, and
+Dragotitan / Sharcrunch clean up. Toxtest is the Stealth Rock setter and special sponge.
+
+**Boxes** — 40 boxes. Box 18 onward are the competitive/benchmark boxes: `Rain`, `Sand`, `Bench`,
+`OU`, `Sandbox`, `Ubers`, `Sun`, hazard-control and utility sets, plus the `Squads` boxes, a
+`Triples` box, a `Laboratory` box and vanilla `UU`/`OU`/`Ubers` reference teams. Boxes 1–17 are the
+ordinary collection from the playthrough. Nearly every mon in the competitive boxes is Lv100 with a
+held item, which is also what enrolls it in the sidmod **Random Battle** pool.
 
 The save carries its own trainer name and ID, and a lot of hours of progress — treat it as a
 showcase/benchmark save rather than a starting point for a fresh run.
