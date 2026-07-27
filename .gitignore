@@ -39,6 +39,9 @@ save_snapshot.rxdata
 
 # Secrets & local state
 *.apikey
+*apikey*
+*.key
+.env
 .claude/settings.local.json
 
 # Runtime logs
