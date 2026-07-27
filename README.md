@@ -32,8 +32,9 @@ Built on upstream **6.8.2**. Tracks upstream's `releases` branch — see [FORK.m
 | **Items are refunded** | A practice battle shouldn't cost you a Life Orb. Consumed held items and bag stock are restored afterwards — for both sides. |
 | **Smart Trainer AI** | A plan-based enemy AI (`055_sidmod/SmartTrainerAI.rb`) that compares attacking, setup, status, healing, phazing and switching as competing plans, with a beam search over an abstract state and an expected-damage model. |
 | **No item cheese** | Enemy trainers never use Full Restore / potions / X items mid-battle. |
-| **Hard mode, retuned** | Level scaling is a flat multiplier instead of vanilla's 1.6×, and hard mode shows you the incoming Pokémon. |
-| **More max PP** | Higher PP ceiling, and moves taught via debug arrive at full PP. |
+| **Hard mode, retuned** | Enemy level scaling is a single flat multiplier with no curve (`Settings::HARD_MODE_LEVEL_MODIFIER`), applied consistently to enemy levels, your level cap and the over-levelled exp penalty. Hard mode also **shows you the incoming Pokémon** on a switch. |
+| **Exp dampener** | A single global **×0.9** on exp gained. Earlier, larger exp experiments (always-on exp share, steeper over-level penalties) were all reverted to vanilla — only the dampener survives. |
+| **Catch anything** | The "Trainer blocked your Poké Ball" guard is off, so trainer Pokémon can be caught. |
 
 **On the AI, honestly:** it is measured as *exactly as strong as* the stock Essentials AI it
 replaces — 0.500 over 1440 games on identical teams and seeds. The v2/v3 work fixed a real
@@ -44,27 +45,89 @@ reverted. `sidmod.txt` records what was tried so it isn't redone blindly. It pla
 
 ### PC & storage
 
-- **PC search** — live-filter picker; type in a name or use `h:` / `b:` to search by fusion head or body, and jump straight to the slot.
-- **Team swap** — exchange your whole party with a box row in one action. Sand team out, rain team in.
-- **Live wallpaper preview** — the box redraws as you scroll the wallpaper list; backing out restores the one you started with.
-- **Free wallpaper lottery** — no Quest Point cost.
-- **Multi-select fixes** — bulk carries respect bounds, dropping onto an occupied slot swaps, and you can change box while holding.
+**Bulk select & carry.** Grab a whole group of Pokémon and move them as one block, with the rough
+edges fixed:
+
+- **Out of bounds is refused, not improvised.** Pasting a 6-wide row starting at column 2 buzzes and you keep holding the group. Previously it fell through to a spiral "find any free slot" fallback that scattered mons into unrelated parts of the box.
+- **Occupied targets swap.** Whatever was in those exact slots comes up into your cursor with its shape preserved — like `Shift` for a single mon. Only the slots you pointed at are ever touched.
+- You can change box while still carrying a group.
+
+**Team swap** — exchange your entire party with a box row in one commit. A box row is exactly six
+slots, so it's exactly one team: sand team out, rain team in. This can't be done with multi-select at
+all, because the stock code refuses to lift your last able Pokémon — swapping both sides in a single
+commit means the party is never empty mid-move. It refuses on an empty row, a row with no able
+Pokémon, or a party mon holding mail, and uneven counts are fine (a party of 3 into a row of 6 just
+takes what's there).
+
+**PC search** — open the PC, press **Up** to highlight the box name, press **A**, choose *Search*.
+
+| Filter | Behaviour |
+|---|---|
+| Type | Pick a primary type, then optionally a secondary. Order-independent, so it works on fusions and dual-types alike. |
+| Name | Matches nickname *or* species — and for a fusion it matches **either half**, so "char" finds both `Char/X` and `X/Char`. |
+| Level | Range. |
+| Dex # | Range. |
+
+Results read `[B#.#] Nickname L## [Type1/Type2]` with explicit `h:` / `b:` rows so you can see what
+the fusion actually *is*, and picking one jumps straight to that box and slot. The picker is a
+live-filter list (type to narrow, `UP`/`DOWN` to move, `HOME`/`END` for the ends, `ENTER` to choose)
+— keyboard-only by design, because with text input on, the letter keys bound to `USE`/`BACK` would
+fire while you type.
+
+**Live wallpaper preview** — the box behind the list redraws as you scroll the wallpaper picker, and
+backing out restores the one you started on. **Wallpaper lottery is free** — no Quest Point cost.
 
 ### Quality of life
 
-Turbo on by default · straight to save-select (no title screen or startup popups) · windowed start ·
-teleport/Fly anywhere · noclip and instant capture (hold `Input::ACTION`, Xbox **X**) ·
-hold-`ACTION`-to-refight any beaten trainer · gym leader rematches always available · traded fusions
-can be unfused · foreign Pokémon always obey · New Game+ keeps your levels instead of reverting to
-Lv5 babies · type-expert challenges accept any Pokémon · difficulty and game mode switchable
-**mid-save**.
+| | |
+|---|---|
+| **New Game+ keeps your Pokémon intact** | Transferred Pokémon keep their **level**, their **evolved form** (no de-evolving back to babies), their **moves** and their **stats**. Vanilla resets all four. Ownership, OT and Pokédex registration still update normally. |
+| **Turbo by default** | Speed-up starts at **2×** and cycles 2 → 3 → 1, instead of starting at 1×. |
+| **Straight into your save** | Title screen, intro cinematic and the startup announcement popups are all skipped — you land on the save-select / continue menu. |
+| **Windowed on launch** | No forced fullscreen. |
+| **Fly / teleport anywhere** | The badge requirement, follower check and outdoor-map check on Fly are removed. |
+| **Noclip** | Hold Xbox **X** (`Input::ACTION`) while moving, in debug builds. |
+| **Instant capture** | Hold Xbox **X** while throwing a ball for a guaranteed catch. |
+| **Refight any trainer** | Hold Xbox **X** and talk to a beaten trainer to rematch them. Works for standard trainers; story trainers (gym leaders, rivals, Rocket grunts) use custom scripts and fall through to normal dialogue. |
+| **Gym leader rematches always up** | All 16 rematchable leaders are present regardless of time of day — vanilla gates each one to a specific time via map events with no script-level switch. |
+| **Traded Pokémon behave** | Traded fusions can be unfused, and foreign Pokémon never disobey. |
+| **Type-expert challenges** | Accept any Pokémon from your party instead of only ones matching the specialist's type. |
+| **Difficulty & mode, mid-save** | Switch Classic / Remix / Legendary and Easy / Normal / Hard on an existing save. Legendary re-rolls all trainer teams into legendary fusions (behind a confirm prompt) and deliberately **skips** vanilla's dump of legendary eggs into your PC. |
 
 ### Creator & debug tools
 
-- **Fusion injector** — describe a fusion in chat, get a JSON spec, drop it into the PC from a debug command.
-- **PC export** — read-only dump of party + every box, so an assistant can actually see your PC.
-- **Searchable everything** — species, moves, items, switches/variables and trainers were all flat lists ordered by internal ID. All are now searchable by name.
-- **Benchmark opponents** — vanilla Gen-5 OU and Ubers teams as debug battle opponents, with the party full-healed before and after each test fight.
+Building a competitive mon by hand meant a lot of menu-walking. Most of that is gone.
+
+**EV / IV presets** — `Level/stats… → EV/IV/pID… → Set EVs` gains three one-click spreads next to
+the randomise entries:
+
+| Preset | Spread |
+|---|---|
+| Max Attack Speed | 252 Atk / 252 Spe / 6 HP |
+| Max Sp. Attack Speed | 252 SpA / 252 Spe / 6 HP |
+| Max Defenses | 252 Def / 252 SpD / 6 HP |
+
+`Set IVs` gains **Max all** (31 across the board), and `Moves…` gains **Max PP all moves**, which
+sets PP Up to 3 and refills every move at once instead of walking into each move individually.
+Moves taught through the debug menu also arrive at full PP with 3 PP Ups automatically — but only
+when the learn actually succeeded, so cancelling a forget-a-move prompt changes nothing.
+
+**Searchable pickers** — everything that used to be an internal-ID-ordered wall of entries is now
+type-to-filter:
+
+- **Items** — ~800 entries listed by ID number, effectively unusable. Now alphabetical with a live search box, still showing the ID.
+- **Species** — `Set species` and `Set fusion species` take a substring (`sala` → Salamence) with ranked matches (exact, then prefix, then contains). The fusion flow prompts for head, then body. Blank input falls back to the old dex-number picker.
+- **Moves** — `Teach move` / `Teach legit move` ask up front whether to *search by name* or *browse the full list*. "Legit" restricts the pool to genuinely learnable moves in either mode.
+- **Switches & variables** — press **Z** to filter 1000+ entries by name. Rows keep their real IDs while filtered.
+- **Trainers** — press **Z** in the Test Trainer Battle list to search by name.
+
+**Other debug additions**
+
+- **Gender lock bypass** — set male / female / genderless even on single-gendered or genderless species. Cosmetic only; breeding and evolution logic may still read the species' gender ratio.
+- **Fusion injector** — describe a fusion in chat, get a JSON spec written to `Data/sidmod/injections.json`, then drop it into a box from a debug command with a per-mon confirm. The spec is archived after a run so it can't be injected twice.
+- **PC export** — read-only JSON dump of your party and every box, so an assistant can actually see your PC. Empty slots stay `nil` so slot indices remain meaningful.
+- **Test battle from the pause menu** — with the party full-healed before *and* after, so test fights don't leave chip damage, and key rematch trainers pinned to the top of the selector.
+- **Benchmark opponents** — vanilla Gen-5 OU and Ubers teams available as debug battle opponents.
 
 ### Offline toolchain (`tools/sidmod_editor/`)
 

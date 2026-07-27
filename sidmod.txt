@@ -1173,6 +1173,87 @@ picking blind from a list of 84 names)
     with no block, deleting the oldpaper lines.
 
 ##############################################
+hard mode level multiplier is now a debug setting - tune it per save instead of editing
+001_Settings.rb and rebooting (end goal: dial hard mode in while playing)
+052_InfiniteFusion/System/GameModes/GameDifficulty.rb
+  NEW at the top of the file, above setDifficulty:
+  - reopens PokemonGlobalMetadata with attr_accessor :sidmodHardModeLevelModifier, so
+    the override lives in the SAVE (marshalled with $PokemonGlobal) and is per-slot.
+    nil = "no override", which is also what every pre-existing save has.
+  - hardModeLevelModifier(): returns the stored value if it is Numeric and > 0,
+    otherwise Settings::HARD_MODE_LEVEL_MODIFIER. Uses $PokemonGlobal&. so it is safe
+    on the title screen / before a save is loaded, and a nil/0/garbage stored value
+    falls back instead of producing level 0 mons.
+  put in this file (not in the debug file) on purpose: the getter is gameplay code
+  called from battle setup, so deleting the debug menu must not break it.
+call sites switched from Settings::HARD_MODE_LEVEL_MODIFIER to hardModeLevelModifier
+  (both of them - grep confirmed these were the only two):
+  010_Data/002_PBS data/013_Trainer.rb ~line 384: level = (level * hardModeLevelModifier).ceil
+    inside the SWITCH_GAME_DIFFICULTY_HARD branch; the Settings::MAXIMUM_LEVEL clamp
+    right below it is untouched, so a big multiplier still caps at 100.
+  052_InfiniteFusion/Gameplay/0_Utilities/BattleUtils.rb ~line 49 (getCurrentLevelCap):
+    current_max_level *= hardModeLevelModifier
+  NOT touched: 015_Trainers and player/001_Trainer.rb ~line 75 (skill_level returns 100
+    on hard) - that is the AI skill axis, not level scaling. EASY_MODE_LEVEL_MODIFIER
+    (0.9, same getCurrentLevelCap method) is still a plain Settings constant - say the
+    word if easy mode should get the same treatment.
+020_Debug/003_Debug menus/006_sidmod_ModeSwitch.rb
+  sidmod_multiplier_text(value) ~line 62 (NEW): format("%g", value.round(3)) so menus
+    show "1.5" / "2" instead of "1.5" / "2.0" / float noise.
+  sidmod_set_hard_mode_multiplier ~line 66 (NEW): ChooseNumberParams, range 100..500
+    PERCENT (pbMessageChooseNumber is integer-only), default = the current effective
+    multiplier * 100. Stores pct / 100.0, EXCEPT when the chosen percent equals
+    Settings::HARD_MODE_LEVEL_MODIFIER * 100, where it stores nil - so picking the
+    default value is how you clear the override and go back to following Settings.
+    params.setCancelValue(-1) AFTER setDefaultValue (setDefaultValue nils the cancel
+    value, so the order matters) - without it, B returns the initial number and the
+    "set to" message fires on a cancel.
+  sidmod_mode_difficulty_menu ~line 90: header now also shows "(Hard multiplier {N}x)",
+    and a new "Hard multiplier: {N}x" entry sits between Difficulty: Hard and Close
+    (cmd == 6 -> sidmod_set_hard_mode_multiplier). close_index is derived from
+    cmds.length so it moved from 6 to 7 on its own.
+  the pause-menu shortcut gets this for free - it calls sidmod_mode_difficulty_menu.
+  effect at a glance (default 1.5x): a Lv50 trainer mon -> Lv75, a 65 badge cap -> 97.
+    at 1.0x -> Lv50/65 (hard mode with no level inflation, AI skill still 100).
+    at 3.0x -> Lv100 (clamped)/195.
+  caveats: only affects trainer teams built AFTER the change (already-instantiated
+    battles and Legendary mode's stored randomTrainersHash keep their levels), and it
+    raises YOUR level cap too, since getCurrentLevelCap multiplies by the same number.
+  tested: scratchpad/test_hardmode_modifier.rb loads the real GameDifficulty.rb and
+    evals the real sidmod_set_hard_mode_multiplier over a stubbed
+    ChooseNumberParams/pbMessageChooseNumber that reproduces the engine's cancel
+    semantics. 20 checks green: fallback on a fresh save / nil / 0 / non-numeric /
+    no-save-loaded, the percent round-trip (220 -> 2.2), reset-to-default clearing the
+    override, cancel changing nothing and printing nothing, 100% allowed, and the
+    level/cap arithmetic at 1x/1.5x/2x/3x. ruby -c clean. NOT exercised in-game.
+  to revert: delete the two new methods + the menu entry and header text, delete the
+    PokemonGlobalMetadata reopen and hardModeLevelModifier, and put
+    Settings::HARD_MODE_LEVEL_MODIFIER back at the two call sites. A stale
+    @sidmodHardModeLevelModifier left in a save is then simply ignored.
+
+##############################################
+debug menu B-button bugfix - pressing B in the sidmod mode/difficulty and league tier
+menus silently ran the entry above "Close" instead of closing
+  root cause: pbShowCommands' cmdIfCancel (007_Objects and windows/011_Messages.rb
+  ~line 1005) is ONE-BASED - on Input::BACK it returns `cmdIfCancel - 1`, and only a
+  NEGATIVE value returns as-is. Both menus passed the 0-based close_index, so B
+  returned close_index - 1: the command right above Close.
+020_Debug/003_Debug menus/006_sidmod_ModeSwitch.rb ~line 108
+  sidmod_mode_difficulty_menu: pbMessage(header, cmds, close_index)
+    -> pbMessage(header, cmds, close_index + 1)
+  was: B set the game to HARD difficulty (and pinned $Trainer.lowest_difficulty = 2)
+  reported by the user; this is a real save write, not just a UI annoyance.
+020_Debug/003_Debug menus/007_sidmod_LeagueTier.rb ~line 55
+  same one-line change. was: B ran sidmod_set_league_tier(5), silently unlocking and
+  setting the Elite 4 rematch tier to 5 (all L100).
+  the `break if cmd < 0 || cmd == close_index` guard below each call already handles
+  the corrected return value, so nothing else needed changing.
+  swept the other 37 sidmod-touched files for the same pattern - these two were the
+  only menus passing a 0-based cancel index (every other 3-arg pbMessage hit is just
+  _INTL interpolation).
+  to revert: drop the `+ 1` back off both calls.
+
+##############################################
 # old commented-out reference impl kept below for future tweaks
 # max vals
 # PokemonDebugMenuCommands.register("hiddenvalues", {
@@ -1421,4 +1502,41 @@ tools/sidmod_editor/sprites/   (offline tooling, not a game patch)
   committed: code + descriptions + the game-ready *_fit sprites (28KB).
   gitignored: out/*_raw.png (4.2MB of 1024px intermediates), comparison strips, autogen/
               baselines (re-extractable in seconds).
+#############################################
+
+
+#############################################
+pause-menu icons on the sidmod entries - match upstream 6.8's icon-ified stock rows
+016_UI/001_UI_PauseMenu.rb
+  PokemonPauseMenu#pbStartPokemonMenu ~line 167-174: the five sidmod command labels
+  were plain _INTL("...") while every stock row got a "  <icon=#{ICON_*}>  " prefix in
+  6.8 (see the UPSTREAM MERGE 6.7.2->6.8.2 block above, which noted them staying plain).
+  now:
+    Heal Party              -> ICON_BAG        (menuIcons/BAG.png)      heal items come from the bag
+    Pokémon Storage         -> ICON_POKEMON    (menuIcons/POKEMON.png)  Poké Ball = Pokémon-related
+    Test Battle             -> ICON_DEBUG      (menuIcons/DEBUG.png)    it is a debug tool
+    Game Mode / Difficulty  -> ICON_OPTIONS    (menuIcons/OPTIONS.png)  difficulty is a game option
+    Random Battle           -> ICON_QUIT_SAFARI(menuIcons/SAFARI.png)   closest to "battle"; SAFARI
+                                                                       is otherwise only shown inside
+                                                                       the Safari Zone, so no clash
+                                                                       in normal play
+  NO NEW ART: only the 11 icons that already exist in Graphics/Icons/menuIcons/ are used,
+  so four of them are deliberately reused from the stock row with the same meaning
+  (Bag / Pokémon / Debug / Options). Nothing else changed - same cmdHeal/cmdStorage/
+  cmdTestBattle/cmdGameMode/cmdRandomOpp locals, same order, same $DEBUG and
+  defined?(SidmodRandomOpp) gates, handlers untouched. Presentation only.
+  why it matters that the file must exist: 010_DrawText.rb ~line 656 does
+  Bitmap.new("Graphics/Icons/<param>") for an <icon=> tag - a missing PNG raises at
+  render time, i.e. the pause menu would crash on open. Item icons (itemNNN.png) were
+  rejected as options because they are 48x48 vs the 24x28 menuIcons.
+  revert: delete the "  <icon=#{ICON_*}>  " + prefix from those five lines (and the two
+  # sidmod: comment lines above the $DEBUG block) to get plain _INTL labels back.
+  verified: ruby -c Syntax OK; all five ICON_* constants defined at ~line 97-107 of the
+  same file and all five PNGs confirmed on disk; each cmdX registered once + handled once
+  (~line 290-318); pbStartPokemonMenu / class PokemonPauseMenu exist in this file ONLY -
+  no 052_InfiniteFusion override to double-patch. NOT verified in-game (not booted).
+  pre-existing unrelated risk spotted: 052_InfiniteFusion/System/Game Options/GameOptions.rb
+  references optionIcons/AUDIO|GAMEPLAY|VISUALS|CHALLENGE|RANDOMIZER but
+  Graphics/Icons/optionIcons/ does not exist in this install - those tags would hit the
+  same Bitmap.new raise if that menu draws them. Untouched here.
 #############################################

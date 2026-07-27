@@ -163,13 +163,15 @@ class PokemonPauseMenu
     end
     # sidmod: quick-access shortcuts (debug builds) - actions otherwise buried in
     # submenus. Placed above Options/Debug for fast reach.
+    # sidmod: icons reuse existing menuIcons/*.png only (no new art) so these rows
+    # match the stock 6.8 icon rows. Revert = drop the "  <icon=...>  " + prefixes.
     if $DEBUG
-      commands[cmdHeal = commands.length]       = _INTL("Heal Party")
-      commands[cmdStorage = commands.length]    = _INTL("Pokémon Storage")
-      commands[cmdTestBattle = commands.length] = _INTL("Test Battle")
-      commands[cmdGameMode = commands.length]   = _INTL("Game Mode / Difficulty")
+      commands[cmdHeal = commands.length]       = "  <icon=#{ICON_BAG}>  " + _INTL("Heal Party")
+      commands[cmdStorage = commands.length]    = "  <icon=#{ICON_POKEMON}>  " + _INTL("Pokémon Storage")
+      commands[cmdTestBattle = commands.length] = "  <icon=#{ICON_DEBUG}>  " + _INTL("Test Battle")
+      commands[cmdGameMode = commands.length]   = "  <icon=#{ICON_OPTIONS}>  " + _INTL("Game Mode / Difficulty")
     end
-    commands[cmdRandomOpp = commands.length] = _INTL("Random Battle") if defined?(SidmodRandomOpp)   # sidmod: fight a team from your Lv100+item PC pool
+    commands[cmdRandomOpp = commands.length] = "  <icon=#{ICON_QUIT_SAFARI}>  " + _INTL("Random Battle") if defined?(SidmodRandomOpp)   # sidmod: fight a team from your Lv100+item PC pool
     # upstream 6.8 added icons to these three entries
     commands[cmdOption = commands.length] = "  <icon=#{ICON_OPTIONS}>  " + _INTL("Options")
     commands[cmdDebug = commands.length] = "  <icon=#{ICON_DEBUG}>  " + _INTL("Debug") if $DEBUG
