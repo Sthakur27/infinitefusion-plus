@@ -23,6 +23,9 @@ Built on upstream **6.8.2**. Tracks upstream's `releases` branch — see [FORK.m
 ---
 
 ## Feature showcase
+<img width="1782" height="1498" alt="image" src="https://github.com/user-attachments/assets/d3932004-c911-48ac-84b3-840f3379dfab" />
+<img width="1080" height="852" alt="image" src="https://github.com/user-attachments/assets/672d452b-8f0c-4e49-a71c-0eb45515101c" />
+<img width="2686" height="1539" alt="image" src="https://github.com/user-attachments/assets/4e96490a-978b-4d98-88f4-b91eb1c5540a" />
 
 ### Battle
 
