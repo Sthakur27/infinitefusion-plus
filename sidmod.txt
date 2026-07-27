@@ -1270,3 +1270,67 @@ cost nothing, and the pool mons' items were being permanently stripped
 #     next false
 #   }
 # })
+
+#############################################
+UPSTREAM MERGE: 6.7.2 -> 6.8.2   (merge commit, sidmod branch)
+
+upstream release line is `releases`, NOT `main` (main is stale since Apr 2024)
+  git fetch upstream && git merge upstream/releases
+7866 files changed upstream, incl. mass rename of Graphics/Trainers to name-based files
+
+all 25 stock scripts sidmod patches were also touched by upstream:
+  14 auto-merged  (# sidmod: tags verified still present afterwards)
+  3 of those carry no tag - verified identical to pre-merge by diff:
+      001_PokeBattle_BattleCommon.rb  (catch-in-trainer-battle bypass, CTRL->ACTION)
+      004_Overworld_FieldMoves.rb     (pbCanUseFly always true)
+      999_Main.rb                     ($DEBUG=TRUE)
+  11 conflicted - resolved keeping sidmod intent on top of upstream's new code:
+
+001_Settings.rb            HARD_MODE_LEVEL_MODIFIER stays 1.5 (upstream moved to 1.1)
+                           + took upstream's new EASY_MODE_LEVEL_MODIFIER = 0.9
+001_StartGame.rb           `# pokemon.level = 5` stays commented; took upstream's
+                           new `pokemon.pif_sprite = nil`
+001_UI_PauseMenu.rb        kept quick-access block + Random Battle entry.
+                           upstream 6.8 added icons: Options/Debug/Title now use
+                           "  <icon=#{ICON_*}>  " - sidmod entries stay plain text
+                           ("Title screen" was renamed "Title" upstream)
+PokemonStorageScreen.rb    kept boxCommandSearch (PC search).
+                           DROPPED boxCommandTransferInfo - upstream deleted it AND
+                           its only caller; disclaimer now comes from
+                           Settings::TRANSFER_BOX_DISCLAIMER_MESSAGE
+002_Debug_MenuCommands.rb  "fillboxes" stays DELETED. upstream rewrote it, but it was
+                           deliberately removed here along with demoparty/healparty/
+                           clearboxes/openstorage (relocated to the pause menu).
+                           to get it back: take upstream's version of that register block
+005_Debug_PokemonCommands  kept the single-gendered/genderless bypass (incl. "Make
+                           genderless", instance_variable_set) over upstream's rewrite.
+                           kept pbChooseSpeciesListSearchable for head/body pickers
+                           (defined in 001_Editor_Utilities.rb:306)
+type_expert.rb             PokemonSelection.choose(...,nil) - no type filter - kept;
+                           took upstream's whitespace formatting
+WallpaperLottery.rb        lottery stays FREE: no cost check, no `quest_points -= 1`,
+                           "Free" prompt + free info text. BUT kept upstream's
+                           `$Trainer.quest_points = initialize_quest_points unless ...`
+                           so the value is never nil for other 6.8 code paths
+MultiSaves.rb              startup ads stay silenced. upstream split STARTUP_MESSAGES
+                           into STARTUP_MESSAGES_KANTO/_HOENN, so BOTH blocks are now
+                           gated with `false &&`
+Spped Up.rb                SPEEDUP_STAGES = [2, 3, 1]
+                           (note: this file previously documented [3,1,2] above, but the
+                            actual code was [2,3,1] - kept what the code had)
+DownloadedSettings.rb      took upstream wholesale. no sidmod content, and the game
+                           rewrites it at boot (updateHttpSettingsFile). now says 6.8.0
+
+verified: ruby -c over 832 files in Data/Scripts + tools = 0 syntax errors
+          (2 duplicate-key WARNINGS are pre-existing in pristine upstream:
+           ImprovedShinies/SHINY_COLOR_OFFSETS.rb, 998_Experimental/OnlineWondertrade.rb)
+          no conflict markers left; every pause-menu sidmod command still has a handler;
+          PC search present in BOTH pbBoxCommands definitions (016_UI + 052 Multiselect)
+NOT verified: game not booted. needs an in-game smoke test.
+
+rollback: git tag pre-6.8.2-merge  ->  git reset --hard pre-6.8.2-merge
+
+local sprite/dex churn (dex.json, Data/sprites/*) was reset to upstream 6.8.2's
+versions to let the merge run; the game re-syncs these at boot. pre-merge copies
+were backed up outside the repo in case custom sprites misbehave.
+#############################################
