@@ -1,0 +1,1272 @@
+always debug 999 main 
+def mainFunction
+  $DEBUG=TRUE
+
+#############################################
+save files in app data > roaming > infinite fusion
+
+skip video 
+#playIntroCinematic
+#@screen.intro
+
+#############################################
+
+
+new game plus reset levels (don't revert to L5 babies)
+moved in a patch from MultiSaves.rb -> 003_Game processing/001_StartGame.rb
+function: self.ngp_clean_pc_data
+comment out:
+            # pokemon.level = 5
+            # pokemon.species = GameData::Species.get(pokemon.species).get_baby_species(false)
+            # pokemon.reset_moves
+            # pokemon.calc_stats
+keep owner.id / ot / obtain_method / pokedex.set_seen/set_owned uncommented
+
+note: Game.start_new exists in both 001_StartGame.rb (folder 003) and MultiSaves.rb (folder 052)
+the MultiSaves.rb one wins (loaded later) — both call ngp_clean_pc_data so patching the cleanup function covers both paths
+
+#############################################
+start turbo
+SPEEDUP_STAGES = [3,1,2]
+
+#############################################
+banned pokemon enabled in challenges:
+type_expert.rb
+if PokemonSelection.choose(1, 4, true, true, nil)
+#############################################
+debug mode heal at top 
+pc at top
+UI_PauseMenu
+Debug_MenuCommands
+healparty
+
+
+#############################################
+dont start fullscreen
+multisaves
+pbSetResizeFactor([$PokemonSystem.screensize, 4].min)
+Graphics.scale = (factor + 1) * 1.0
+
+#############################################
+teleport anywhere
+004_Overworld_FieldMoves.rb
+pbCanUseFly
+#############################################
+debug noclip - hold Xbox X (= Input::ACTION) while moving
+004_Game classes/009_Game_Player.rb ~line 168
+  return true if $DEBUG && Input.press?(Input::ACTION)
+was Input::BACK which overlapped with the menu button
+
+#############################################
+EV/IV limit
+EV_STAT_LIMIT
+pbJustRaiseEffortValues
+#############################################
+exp tweaks - ALL REVERTED TO VANILLA except a single 0.9x dampener
+011_Battle/003_Battle/004_Battle_ExpAndMoveLearning.rb
+  the only surviving exp change is the global dampener:
+  ~line 141 (after scaled exp block, before outsider bonus):
+    exp = (exp * 0.9).floor   # sidmod: global 0.9x exp dampener (only surviving exp tweak)
+  to revert fully: delete that line.
+
+  reverted back to vanilla (history kept for reference):
+  - pbGainExp ~line 11: expAll was forced `true` (always-on exp share, bench mons
+    got exp); restored to vanilla `(EXPALL item) || easy-mode` gate.
+  - pbGainExpOne ~line 122: exp-all bench fraction was `a / 4`; restored to vanilla `a / 2`.
+  - scaled exp block: over-leveled exponent was bumped to ** 7 (then ** 5); restored
+    to vanilla ** 5 with plain `level` (briefly used penalty_level = level /
+    HARD_MODE_LEVEL_MODIFIER on hard mode -- removed).
+  - dampener itself briefly ran at 0.7x then 0.8x; now 0.9x.
+  note: SCALED_EXP_FORMULA is true via MECHANICS_GENERATION = 5 (vanilla IF default).
+
+#############################################
+Rearrange menu 
+UI_PauseMenu
+Debug_MenuCommands
+healparty
+
+#############################################
+og trainer/name/hexcolor 
+ui_summary 
+drawPageOne 
+exp. points
+
+#############################################
+instant capture - hold Xbox X (= Input::ACTION) while throwing a ball
+Data\Scripts\011_Battle\003_Battle\001_PokeBattle_BattleCommon.rb
+pbCaptureCalc ~line 216:
+  return 4 if $DEBUG && Input.press?(Input::ACTION)
+returns 4 shakes (= guaranteed catch); was Input::CTRL
+
+catch trainer pokemon
+001_PokeBattle_BattleCommon
+  # if trainerBattle? && !(GameData::Item.get(ball).is_snag_ball? && battler.shadowPokemon?)
+    #   @scene.pbThrowAndDeflect(ball, 1)
+    #   pbDisplay(_INTL("The Trainer blocked your Poké Ball! Don't be a thief!"))
+    #   return
+    # elsif $game_switches[SWITCH_CANNOT_CATCH_POKEMON]
+#############################################
+unfuse traded pokemon (remove restriction)
+052_InfiniteFusion/Gameplay/Items/New Items effects.rb
+  pbUnfuse ~line 1647: changed `if (pokemon.foreign?($Trainer))` to `if false`
+  bypasses the "You can't unfuse a Pokémon obtained in a trade!" early return
+
+PC search/filter - "Search" entry in the box-name command menu
+new file: 052_InfiniteFusion/Menus/PC/PCSearch.rb (module PCSearch)
+hooks (TWO pbBoxCommands -- IF overrides the standard one with multiselect):
+  016_UI/PokemonStorage/PokemonStorageScreen.rb pbBoxCommands
+  052_InfiniteFusion/Menus/PC/Multiselect/MultiSelect_PokemonStorageScreen.rb pbBoxCommands
+both have cmd_search at top + new boxCommandSearch method
+filters: type / level range / name (substring) / dex # range
+  type filter: prompts for primary type, then optional secondary type
+    - secondary "(Any / single-type)" -> matches mons containing primary
+    - secondary chosen -> matches mons containing BOTH types in any order
+      (works for fusions and dual-type mons; order-independent)
+  name filter: matches nickname OR species name; for fusions matches either
+    head or body species name (so "char" finds Char/X and X/Char fusions)
+results: shown as "[B#.#] Nickname L## [Type1/Type2]"
+selecting a result calls @scene.pbJumpToBox + sets @scene.@selection
+result list capped at MAX_RESULTS = 60 (warns if truncated)
+how to use: open PC -> press Up to highlight box name -> press A -> "Search"
+#############################################
+hold-to-refight - hold Xbox X (Input::ACTION) + talk to a beaten trainer to fight again
+new file: 053_PIF_Hoenn/TrainerRematches/05_HoldToRefight.rb
+mechanic: aliases Game_Player#check_event_trigger_there; if button held and
+  the front event has Self-Switch A on, flip it off + refresh the event before
+  the normal talk handler runs. Trainer's "let's battle" page reactivates,
+  battle fires, event re-locks Self-Switch A on win.
+caveat: if you lose/flee the rematch the trainer stays "unbattled" until you win
+caveat: any non-trainer NPC that uses Self-Switch A for state will also reset
+caveat: only works for standard trainers (Self-Switch A pattern); story trainers
+        like Rocket grunts/gym leaders/rivals use custom scripts and won't refight
+        - falls through silently to normal dialogue for those
+#############################################
+foreign mons always obey - disabled trade disobedience check
+011_Battle/001_Battler/009_Battler_UseMove_SuccessChecks.rb
+  pbObedienceCheck? ~line 114: prepended `false &&` to the foreign clause
+  was: if (@pokemon.foreign?(@battle.pbPlayer) && @level>badgeLevel) || @pokemon.force_disobey
+  now: if (false && @pokemon.foreign?(...) && @level>badgeLevel) || @pokemon.force_disobey
+  force_disobey path preserved for story/debug uses
+  vanilla threshold was 10 * (badge_count + 1) -- triggered on traded mons over cap
+#############################################
+hard mode level scaling - flat 1.1x (vanilla linear modifier; vanilla stock 1.6x, briefly tried 1.3x and a curve)
+001_Settings.rb: HARD_MODE_LEVEL_MODIFIER = 1.1
+call sites use Settings::HARD_MODE_LEVEL_MODIFIER directly (plain linear/flat multiply, no curve):
+  013_Trainer.rb (enemy mon level scaling)
+  BattleUtils.rb getCurrentLevelCap (player level cap scaling)
+  004_Battle_ExpAndMoveLearning.rb (penalty_level inverse for over-leveled calc)
+
+  --- alternative: linear curve (gentler early, steeper late) ---
+  if you want to swap back, in 001_Settings.rb replace the constant line with:
+    HARD_MODE_LEVEL_MODIFIER = 1.6
+    def self.hard_mode_level_mod(level)
+      1.0 + (HARD_MODE_LEVEL_MODIFIER - 1.0) * (level / 60.0).clamp(0.0, 1.0)
+    end
+  then update the 3 call sites above to use Settings.hard_mode_level_mod(level)
+  instead of Settings::HARD_MODE_LEVEL_MODIFIER
+  curve sample: L10->1.1x  L20->1.2x  L30->1.3x  L60+->1.6x
+
+#############################################
+more max pp
+def total_pp
+in 004_Pokemon_Move
+
+##############################################
+show incoming pokemon on hard mode: 
+006_Battle_action_switching
+switchMessage = $game_switches[SWITCH_GAME_DIFFICULTY_HARD] ? switchMessageHard : switchMessageNormal
+
+
+##############################################
+debug pokemon commands
+005_Debug_PokemonCommands.rb
+
+EV presets - in Level/stats... -> EV/IV/pID... -> Set EVs, after the
+  Randomise/Max randomise entries:
+    Max Attack Speed     -> 252 ATK / 252 SPD / 6 HP
+    Max Sp. Attack Speed -> 252 SPA / 252 SPD / 6 HP
+    Max Defenses         -> 252 DEF / 252 SPDEF / 6 HP
+  branch logic: cmd2 < ev_id.length -> per-stat edit;
+                cmd2 < ev_id.length + 2 -> randomise/max-randomise;
+                else -> preset (cmd2 - (ev_id.length + 2) picks which)
+  fix: randomise-all check now uses ev_id.length (was evcommands.length - 2,
+       which broke once presets pushed extra entries)
+
+Max IVs button - same submenu -> Set IVs, after Randomise all:
+    "Max all" -> sets every IV to Pokemon::IV_STAT_LIMIT (31)
+  branch: < iv_id.length per-stat, == iv_id.length randomise, else max all
+
+Move name-search picker - Moves... -> Teach move / Teach legit move
+  upfront prompt: "Search by name" vs "Browse full list".
+    Search: type a substring (e.g. "earth" -> Earthquake) -> ranked matches.
+    Browse: original letter-bucket picker (A/B/C... -> move list).
+  Teach legit move passes pbGetLegalMoves(species) as the restricted pool so
+  only learnable moves are shown in either mode.
+  helpers (top of 005_Debug_PokemonCommands.rb):
+    pbChooseMoveSearchOrBrowse(restrict_to_ids) - upfront chooser
+    pbChooseMoveByName(restrict_to_ids, prompt)  - name search
+    pbChooseMoveByLetterBucket(pool)             - letter-bucket browse
+
+Bypass single-gender/genderless lock - main -> Set gender
+  vanilla blocked the menu entirely for AlwaysMale/AlwaysFemale/Genderless species.
+  patch removes the early-return and writes @gender directly via instance_variable_set
+  (since Pokemon#gender= refuses writes on singleGendered? mons).
+  options: Make male / Make female / Make genderless / Reset
+  current status line shows "(species is single-gendered)" hint when applicable.
+  cosmetic only - breeding/evolution logic that branches on gender may still use
+  species_data.gender_ratio rather than the per-mon @gender.
+
+Species name-search picker - Species/form... -> Set species / Set fusion species
+  prompts for a substring (e.g. "sala" -> Salamence, "kyo" -> Kyogre) and
+  shows ranked matches (exact > startsWith > contains, then by dex #).
+  blank/cancel input falls back to the original dex-number picker.
+  fusion flow: head prompt, then body prompt - both name-searchable.
+  helper: pbChooseSpeciesByName(default, max_dex, prompt) at top of
+    005_Debug_PokemonCommands.rb. NB_POKEMON cap limits to base species for
+    fusion components. Reuses pbChooseSpeciesList as the dex-# fallback.
+
+Max PP all moves - top-level Moves... entry (sibling of Teach move /
+  Teach legit move / Forget move / Reset moves / Set move PP /
+  Reset initial moves). Sets PP Up to 3 and PP to total_pp for every
+  move on the Pokemon. Skips empty slots and infinite-PP moves
+  (total_pp <= 0). Saves walking into Set move PP -> each move ->
+  Set PP Up -> 3 individually.
+
+##############################################
+wallpaper lottery free - removed Quest Point cost (end goal: free wallpapers)
+052_InfiniteFusion/Gameplay/Features/WallpaperLottery.rb
+  PokemonStorage#wallpaperLottery:
+  - dropped the `$Trainer.quest_points <= 0` gate + "you don't have any" return
+  - removed the `$Trainer.quest_points -= 1` deduction
+  - play prompt now reads "(Free)" (was "Costs 1 Quest point"); Info text updated
+  also removed the now-unused `initialize_quest_points` call at the top of the method
+  quest_points system itself (Trainer#quest_points, QuestUtils/QuestLogScript) left
+  intact - finishQuest still awards points, they just aren't spent here anymore
+  alt path considered: a debug "Set Quest Points" command mirroring setbp/setmoney in
+  020_Debug/003_Debug menus/002_Debug_MenuCommands.rb (playermenu) - not done, free
+  lottery covered the goal. quest_points has no Settings::MAX_* constant (use 9_999)
+
+##############################################
+no AI item usage - enemy trainers never use Full Restore / potions / X items
+011_Battle/004_AI/002_AI_Item.rb
+  PokeBattle_AI#pbEnemyShouldUseItem? ~line 5: prepended `return false` at the top
+  this is the single gate - pbDefaultChooseEnemyCommand (001_PokeBattle_AI.rb ~line 63)
+  calls it first each turn; false = AI falls through to choosing a move instead
+  trainer items still load into @battle.items (Overworld_BattleStarting.rb), they're
+  just never consulted. pbEnemyItemToUse / pbGetOwnerItems left intact
+  to revert: delete the `return false` line
+  to make conditional (e.g. only off on hard mode): replace with
+    return false if $game_switches[SWITCH_GAME_DIFFICULTY_HARD]
+  NO side effects on: player item use, wild mon held items, item effect handlers
+
+##############################################
+debug switches/variables search - find a switch/variable by name fast (1000+ entries)
+020_Debug/003_Debug menus/003_Debug_MenuExtraCode.rb
+  SpriteWindow_DebugVariables (~line 70): added @filter + @filtered list. itemCount now
+    returns @filtered.size; new build_list builds the visible id list from mode + filter
+    (case-insensitive name substring match); new current_real_id maps the cursor's display
+    row -> real switch/variable id; new filter= setter rebuilds list, jumps to index 0.
+    mode= now also calls build_list.
+  drawItem (~line 117): uses id = @filtered[index] instead of index+1 everywhere
+    (name lookup, on/off eval, status, %04d id label) so rows show the real id even when filtered.
+  pbDebugVariables (~line 224): added Input::SPECIAL (Z key) handler -> pbMessageFreeText
+    prompt; blank input clears the filter (shows all). current_id now = current_real_id,
+    with `next if current_id.nil?` guard so an empty result list is safe.
+  002_Debug menus/002_Debug_MenuCommands.rb (~line 114/123): appended "Press Z to search by
+    name." to the Switches and Variables command descriptions.
+  why: scrolling 1000+ switches/variables to find gym-leader-rematch flags was painful.
+  hotkey choice: Z = Input::SPECIAL (free on this screen; ACTION/USE/LEFT/RIGHT/BACK all taken).
+  to revert: restore index+1 in drawItem, itemCount to the size-1 expression, drop the new
+    methods/filter handler, and remove the description suffixes. no save-data or gameplay impact
+    (debug-only screen; filtering is purely visual, toggling still writes the real id).
+  bugfix (crash on open): @filter/@filtered were set AFTER super(...) in initialize, but
+    Window_DrawableCommand's constructor calls refresh -> itemCount, which hit @filtered.size
+    while still nil -> "undefined method `size' for nil:NilClass" (003_Debug_MenuExtraCode.rb:81).
+    fix: assign @filter/@filtered BEFORE super; itemCount now returns @filtered ? .size : 0.
+    affected both the Switches and Variables screens (shared SpriteWindow_DebugVariables class).
+
+##############################################
+debug test-trainer-battle search - find a trainer by name fast in the big list
+020_Debug/003_Editor_Listers.rb
+  pbListScreen (~line 45 loop): added Input::SPECIAL (Z key) handler, gated on
+    lister.respond_to?(:filter=). Prompts pbMessageFreeText, sets lister.filter=,
+    rebuilds commands; if no matches, shows a message and clears the filter back
+    to all. Resets list.index to lister.startIndex and selectedmap = -1.
+  TrainerBattleLister: added @filter = "" in initialize, filter / filter=(value)
+    accessors (setter also resets @selection = 0 so the cursor jumps to top),
+    and a substring filter in commands (matches "<TrainerType name> <real_name>",
+    case-insensitive) before pushing each row. @ids stays in sync with @commands
+    so value(index) / refresh(index) map correctly under filtering.
+  002_Debug menus/002_Debug_MenuCommands.rb: appended "Press Z to search by name."
+    to the "Test Trainer Battle" and "Test Trainer Battle Advanced" descriptions
+    (Advanced's [Add trainer]/[Edit trainer] both reuse the same lister, so search
+    works there too with no extra code).
+  hotkey choice: Z = Input::SPECIAL, free in pbListScreen (loop only handled
+    BACK/USE) - same choice as the switches/variables search.
+  why: the trainer list is huge; scrolling to find a specific trainer was painful.
+  to revert: drop the Input::SPECIAL branch in pbListScreen, remove @filter +
+    filter/filter= + the substring guard in TrainerBattleLister.commands, and remove
+    the description suffixes. debug-only, no save/gameplay impact (filter is visual).
+  caveat: filter only applies to listers that define filter= (TrainerBattleLister);
+    every other pbListScreen caller is unaffected (respond_to? guard).
+
+##############################################
+gym leader rematches always available - bypass time-of-day gate
+new file: 054_PIF_Kanto/GymLeaderRematch_AlwaysAvailable.rb
+mechanic: vanilla gates each of the 16 rematchable Gym Leaders to a specific time
+  of day (Brock = day, Koga = evening, Sabrina = night, etc); the gate lives in
+  map-event conditional branches that flip a per-leader switch on/off by the clock
+  -- there is NO script-level timer to disable.
+fix: Events.onMapChange hook force-sets all 16 leader switches true on every map
+  change, so every leader is always present at the rematch spot regardless of time.
+switches (same set read by Kernel.gymLeaderRematchHint, = the 16 in the
+  VAR_NB_GYM_REMATCHES >= 16 tier-4 league unlock):
+  426 Brock 427 Misty 428 Surge 429 Erika 430 Koga 431 Sabrina 432 Blaine
+  433 Giovanni 434 Whitney 435 Kurt 436 Falkner 437 Clair
+  508 Morty 509 Pryce 510 Chuck 511 Jasmine
+caveat: after beating a leader its switch goes false; it re-appears next map change
+  (leave + re-enter the rematch hall), not instantly mid-room.
+caveat: the rematch-hall hint NPC will always say "you got every Gym Leader to come
+  here" since all switches read true.
+to revert: delete the file.
+
+##############################################
+mid-save game mode / difficulty switcher - change Classic/Remix/Legendary + Easy/Normal/Hard on an existing save
+new file: 020_Debug/003_Debug menus/006_sidmod_ModeSwitch.rb
+where: Debug menu -> Player options... -> "Set Game Mode / Difficulty" (registered under parent "playermenu")
+  registers DebugMenuCommands command "sidmodmodeswitch"; loops a pbMessage(header, cmds, close_index) menu
+  showing current mode (sidmod_current_mode_text via getCurrentGameModeSymbol) + current difficulty
+  (getDisplayDifficulty), with a "Close" entry to exit.
+  NOTE: effect procs run in the top-level (main) context, NOT the debug screen object, so the debug screen's
+  pbShowCommands(text, commands, index) is NOT in scope - the GLOBAL pbShowCommands(msgwindow, ...) is, and
+  its first arg is a window (passing a String there crashes: "undefined method `height' for String" in
+  pbPositionNearMsgWindow). Use pbMessage with a commands array instead (same pattern as GameModeMenu.rb).
+mode axis (switches, from 052_InfiniteFusion/Constants/CONSTANTS_Switches.rb):
+  SWITCH_MODERN_MODE=974 (Remix), SWITCH_EXPERT_MODE=772, SWITCH_LEGENDARY_MODE=1129,
+  SWITCH_RANDOM_TRAINERS=987, SWITCH_RANDOMIZED_AT_LEAST_ONCE=855, SWITCH_RANDOM_WILD_TO_FUSION=953
+difficulty axis: SWITCH_GAME_DIFFICULTY_EASY=665, SWITCH_GAME_DIFFICULTY_HARD=666 (set via setDifficulty()).
+helper sidmod_set_game_mode(target):
+  :CLASSIC / :REMIX -> clears legendary+randomizer+expert switches, sets MODERN_MODE = (target==:REMIX),
+    sets $Trainer.game_mode (0 classic / 2 remix). Trainer + wild data is picked LIVE per battle by
+    getTrainersDataMode (015_Trainers/002_Trainer_LoadAndNew.rb), so flipping the switch is enough for
+    future battles - NO pbShuffleTrainers (that's the randomizer; would randomize classic/remix teams).
+  :LEGENDARY -> pbConfirmMessage, then an INLINED copy of initializeLegendaryMode
+    (052/System/GameModes/LegendaryMode.rb:23) MINUS the addLegendaryEggsToPC call (sidmod: no egg dump -
+    user didn't want a full set of legendary eggs added to the PC). Sets the randomizer/legendary switches
+    (RANDOM_TRAINERS, RANDOMIZE_GYMS_SEPARATELY, GYM_RANDOM_EACH_BATTLE=false, RANDOM_GYM_PERSIST_TEAMS,
+    LEGENDARY_MODE, RANDOMIZED_AT_LEAST_ONCE), VAR_CURRENT_GYM_TYPE=-1, hide_custom_eggs + type_icons, then
+    Kernel.pbShuffleTrainers (025-Randomizer/randomizer gym leader edit.rb:343 - builds
+    $PokemonGlobal.randomTrainersHash; getNewSpecies detects SWITCH_LEGENDARY_MODE and converts each mon to a
+    legendary fusion). game_mode = 3.
+    to restore the egg dump: replace the inlined block with a plain `initializeLegendaryMode` call.
+difficulty branch: setDifficulty(idx) (0/1/2) then $Trainer.lowest_difficulty = idx.
+  why pin lowest_difficulty: getDisplayDifficulty (GameDifficulty.rb:66) floors the shown/rewarded difficulty
+  to the LOWEST ever selected; without pinning, picking Hard after ever playing Easy/Normal still displays
+  Easy/Normal even though the HARD switch (read by 013_Trainer.rb:352 scaling) is on. Pinning makes the
+  chosen difficulty both display and apply with no residual gating (intentional debug override).
+caveats:
+  - Legendary is new-game-oriented; toggling it mid-save re-rolls ALL trainer teams into legendary fusions.
+    Egg dump removed (see above), so no eggs are added. Confirm prompt guards it. Does NOT give a legendary
+    starter or convert wild encounters retroactively - only trainer teams change.
+  - Switching Legendary/Randomized -> Classic/Remix clears the mode switches (base data resumes); the stale
+    randomTrainersHash is left intact but unused (switches off = randomization path skipped; avoids the
+    nil-entry reshuffle path in 013_Trainer.rb:251).
+load-order note: file lives in folder 020 but references helpers from folders 025/052 (setDifficulty,
+  initializeLegendaryMode, Kernel.pbShuffleTrainers, getCurrentGameModeSymbol) - safe because those run at
+  menu-time inside the proc, long after all scripts have compiled. DebugMenuCommands module is defined in the
+  same folder's 002_Debug_MenuCommands.rb which loads first.
+to revert: delete the file. debug-only; the only persistent writes are the switches/difficulty the user chooses.
+
+##############################################
+fusion injector - describe a fusion in chat, Claude writes a JSON spec, in-game debug command drops it into the PC
+new file: 020_Debug/003_Debug menus/007_sidmod_FusionInjector.rb (module SidmodInjector + DebugMenuCommands.register "sidmodinjectfusions")
+data files (game root, relative paths resolve from C:\Games\InfiniteFusion):
+  Data/sidmod/injections.json          - the LIVE spec the command reads (Claude writes this from chat). archived to
+                                         injections.applied.json after a run so it can't be injected twice.
+  Data/sidmod/injections.example.json  - documented sample of the schema (never auto-read)
+  Data/sidmod/injector_state.json      - {"current_box": N} persistent working box (0-indexed; UI shows +1)
+where: Debug menu -> top level ("main" parent) -> "Inject Fusions from file (sidmod)"
+flow: SidmodInjector.run reads the JSON, builds each mon, per-mon pbConfirmMessage Y/N, places with
+  $PokemonStorage.pbMoveCaughtToBox(pkmn, box) (first free slot of the target box), registers pokedex, saves state,
+  archives the spec, prints a summary (injected / skipped / errors).
+schema per entry: head+body (base species names/symbols/dex; FIRST=head SECOND=body) OR species (non-fusion);
+  level, nickname, ability, ability_index, nature, item, moves[] (<=4), evs{}, ivs{}, gender(male/female/genderless),
+  ball, shiny(bool), box (per-mon override; else default_box / current_box).
+key engine calls: getFusionSpecies(body, head) [note body-first arg order] -> GameData::Species;
+  Pokemon.new(species, level, $Trainer); pkmn.ability=/nature=/item=/poke_ball= (symbols); learn_move; ev[]/iv[]+calc_stats;
+  gender via instance_variable_set(:@gender, 0/1/2) to bypass single-gender lock.
+id resolution: resolve_id strips non-alphanumerics + upcases (game ids have NO underscores: :POISONHEAL, :TOXICORB,
+  :SPEEDBOOST, :ULTRABALL) so it tolerates underscored input too. STATS are the exception (:SPECIAL_ATTACK keeps its
+  underscore) -> resolve_stat + STAT_ALIASES (Smogon: SPA/SPD=SpDef/SPE=Speed) preserves them.
+safety: user tests on save file B; manual save backups live in %AppData%/Roaming/infinitefusion/sidmod_manual_backups/.
+  effect proc runs in top-level context (globals available), same as the mode-switch mod.
+caveats:
+  - fusion TYPING is fixed by head/body species; can't be overridden per-mon (a described "poison/flying" won't change it).
+  - ability is FORCED by symbol (may not be a natural ability of that fusion) - intended for debug/design.
+  - File.rename won't overwrite on Windows, so the archive step deletes injections.applied.json first.
+to revert: delete 007_sidmod_FusionInjector.rb (and optionally the Data/sidmod/ folder). debug-only; the only
+  persistent writes are the mons the user confirms + injector_state.json.
+
+##############################################
+pc export - read-only dump of party + all boxes so Claude can see the PC (companion to the injector)
+new file: 020_Debug/003_Debug menus/008_sidmod_PCExport.rb (module SidmodPCExport + DebugMenuCommands.register "sidmodexportpc")
+where: Debug menu -> top level ("main" parent) -> "Export PC to file (sidmod)"
+output: Data/sidmod/pc_dump.json = { party:[...], boxes:[{index,display,name,capacity,filled,pokemon:[...]}] }
+  box "pokemon" array keeps nil for empty slots so slot indices stay meaningful; per-mon fields:
+  name, species(fused display name), dex, level, fusion(bool), head/body(if fusion), shiny, gender, ability, nature,
+  item, moves[], ivs{}, evs{}. every field read is wrapped in a safe{} rescue so one weird mon can't abort the dump.
+key calls: $Trainer.party, $PokemonStorage.maxBoxes/maxPokemon(b)/[b]/[b,i], PokemonBox#name,
+  get_head_number_from_symbol/get_body_number_from_symbol(pkmn.species), pkmn.species_data.id_number, pkmn.gender (int 0/1/2).
+purely read-only (no save writes). to revert: delete the file. see the fusion injector block above.
+
+##############################################
+OFFLINE fusion save editor - read/edit File B directly (no in-game export/import); Ruby, fully offline
+tools: C:\Games\InfiniteFusion\tools\sidmod_editor\  (NOT loaded by the game; external toolchain)
+ruby: C:\Ruby31-x64\bin\ruby.exe (Ruby 3.1.7, winget RubyInstallerTeam.Ruby.3.1; matches game's ruby310.dll)
+design doc: Data/sidmod/OFFLINE_EDITOR_PLAN.md (full details, verified internals, phases, status)
+how it works: save = Marshal.dump Hash{Symbol=>Object}; party in :player @party, PC in :storage_system @boxes.
+  Load with STUB CLASSES (no engine) - Marshal sets ivars w/o initialize; userdef RGSS Color/Tone/Table
+  captured raw + re-emitted verbatim. Proven byte/deep-faithful round-trip (deep_eq.rb).
+  Writer template-clones a real Pokemon, mutates ivars, COMPUTES derived stats (game does NOT recompute
+  on load - only in battle), inserts into a box. Base stats from Data/species.dat, PP from Data/moves.dat.
+key math (pokemath.rb, validated vs 701 real mons: stats 697/701 exact): fused base stat =
+  (2*dom)/3 + (oth/3) [head-dom: HP/SpA/SpD; body-dom: Atk/Def/Spe]; fusion growth = first of
+  [Fast,Medium,Parabolic,Fluctuating,Erratic,Slow] matching either component; fusions genderless(@gender=2);
+  WonderGuard -> HP=1. @species = :B{bodyDex}H{headDex} symbol; @species_data=nil (game re-fetches).
+scripts: build_species_table.rb, build_moves_table.rb, read_save.rb (party+boxes -> pc_dump.json),
+  edit_save.rb (<in> <spec.json> <out>; self-validates each mon; writes only if all pass),
+  verify_edit.rb (collateral check: OUT==IN except added mons), apply.ps1 (orchestration).
+apply.ps1 safety: refuses if game process running (Game/InfiniteFusion/InfiniteFusion-performance),
+  backs up live save to sidmod_manual_backups\<stamp>, edits a COPY, gates on "collateral NONE",
+  atomic-replaces live save. -DryRun to preview. -Slot B (Sid's test slot).
+spec schema: {default_box, pokemon:[{head,body|species, level, nickname, ability, nature, item,
+  moves[], evs{}, ivs{}, gender, ball, shiny, box}]}. head=first named, body=second (see fusion convention).
+status: BUILT + offline-validated 2026-07-17. Pending: in-game load verification (only thing not testable offline).
+relation to in-game tools: supersedes the debug-menu injector (007) / PC export (008) for the normal loop;
+  those remain as an in-game fallback.
+
+##############################################
+smart trainer ai - plan-based enemy AI: compares attack/setup/status/switch as competing plans - end goal: smarter trainers without item cheese
+new file: 055_sidmod/SmartTrainerAI.rb (new folder; loads after 011_Battle, same pattern as 054)
+mechanic: aliases PokeBattle_AI#pbDefaultChooseEnemyCommand + #pbChooseBestNewEnemy; vanilla kept as
+  fallback for wild battles, doubles (sideSize>1), and SmartAI::ENABLED=false (top-of-file toggle).
+  planner (sidmod_choose_action):
+  - builds vanilla move scores via pbRegisterMoveTrainer (reuses the 3000-line effect-score library
+    as the tactical signal, always at skill 100), then REPRICES each move with a damage-race model
+    (sidmod_race_context): expected dmg/turn both directions via pbRoughDamage*accuracy -> turns-to-KO
+    each way, speed order (trick-room aware), priority moves, "doomed" detection (foe KOs us first).
+    KO-when-first +260*acc, KO-when-slow +140*acc, overkill penalty up to -25 (prefers weakest
+    sufficient KO, Reborn-style), priority-save +130, U-turn/Volt Switch +60 when losing the race,
+    doomed non-priority *0.55, status vs dying target *0.2, status in tight/lost race *0.35, setup
+    in safe window (foe needs 4+ turns) *1.6 when vanilla liked the move (>100) AND user hp >= 60%.
+  - adds SWITCH candidates on the same score scale: benched mons evaluated by sidmod_party_matchup
+    (real damage formula from party-mon raw stats vs battler pbRoughStat, STAB+type mod, levitate/
+    immunity checks, entry-hazard HP tax) with a -1 race-turn "free hit" cost; requires clear
+    improvement (edge +1.0) unless emergency (best move score <40 = encored/taunted; perish song
+    count 1 = forced +500). never switches turn after entering (turnCount<1); never voluntarily
+    switches away >=4 positive stat stages (boost inertia, v21 rule). cap 300 (< likely KO).
+  - picks via v21-style threshold discard: plans below 95% of the best score are dropped, survivors
+    weighted by margin above the cutoff. vanilla weighted-random roll is gone on the smart path.
+  - replacement after faint: pbChooseBestNewEnemy override picks by race edge, +2 for revenge killer
+    (outspeeds + OHKOs).
+  interplay: AI item use stays disabled (002_AI_Item return false patch, see "no AI item usage") -
+    pipeline still calls pbEnemyShouldUseItem? for parity so reverting THAT patch re-enables items
+    under smart AI too. hard-mode skill=100 patch (001_Trainer.rb) now irrelevant on the smart path
+    (skill forced 100 internally); still governs vanilla-path fallbacks.
+  logging: PBDebug.log "[SmartAI]" lines (TTKs, per-plan scores, final pick) when $INTERNAL.
+  tunables: SmartAI module constants at top of file (bonuses/multipliers/thresholds documented inline).
+  caveats: singles-only strategic layer (doubles = vanilla); no player-action prediction (assumes foe
+    attacks); AI "cheats" by reading the player's actual moveset (standard for boss AI); toxic/leech
+    chip damage not in the TTK model.
+  design informed by prior-art research: Pokemon Reborn AI dev record (score-everything, switch as
+    scored option resolved late, weakest-sufficient-KO), official Essentials v21 AI rewrite
+    (threshold-discard selection, boost-inertia switch veto, setup HP/stage gating, replacement
+    rating), gen4 cartridge switch AI (revenge-kill send-in), Showdown heuristic bots (TTK race as
+    the core primitive; 1-ply heuristics empirically beat naive minimax).
+  future options considered but not built: move memory (score only moves SEEN this battle instead of
+    reading the player's full set - fairer, slightly dumber), player-switch prediction, sack mode
+    with parting-gift scoring (partially covered by doomed*0.55 + pivot bonus).
+  syntax-checked with ruby -c (Ruby 3.1). to revert: delete the 055_sidmod folder.
+
+##############################################
+skip title screen + startup popups - launch straight to the save select / continue menu
+052_InfiniteFusion/Menus/IntroScreen.rb
+  Scene_Intro#main ~line 31: after the (already commented) #playIntroCinematic, added an
+    `if true ... return` block that creates PokemonLoad_Scene/PokemonLoadScreen and calls
+    pbStartLoadScreen directly, then Graphics.freeze + return. Bypasses GenOneStyle
+    entirely (the "random pokemon fusing" title animation + press-start wait + title BGM).
+    to revert: delete the if-true block (the original @screen = GenOneStyle.new / self.update
+    path is untouched below it).
+052_InfiniteFusion/System/MultiSaves.rb
+  pbStartLoadScreen ~line 429/433: prepended `false &&` to two message gates:
+    - `if newer_version` -> "Version X is now available! Please use the installer..." nag
+    - `if Settings::STARTUP_MESSAGES != ""` -> announcement ads (currently "Pokémon Infinite
+      Fusion 2 is now available!"; strings live in DownloadedSettings.rb, re-downloaded each
+      launch by updateHttpSettingsFile - left intact, only the display is gated)
+    to revert: remove the two `false &&` prefixes.
+notes: sprite-import messages + custom sprite download check in pbStartLoadScreen untouched.
+  the intro VIDEO (Movie playIntroCinematic) was already skipped by an earlier patch ("skip
+  video" block above); this covers the title screen + popups that remained.
+  side effect: any flow that re-enters Scene_Intro (e.g. soft reset / quit to title) now also
+  lands directly on the load screen - intended.
+
+##############################################
+pin key rematch trainers to top of debug battle selector - quick rebattle access
+020_Debug/003_Editor_Listers.rb
+  TrainerBattleLister#commands ~line 581 (right after cmds.sort!, before the `if @includeNew`):
+    inserted a sidmod pin pass. Builds sidmod_pin_types (ordered list of trainer_type
+    symbols), for each picks the entry with the highest version (max_by c[3] = "most
+    advanced" team), then reorders `cmds = sidmod_pinned + (cmds - sidmod_pinned)` so
+    the pinned trainers render at the top. Rest of the alphabetical list is unchanged.
+  pin order: CHAMPION (Blue, resolves to v8 = his hardest team) -> CHAMPION_Sinnoh
+    (Cynthia) -> POKEMONTRAINER_Gold (Gold) -> ELITEFOUR_Lorelei/Bruno/Agatha/Lance
+    (Elite Four, max ver each) -> all LEADER_* gym leaders in Kanto-then-Johto badge
+    order (Brock, Misty, Surge, Erika, Koga, Sabrina, Blaine, Giovanni, Falkner,
+    Whitney, Morty, Chuck, Jasmine, Pryce, Clair, Kurt), each at its highest version.
+  why highest-version: rematch teams scale with version, so max version = strongest
+    fight; picking dynamically means data drift can't stale a hardcoded version number.
+  affects: Debug -> Battle options -> Test Trainer Battle (+ Advanced), which build
+    TrainerBattleLister.new. The name filter (Z search) still applies on top - pins that
+    don't match the filter just drop out like any other entry. value()/refresh()/ids
+    stay index-aligned since we reorder cmds before the push loop.
+  caveat: uses the CURRENTLY-LOADED trainer data (Classic/Remix/Expert per game mode).
+    All 23 pins verified present in classic trainers.dat; a type absent in some mode is
+    silently skipped (next if matches.empty?).
+  to revert: delete the `# sidmod: pin key rematch trainers...` block (the sidmod_pin_types
+    array through the `cmds = sidmod_pinned + ...` line) in TrainerBattleLister#commands.
+
+##############################################
+full-heal party before and after debug fights - no chip damage between test battles
+020_Debug/003_Debug menus/002_Debug_MenuCommands.rb
+  wrapped every debug battle trigger with `$Trainer.heal_party` on both sides
+  (heal_party = @party.each(&:heal), i.e. full HP/PP/status restore):
+    - testwildbattle           ~line 226: around pbWildBattle
+    - testwildbattleadvanced   ~line 256: around pbWildBattleCore
+    - testtrainerbattle        ~line 304: around pbTrainerBattle
+    - testtrainerbattleadvanced ~line 344: around pbTrainerBattleCore
+  each is tagged `# sidmod: heal before/after debug fight`.
+  why both sides: pre-heal = always start a test fight at full; post-heal = walk away
+    clean even if you won damaged or fled. Pairs with the pinned rematch list above for
+    quick back-to-back rebattles.
+  to revert: delete the two `$Trainer.heal_party` sidmod lines bracketing each of the
+    four battle calls.
+
+##############################################
+vanilla benchmark teams as debug battle opponents (Gen5 OU + Ubers Off/Bal)
+020_Debug/003_Debug menus/007_sidmod_VanillaTrainers.rb  (NEW FILE)
+  registers 3 debug-only trainers - the standard Smogon "vanilla control" teams used
+  during team testing - so they can be rebattled from Debug -> Battle options:
+    Vanilla OU          (Tyranitar/Ferrothorn/Gliscor/Latios/Scizor/Jirachi)
+    Vanilla Ubers (Off) (Kyogre/Rayquaza/Arceus/Darkrai/Dialga/Ferrothorn)
+    Vanilla Ubers (Bal) (Groudon/Kyogre/Giratina/Scizor/Latias/Mewtwo)
+  all L100, 31 IVs, real competitive EV spreads + natures, AI skill 100 (bestSkill).
+  mechanism: sidmod_register_vanilla_trainers registers 3 TrainerTypes (:SIDMOD_OU/
+    _UBERSOFF/_UBERSBAL, id_number 9001-9003) + 3 Trainers into the BASE GameData tables.
+    pbLoadTrainer falls back to the base Trainer table when the mode-specific one lacks
+    the entry, so they battle in Classic/Remix/Expert. Registration is lazy + idempotent,
+    triggered from TrainerBattleLister#commands. No trainer sprite (battle scene tolerates
+    a nil front sprite: pbCreateTrainerFrontSprite `return if !trainer.bitmap`).
+  also patches GameData::TrainerType#name to fall back to real_name when the message-table
+    lookup is empty (our custom types have no message entry). Harmless for real types.
+020_Debug/003_Editor_Listers.rb
+  TrainerBattleLister#commands: (1) calls sidmod_register_vanilla_trainers at the top so
+    they show up; (2) added :SIDMOD_OU/_UBERSOFF/_UBERSBAL to the pin list, positioned
+    right after the Elite Four and before the gym leaders (per request).
+010_Data/002_PBS data/013_Trainer.rb
+  Trainer#to_trainer ~line 342: guarded the placeholder-species substitution with
+    `&& !@trainer_type.to_s.start_with?("SIDMOD_")`. Needed because DIALGA/PALKIA/GIRATINA/
+    MEW are RESERVED placeholder species (Settings::VAR_*_PLACEHOLDER_SPECIES) that the
+    trainer system swaps for a game-variable value at battle time; without the guard our
+    Vanilla Ubers Dialga/Giratina would be replaced in-game (verified they turned into
+    garbage/Pikachu, then confirmed fixed).
+  to revert whole feature: delete 007_sidmod_VanillaTrainers.rb, remove the register call +
+    the 3 :SIDMOD_* pins in 003_Editor_Listers.rb, and drop the `&& !...SIDMOD_` guard here.
+  caveat: teams are session-registered in memory (not written to trainers.dat), so they
+    exist only while the game is running - fine for debug rebattles.
+
+##############################################
+pause-menu quick shortcuts - surface buried debug actions at the top-level menu
+016_UI/001_UI_PauseMenu.rb
+  PokemonPauseMenu#pbStartPokemonMenu: added 4 commands (gated on $DEBUG) just above
+  "Options": Heal Party, Pokémon Storage, Test Battle, Game Mode / Difficulty.
+    - Heal Party: $Trainer.heal_party + confirmation message, returns to menu.
+    - Pokémon Storage: opens PokemonStorageScreen.pbStartScreen(0) via pbFadeOutIn.
+    - Test Battle: ends the pause scene, sets $game_temp.in_menu=false, calls
+      sidmod_quick_trainer_battle (list -> heal -> pbTrainerBattle -> heal), then returns
+      to the overworld (natural post-battle flow).
+    - Game Mode / Difficulty: calls sidmod_mode_difficulty_menu, returns to menu.
+  added cmdHeal/cmdStorage/cmdTestBattle/cmdGameMode locals (init -1) by the other cmd*.
+020_Debug/003_Debug menus/006_sidmod_ModeSwitch.rb
+  extracted the mode/difficulty loop from the debug command proc into a top-level method
+  sidmod_mode_difficulty_menu; the "sidmodmodeswitch" debug command now just calls it (so
+  the pause-menu shortcut and the debug menu share one implementation).
+020_Debug/003_Debug menus/007_sidmod_VanillaTrainers.rb
+  added sidmod_quick_trainer_battle (shared by pause-menu Test Battle; heals before+after).
+  to revert: remove the 4 command registrations + their handlers in 001_UI_PauseMenu.rb;
+    optionally re-inline sidmod_mode_difficulty_menu back into the debug proc.
+
+##############################################
+random battle - fight a role/type-balanced or random team drawn from your Lv100+item PC pool
+055_sidmod/RandomOpponent.rb  (new file)
+  module SidmodRandomOpp: assembles a 6-mon opposing team from the "battle-ready" PC pool
+  (every $PokemonStorage mon at Lv100 AND holding an item), deep-copies + heals them onto an
+  NPCTrainer, and starts a battle (pbTrainerBattleCore) fought by the SmartTrainerAI. FOUR modes
+  = {Chaos, Smart} x {OU, Ubers} chosen via pbShowCommands. Selection dimension:
+    - CHAOS: pure random 6, Species-Clause legal (no repeated base species; fusions count both
+      head_id + body_id via bases(), which returns base-species SYMBOLS).
+    - SMART: greedy seeded builder - fills a hazard-setter, a wall, and a pivot first, then rounds
+      out with offensive variety + freshest typing (minimise shared types). Every roll differs.
+      Roles classified from moves+EVs+item (SETUP/HAZARD/PIVOT/RECOVER/PHAZE move tag-lists + EV
+      thresholds: off = Atk|SpA >= 200, bulky = HP >= 180 & a defence >= 100).
+  Tier dimension (ou_legal?): OU excludes any fusion whose head OR body is a legendary that is NOT
+    in OU_LEGAL_LEGENDS = the sub-600 birds/beasts/golems + Regigigas special-case (ARTICUNO ZAPDOS
+    MOLTRES SUICUNE ENTEI RAIKOU REGICE REGIROCK REGISTEEL REGIGIGAS). "Legendary" = the game's own
+    LEGENDARIES_LIST (randomizer.rb) at runtime, with a hardcoded LEGENDS_FALLBACK mirror so the
+    filter also works head-less. Ubers = no filter. (Tested: 396-mon pool -> 266 OU / 130 Ubers-only,
+    zero banned-legendary leaks; pseudo-legends like Tyranitar/Hydreigon stay OU-legal.)
+  SPORE CLAUSE (all modes): build_team rejects any candidate whose stored moveset contains a move in
+    BANNED_MOVES (currently just :SPORE) BEFORE the tier filter - so no 100%-accuracy sleep in any of the
+    4 modes. Extend BANNED_MOVES for a broader sleep/status ban. (Tested: 396 pool -> 11 spore mons removed
+    -> 385; zero SPORE leaks.)
+  TRIPLE-FUSION TRAP (fixed): pk.isFusion? returns FALSE for triple fusions (isTripleFusion? instead),
+    so a naive head+body check treats a triple as one unknown species and it BYPASSES the OU filter
+    (a banned-legendary triple would leak into OU). bases() now checks isTripleFusion? FIRST and decodes
+    all 3 components via the game's get_triple_fusion_components(species) (FusionUtils.rb - triples are a
+    fixed curated set of legendary/starter trios). Regiregiregi (Regirock/Regice/Registeel) is correctly
+    OU-legal (all 3 allowlisted); Mew/Celebi/Latios-type trios are correctly Ubers-only. Also fixes
+    Species-Clause dedup for triples (they now contribute all 3 base species).
+  classify / select_smart / select_chaos are PURE (operate on plain-data candidate hashes),
+  so they are unit-testable head-less; the `if defined?(...)` guards keep loading side-effect-free.
+016_UI/001_UI_PauseMenu.rb
+  PokemonPauseMenu#pbStartPokemonMenu: added "Random Battle" to the MAIN menu (always visible,
+  just above Options; guarded `if defined?(SidmodRandomOpp)`) + a handler mirroring Test Battle
+  (pbEndScene -> $game_temp.in_menu=false -> SidmodRandomOpp.run -> return). Added cmdRandomOpp
+  local (init -1). NOT $DEBUG-gated (unlike the other pause-menu shortcuts) - it's a real feature.
+  to revert: delete 055_sidmod/RandomOpponent.rb + remove the cmdRandomOpp decl/list-line/handler.
+  note: the pool grows automatically as more PC mons are upgraded to Lv100+item (see the mass-
+    upgrade pipeline in tools/sidmod_editor/RUNBOOK.md - it batch-coaches under-built mons to
+    optimal L100 sets, which is how they become selectable here).
+
+##############################################
+searchable item picker - "Set item" in the pokemon debug menu listed ~800 items by ID number, unusable
+020_Debug/001_Editor_Utilities.rb
+  pbChooseItemList ~line 213: now calls the new pbChooseListSearchable(commands, default, "item")
+    instead of pbChooseList(commands, default, nil, -1) (= ID-ordered, ACTION toggled alphabetical).
+    old call left commented on the next line to revert.
+  pbChooseListSearchable ~line 226 (new): alphabetical list + live type-to-search box.
+    - layout: search box (Window_TextEntry_Keyboard, heading "Search item:") top-left 256x96,
+      list (Window_CommandPokemon, small font, rowHeight 24) under it, hint/match-count window
+      bottom-right. Entries shown as "Name (003)" so the ID number is still visible.
+    - filter matches the display name OR the id symbol, case-insensitive substring, rebuilt only
+      when the typed text changes; "default" is re-selected whenever it survives the filter.
+    - KEYBOARD ONLY BY DESIGN: Input.text_input is on, so the letter keys bound to USE/BACK (z/x)
+      would fire while typing - so no gamepad/button input is read. Type to filter, UP/DOWN move
+      (HOME/END jump to ends), ENTER chooses, ESC cancels (returns nil, same as the old cancel).
+      Navigation is driven manually and the list has ignore_input = true, so LEFT/RIGHT stay with
+      the text cursor instead of paging the list.
+  also affects: the PBS editors (002_Editor_DataTypes.rb ~443 and ~1180) which share
+    pbChooseItemList. Return contract is unchanged (id symbol, or nil on cancel).
+  note: the debug MAIN menu's "ADD ITEM" uses ItemLister (003_Editor_Listers.rb) instead - it is
+    already alphabetical but has no search; not touched.
+  to revert: uncomment the old pbChooseList line in pbChooseItemList, drop the new one, and
+    delete pbChooseListSearchable.
+
+##############################################
+debug-taught moves always come with max PP - a freshly taught move was arriving at base PP with
+0/3 PP Ups, forcing a second trip into "Set move PP" every time
+020_Debug/003_Debug menus/005_Debug_PokemonCommands.rb
+  pbDebugMaxMovePP(pkmn, move_id) ~line 707 (new): finds that move in pkmn.moves and sets
+    ppup = 3 then pp = total_pp (ppup first, since total_pp is derived from it). Skips moves with
+    total_pp <= 0 (infinite-PP moves), same guard as the existing "Max PP all moves" command.
+  "teachmove" effect ~line 725: pbLearnMove(pkmn, move) -> pbDebugMaxMovePP(pkmn, move) if
+    pbLearnMove(pkmn, move). Only maxes when the learn actually succeeded, so cancelling the
+    forget-a-move prompt / already knowing the move changes nothing.
+  "teachlegitmove" effect ~line 745: same one-line change.
+  note: applies to both replace-a-move and free-slot paths (pbLearnMove returns true for both).
+    Does NOT affect level-up learning, TMs/move tutors, or the Move Relearner - those still use
+    stock PP. To revert, drop the `pbDebugMaxMovePP(...) if` wrapper in both effects (back to a
+    bare pbLearnMove call) and delete pbDebugMaxMovePP.
+
+##############################################
+team swap - exchange the whole party with a box row in one action (sand team out, rain team in)
+new file: 052_InfiniteFusion/Menus/PC/TeamSwap.rb (reopens class PokemonStorageScreen, adds 2 methods)
+  why: a box row is BOX_WIDTH (6) slots = exactly one party. The stock multi-select CANNOT express a
+    team swap - pbHoldMulti refuses to lift your last able Pokemon (it silently drops one mon from the
+    selection), so the party can never be emptied mid-move and you end up doing 3+ carries per swap.
+    Swapping both sides in a single commit sidesteps that: the party is never empty at any point.
+  boxCommandSwapPartyRow: picks a row, then party <-> row in one commit.
+    - refuses if holding a mon, on a StorageTransferBox, if the row is empty, if NO mon in the row is
+      pbAble? (else you'd end up with an unusable party), or if a party mon is holding mail (same rule
+      as Store/Release). Confirms before committing.
+    - uneven counts are fine (party 3 vs row 6): both sides just take what's there. The row is written
+      packed from its first slot, so gaps in the row get compacted away.
+    - mutates $Trainer.party IN PLACE (clear + push, never reassigns) - other code holds that array.
+    - @scene.pbHardRefresh afterwards (rebuilds both the box and the party sprites) + "GUI party switch" SE.
+  pbChooseSwapRow: lists only the non-empty rows as "Row 2: Aegiapex +5" (first mon + how many more),
+    prompt shows your current party size. Cancel = no change.
+hooks - "Swap party" added to BOTH pbBoxCommands (IF overrides the standard one with multiselect):
+  016_UI/PokemonStorage/PokemonStorageScreen.rb pbBoxCommands ~line 584
+  052_InfiniteFusion/Menus/PC/Multiselect/MultiSelect_PokemonStorageScreen.rb pbBoxCommands ~line 94
+  both: cmd_swap decl + `commands << cmd_swap if !holding && !transfer box` (2nd entry, under Search)
+  + a `when cmd_swap then boxCommandSwapPartyRow` branch. The multiselect copy also gained an
+  is_transfer_box local (the other transfer-box checks there are still inline).
+how to use: open PC -> Up to highlight the box name -> A -> "Swap party" -> pick a row.
+tested: headless harness over the real TeamSwap.rb with stubbed storage/scene - 17 checks (full 6<->6,
+  uneven 3<->6, gappy row, all-fainted row refused, mail refused, decline-confirm, holding, empty box,
+  row-label formatting). Not yet exercised in-game.
+to revert: delete TeamSwap.rb + the cmd_swap decl/list-line/case-branch in both pbBoxCommands.
+
+##############################################
+boot crash fix - game died on the loading screen, never reached the title (NOT a mod bug)
+007_Objects and windows/001_RPG_Cache.rb
+  symptom: every launch logged `NoMethodError: undefined method 'include?' for nil:NilClass` at
+    001_RPG_Cache.rb:28 fromCache <- load_bitmap_path <- GraphicsUtils pbBitmap <- 999_Main:149
+    showLoadingScreen. 999_Main:190's retry loop then re-ran mainFunction and re-crashed forever,
+    so one launch = a dozen+ identical errorlog blocks. 332 distinct crashed launches in
+    errorlog.txt between 2026-07-17 and 2026-07-25 - long-standing, predates the PC/debug mods.
+  cause: RPG::Cache's @cache is NEVER initialised anywhere in Data/Scripts (grepped the whole
+    tree), and self.clear - called from 003_Game processing/002_Scene_Map.rb:119,
+    012_Overworld/.../002_Overworld_BattleIntroAnim.rb:7 and the anim editor - isn't defined here
+    either. Both are expected to come from the engine's (mkxp-z) RGSS layer; in this build @cache
+    arrives nil, so the FIRST bitmap load of the process dies.
+  fix (~line 6, 23, 27): `@cache ||= {}` at module-body level + the same guard at the top of
+    self.setKey and self.fromCache. Every other method (load_bitmap, load_bitmap_path, tileEx)
+    calls fromCache before it touches @cache, so those are covered transitively.
+  no-op when @cache is already a Hash; also self-heals if something nils it mid-session.
+  NOT a root-cause fix - why the engine hands us a nil @cache is still unknown. If the crash
+    returns, look at what the RGSS layer does with RPG::Cache before Data/Scripts is eval'd.
+  to revert: delete the three `@cache ||= {}` lines + the comment block.
+
+##############################################
+searchable species + move pickers - "Set fusion species" still asked for a DEX NUMBER, and the two
+"Teach move" commands used the old search-prompt/letter-bucket flow; both now use the same live
+type-to-search list as the item picker
+020_Debug/001_Editor_Utilities.rb
+  pbChooseSpeciesListSearchable(default, max, what) ~line 300 (new): builds [id_number, real_name,
+    id] for BASE species only (form == 0, dex 1..max, max defaults to NB_POKEMON = 501) and hands
+    it to the existing pbChooseListSearchable. Returns the GameData::Species ENTRY (same contract
+    as pbChooseSpeciesList), or nil if cancelled. "default" may be a dex number or an id symbol -
+    pbChooseListSearchable already matches either.
+    list size: GameData::Species.each only walks the symbol-keyed DATA hash - fusions are built on
+    demand by GameData::Species.get(dex > NB_POKEMON) and are NOT in DATA - so the list is 501
+    entries, not 501^2. Nothing is truncated. Forms (form != 0) are skipped, as is dex 0.
+  pbChooseMoveListSearchable(move_ids, default, what) ~line 325 (new): same idea for moves.
+    move_ids = nil lists every move (~680); move_ids = an array of ids restricts the list to
+    exactly those (deduped, unknown ids dropped) - that is how "Teach legit move" stays inside
+    pbGetLegalMoves. Returns a move id symbol, or nil if cancelled / the pool is empty (empty pool
+    returns nil WITHOUT opening a window).
+  pbChooseListSearchable itself was NOT modified - both wrappers only pre-build the command array
+    and post-process the return value, so the item picker is byte-for-byte unaffected.
+020_Debug/003 Debug menus/005_Debug_PokemonCommands.rb
+  "speciesform" -> "Set fusion species" ~line 1129/1132: head and body now each use
+    pbChooseSpeciesListSearchable(old_head_dex/old_body_dex, NB_POKEMON, "head species"/"body
+    species") instead of pbChooseSpeciesByName(..., "Head species (name; blank = dex #)?"), whose
+    blank/cancel path fell through to pbChooseSpeciesList = the pbMessageChooseNumber DEX NUMBER
+    prompt. The old default (current head/body dex) is preserved and pre-selects in the new list.
+    Both old calls left commented on the following line.
+  "teachmove" ~line 724: pbChooseMoveListSearchable(nil, nil, "move") replaces
+    pbChooseMoveSearchOrBrowse(nil). Old call commented on the next line.
+  "teachlegitmove" ~line 744: pbChooseMoveListSearchable(legal, nil, "legit move") replaces
+    pbChooseMoveSearchOrBrowse(legal) - LEGALITY IS PRESERVED, the picker only ever sees the
+    pbGetLegalMoves(pkmn.species) array (~50-120 moves), and a move outside it cannot be reached
+    even by typing its full name. The `legal.empty?` guard above it is untouched.
+  the older sidmod helpers pbChooseSpeciesByName / pbChooseMoveByName / pbChooseMoveSearchOrBrowse /
+    pbChooseMoveByLetterBucket are left in place - pbChooseSpeciesByName is still used by "Set
+    species" (the non-fusion one, deliberately NOT converted; it takes a species symbol default and
+    is out of scope here), and the move ones are now unused but kept for the commented-out revert.
+  behaviour notes: ENTER on a search with 0 matches is a no-op (there is nothing to choose) - clear
+    the search or press ESC. ESC returns nil, which the fusion branch already handles with
+    `next if head_species.nil?`, so cancelling leaves the Pokemon untouched.
+  not touched: pbChooseMoveList / pbChooseMoveListForSpecies / pbChooseSpeciesList themselves (the
+    PBS editors in 002_Editor_DataTypes.rb share them and none of the three debug commands call
+    them) - convert those separately if the editors want search too.
+  tested: headless harness (scratchpad/test_searchpicker.rb) loads the real 001_Editor_Utilities.rb
+    over stubbed GameData/Window/Input/Graphics and drives a scripted keystroke sequence - 23
+    checks: item picker regression (filter+ENTER, DOWN, ESC, all windows disposed, text_input off),
+    species (name filter, base-species-only list contents, dex-number default, symbol default, ESC,
+    max clamp), moves (full pool, restricted pool dedup + bogus id, out-of-pool move unreachable,
+    empty pool, ENTER with 0 matches), HOME/END nav. ruby -c clean on both files. NOT exercised
+    in-game.
+  to revert: uncomment the four old call lines in 005_Debug_PokemonCommands.rb, delete the new
+    calls, and delete pbChooseSpeciesListSearchable + pbChooseMoveListSearchable.
+
+##############################################
+multi-select carry fixes - bulk moves in the PC: bounds are strict, occupied = swap, Jump while carrying
+052_InfiniteFusion/Menus/PC/Multiselect/MultiSelect_PokemonStorageScreen.rb
+  pbPlaceMulti ~line 263 (rewrote the `box >= 0` branch; the party branch is unchanged):
+    - OUT OF BOUNDS IS NOW ILLEGAL. If any held mon would land outside the Box (e.g. a row of 6
+      pasted starting at column 2), it buzzes + "It won't fit there!" and you keep holding the
+      group. Was: any OOB *or* occupied target set need_fill and fell through to
+      @storage.pbStoreBatch, whose spiral fallback scattered the group into whatever free slots
+      it could find - mons appeared to teleport to unrelated parts of the box.
+    - OCCUPIED TARGETS NOW SWAP (new pbSwapMulti): ours go down, whatever was in those exact
+      slots comes up into the cursor with its shape preserved (offsets relative to the anchor).
+      Same idea as "Shift" for a single mon. Only the slots you actually pointed at are touched,
+      so nothing is ever displaced somewhere you didn't choose. Returns :PLACED_OCCUPIED, which
+      multiSelectAction already uses to play the "GUI party switch" SE.
+    - order: animate_place_multi -> commit both sides -> pbHardRefresh -> animate_hold_multi_pokemon.
+      The hard refresh is what makes the grid match storage before the new group is grabbed.
+  dropAllHeldPokemon ~line 172: anchors so the group's TOP-LEFT lands in slot 0 instead of putting
+    the cursor at slot 0. A lasso's anchor is whichever corner you finished on, so offsets are
+    usually negative and a raw slot-0 drop would now be refused by the bounds rule. Offsets are
+    left untouched so the held sprites stay in sync (do NOT "fix" this by mutating them - the
+    arrow's sprites carry their own heldox/heldoy).
+  pbBoxCommands ~line 84: while CARRYING, the box name used to call dropAllHeldPokemon immediately,
+    so Jump was unreachable and you had to walk box-by-box with a group in hand. Now only the
+    not-holding multiselect case short-circuits (to selectAllBox); holding opens the normal menu,
+    with the old dump behaviour available as an explicit "Place at start" entry (multiselect only,
+    since dropAllHeldPokemon routes through multiSelectAction). "Swap party"/"Select all" stay
+    hidden while holding.
+052_InfiniteFusion/Menus/PC/Multiselect/MultiSelect_PokemonStorageScene.rb
+  animate_hold_multi_pokemon (new, ~line 253): grabs a group that is already OUT of storage by
+    building fresh PokemonBoxIcon sprites (setting heldox/heldoy) and handing them to
+    arrow.grabMulti. animate_hold_multi can't be reused for the swap - it grabs sprites out of the
+    box grid, and by then the grid has been rebuilt with the mons we just placed.
+side effect: PokemonStorage#pbStoreBatch (MultiSelect_PokemonStorage.rb) is now DEAD CODE - the
+  pbPlaceMulti call site was its only caller. Left in place so the revert below works.
+tested: headless harness over the real screen file with stubbed storage/scene - 22 checks (clean
+  placement, OOB refused sideways + downward with nothing written and the group still held, full
+  6-for-6 swap, partial overlap swapping back only the occupants, diagonal/multi-row shapes,
+  conservation "no mon lost", the animation call order, empty-hands no-op, and Place-at-start with
+  a negative-offset lasso). The harness raises if pbStoreBatch is ever called again.
+  NOT exercised in-game: the actual sprite animation of the swap (place-then-grab in one action)
+  is the part stubs can't prove - watch that the picked-up group renders in the right shape.
+to revert: restore the need_fill/pbStoreBatch block in pbPlaceMulti, delete pbSwapMulti +
+  animate_hold_multi_pokemon, restore the `if is_holding_pokemon then dropAllHeldPokemon` branch
+  at the top of pbBoxCommands + drop cmd_place, and revert dropAllHeldPokemon to slot 0.
+
+##############################################
+smart trainer ai v2 - defensive competence: it now heals, statuses, phazes and never wastes a turn
+055_sidmod/SmartTrainerAI.rb (same file; all additions gated by new SmartAI constants)
+  WHY: measured, not guessed. Over 36 logged AI-vs-AI battles the planner had 119 chances to use a
+  recovery move and took 1 (0.8%), and 191 moves per 6 battles failed outright (one wall used Haze
+  36 times in a single game with no stat changes to clear). Root cause: a heal was scored as a
+  generic status move, so STATUS_TIGHT_MULT (0.35) suppressed it exactly when losing the race - the
+  moment healing matters - and residual/chip damage was absent from the TTK model, so a stall win
+  condition was invisible (healing never shortened our clock, poison never shortened theirs).
+  Consequence: the AI could only express hyper-offense, which also depressed every defensive mon in
+  the offline rating tables.
+
+  sidmod_residual_hp(b) (new): net HP change per turn from poison/toxic-counter/burn/Leech Seed/
+    sandstorm/hail/Leftovers/Black Sludge/Poison Heal/Aqua Ring/Ingrain, using the engine's own
+    end-of-round formulas (burn is totalhp/8 here because MECHANICS_GENERATION = 5).
+  sidmod_race_context ~line 300: both TTK clocks now use effective damage = attack dpt +/- residual,
+    so chip shortens the foe's clock and Leftovers/Poison Heal lengthen ours. Also exposes
+    my_dpt/their_dpt/my_resid/their_resid for the scorers below.
+  sidmod_score_heal (new): heals are scored against INCOMING damage per turn instead of the generic
+    status path. Out-heal the foe -> +HEAL_OUTPACE_BONUS (+ATTRITION_BONUS if they are also on a
+    chip clock, i.e. healing IS the win condition); buy one more turn -> +HEAL_SURVIVE_BONUS;
+    topping off above HEAL_MIN_MISSING or healing while doomed -> crushed. Rest takes REST_MULT.
+  sidmod_will_fail? (new): a move that cannot accomplish anything scores 0 and is dropped - healing
+    at full HP, status into an existing status or an immune target (via the ENGINE's own
+    pbCanPoison?/pbCanBurn?/pbCanParalyze?/pbCanSleep?/pbCanConfuse?), Leech Seed into Grass or an
+    already-seeded foe, Haze with nothing to clear, hazards already at max layers, screens/Substitute/
+    Aqua Ring/Ingrain/Perish Song/Mean Look already in place, Trick Room while it is already up.
+  sidmod_immune? (new): type immunity AND ability immunity for damaging moves, via pbCalcTypeMod plus
+    the engine's pbImmunityByAbility - so Water Absorb / Volt Absorb / Flash Fire / Levitate /
+    Sap Sipper / Storm Drain are respected (it was clicking Scald into a Water Absorb wall, healing it).
+  sidmod_preview (new): ANALYTIC one-step projection of the resulting board (no state cloning).
+    Vetoes SUICIDE_MULT the case "we faint, they live, and the action left nothing behind" - wider
+    than the old DOOMED_MULT, which only caught being OHKOd before acting.
+  sidmod_setup_converts? (new): a boost must bring the foe within SETUP_CONVERT_MIN turns of dying,
+    else the boost turn is discounted by SETUP_NOCONVERT.
+  chip-status block in sidmod_reprice_move: a foe we are NOT out-racing gets put on a clock
+    (+CHIP_STATUS_BONUS, +CHIP_SETUP_BONUS if it is boosting). Applied AFTER the tight-race
+    multiplier so it cannot be erased. Fixes: a bulky mon holding Toxic spammed a 4HKO attack into a
+    Bulk Up sweeper for four turns and died without ever statusing it.
+  phaze block: Haze/Clear Smog and Whirlwind/Roar/Dragon Tail/Circle Throw get PHAZE_BOOST_BONUS per
+    positive stage on the foe (capped PHAZE_BOOST_CAP) - the textbook answer to a setup sweeper,
+    previously absent (a wall holding Haze watched a foe reach +2/+2 and clicked Toxic).
+  Protect block: +PROTECT_CHIP_BONUS when the foe is already losing HP per turn (banks free chip),
+    PROTECT_SPAM_MULT when ProtectRate shows a consecutive use.
+  empty-choices path ~line 150: when every option is a no-op the planner now plays its own least-bad
+    option instead of handing control to the VANILLA AI, which used to re-pick the move we had just
+    ruled out (13 such hand-offs in one battle). Vanilla is still used when there is genuinely
+    nothing to choose (Struggle).
+  BOOST_STAGES_STAY 4 -> 2: it was banking Bulk Ups and then pivoting out of them.
+  pbChooseBestNewEnemy: -REPL_OHKO_PENALTY for a send-in the active foe outspeeds and OHKOs (it was
+    feeding replacements into free kills).
+  SmartAI.feature?(side, flag) (new, SIM ONLY): $SIDMOD_AI_FEATURES is nil in game so every feature
+    is on; the offline harness sets it per side to play one AI version against another.
+
+  MEASURED EFFECT (tools/sidmod_editor/sim/nplaystyle.rb, 36 battles per run):
+    recovery moves used per stall-mirror battle   0.0  -> 19
+    failed (no-op) moves per 6 battles            191  -> 0
+    poisons landed vs an offence team per 6 games 0    -> 20-31
+    switch thrashing per 6 battles                58   -> 16
+    stall archetype vs offence                    0-12 -> 1-11, battle length 13 -> 22-44 turns
+    offence-mirror record                         3-3  -> 2-4 (unchanged within noise)
+  ABLATION (sim/nablate.rb, full AI vs full-AI-minus-one-feature, 224 games each, mirrored):
+    chip +0.081 (significant) - the single biggest win. heal +0.045, preview +0.050 (positive lean).
+    noop/phaze/repl_safe ~0.505 (no win-rate effect in self-play, but they remove obvious blunders,
+    which is the point). residual/setup_convert 0.480 - see the higher-sample run before trusting.
+  Cost: unchanged. 4.67 ms per decision, ~0.125 s per battle. Real tree search was priced and
+    rejected: a search node needs a party deep-copy (2.6 ms), so joint 1-ply = 81 nodes = 212 ms per
+    decision (45x) and 2-ply = 17 SECONDS. The preview is arithmetic instead.
+  caveats: singles only (doubles still fall back to vanilla); no opponent-switch prediction, so a
+    move chosen against the active foe can still be blanked by their switch-in; stall mirrors of
+    identical teams now go to the 100-turn timeout draw, which is the honest result.
+  to revert: restore the constants block and delete the new methods, or simply set
+    SmartAI::ENABLED = false at the top of the file to fall back to vanilla AI entirely.
+
+##############################################
+smart trainer ai v3 - beam search + expected-damage term (and a display bug fixed)
+055_sidmod/SmartTrainerAI.rb
+  BEAM SEARCH over an ABSTRACT state (sidmod_action_table / sidmod_beam_step /
+    sidmod_beam_eval / sidmod_beam_values, ~line 330). Real tree search was PRICED FIRST and
+    rejected: a search node must snapshot state, a party deep-copy is ~2 ms, so a joint 1-ply
+    expansion is 81 nodes = 212 ms per decision (45x) and 2-ply = 17 SECONDS. So the beam does not
+    touch the engine state at all - it builds a per-decision table of what each move does
+    (damage / heal / chip+burn / boost), then searches a compact state
+    [my_hp, their_hp, my_off_mult, their_off_mult, my_resid, their_resid, my_statused, their_statused]
+    with pure arithmetic. A node is microseconds. Opponent is modelled greedily (best attack).
+    BEAM_DEPTH 3 full turns, BEAM_WIDTH 4, blended into the existing score as
+    BEAM_WEIGHT * (value - mid_of_range) so it RE-RANKS rather than inflates.
+    Measured: +0.044 winrate vs the same AI with the beam off (298-250 of 548 decided, 2.1 SE).
+    Depth 3 beat depth 2 over 919 games (0.534 +/- 0.017, z=2.1); depth 4 added nothing; width and
+    weight variants were all flat, so those stay at 4 / 130.
+  DMG_WEIGHT (~line 460): expected damage as a fraction of the target's remaining HP, added when no
+    KO is available. The vanilla effect-score library rewards secondary effects, so it ranked a
+    RESISTED Waterfall (230) above a neutral STAB Earthquake (214) on a Huge Power attacker, and the
+    beam's correct preference was too narrow a spread to overturn it. Side effect worth knowing: this
+    also fixed heal-vs-weak-attack decisions, because a resisted poke now scores as the weak play it
+    is - stall's recovery use per battle went 3.3 -> 7.3 and the stall archetype went from 0-6 to
+    3-3 against the pool's six highest-KO mons.
+  sidmod_ability_immune? (~line 250) REPLACES a call to the engine's pbImmunityByAbility.
+    IMPORTANT BUG THIS FIXES: pbImmunityByAbility DISPLAYS the ability splash and the "It doesn't
+    affect..." message, so calling it from the AI's scoring pass printed phantom battle messages -
+    396 spurious lines across six sim battles, and in game the player would have seen ability
+    popups while the AI was merely thinking. The replacement is a side-effect-free table
+    (ABILITY_IMMUNE_TYPE / ABSORB_ABILITIES / GROUNDED_ANYWAY covers Water/Volt Absorb, Dry Skin,
+    Storm Drain, Lightning Rod, Motor Drive, Flash Fire, Well-Baked Body, Sap Sipper, Levitate,
+    Earth Eater, Wonder Guard, and Thousand Arrows/Smack Down ignoring Levitate).
+  least-bad no-op ranking (~line 165): when every option is a no-op, a move the foe ABSORBS for HP
+    is now ranked last, so the planner does nothing rather than healing the opponent.
+  SmartAI.tune(side, key, default): numeric per-side override (sim only) so tuning variants can be
+    played against each other instead of guessed at.
+  cost: 3-5 ms per decision, ~0.08-0.16 s per battle - unchanged from v2 within machine noise.
+  fairness re-verified after all changes: side 0 wins 46.6% of 240 games across varied teams and
+    50.0% of 80 identical-team self-mirrors; draws 0.8%.
+
+  OPPONENT SWITCH PREDICTION - BUILT TWICE, MEASURED, REVERTED. Since the beam already projects a
+  state for free, predicting the pivot is just a second scenario. Attempt 1: evaluate "they pivot
+  now" (our per-move damage recomputed against the incoming mon, so a move it is immune to reads as
+  worthless) and blend by switch probability -> pivot-blanked hits got WORSE, 15 -> 23 per 112
+  battles. Attempt 2: a narrow veto (only when a pivot is >=40% likely AND this exact move does
+  literally nothing to the incoming mon) -> the targeted blunder dropped 15 -> 10, but TOTAL wasted
+  turns were unchanged (42 vs 43): dodging the pivot just moves the wasted turn onto the mon actually
+  in front of you. Winrate 0.492 and 0.491 +/- 0.020 across ~1200 ablation games. No benefit on
+  either yardstick, so both were removed instead of shipped (negative result documented in the
+  source too). The blocker is the opponent MODEL, not the search: "their best bench matchup by race
+  edge" is not accurate enough to hedge against. Revisit only with a better predictor.
+
+  AGENT REVIEW (sim/naudit.rb has Claude read full turn-by-turn logs incl. the planner's own score
+  lines): the offence-mirror rating went 5/10 -> 8/10, with replacement picks called "consistently
+  reasonable". Remaining criticisms are honest and known: no opponent-switch prediction (see the
+  negative result above), it will still set up while badly poisoned, and stall-vs-stall mirrors of
+  identical teams run to the 100-turn timeout draw.
+  METHOD NOTE for future tuning: most correctness fixes show ~0.50 in self-play ablation because
+  BOTH sides make the same mistake symmetrically - judge them on blunder counts (wasted turns,
+  immunity clicks, heal rate) and on archetype viability, not only on winrate. The two changes that
+  DID move winrate are chip-status (+0.081) and the beam (+0.044).
+  new sim tools: nplaystyle.rb (archetype behaviour counters), naudit.rb (agent log review),
+    nablate.rb (per-feature ablation), nbeamtune.rb (tunable A/B), nlookahead_cost.rb (search cost),
+    ntypeprobe/npairprobe/nimmprobe.rb (immunity probes). See RUNBOOK.md §3c.
+  to revert v2+v3 entirely: SmartAI::ENABLED = false (falls back to vanilla AI), or delete the
+    055_sidmod folder.
+
+##############################################
+SMART AI - STRENGTH CEILING FOUND (read this before investing more in the AI)
+  The plan-based SmartAI is EXACTLY AS STRONG AS THE STOCK ESSENTIALS AI it replaces.
+  Measured with sim/naiversions.rb, identical teams + seeds, both side assignments:
+    stock vanilla  vs  pre-session SmartAI : 0.572 +/- 0.023 (480 games)  -> vanilla WON
+    stock vanilla  vs  current SmartAI     : 0.500 +/- 0.013 (1440 games) -> dead even
+    pre-session    vs  current             : 0.428            (480 games)
+    ELO with stock = 0: current +0, additive-only variant +0, pre-session -37
+  So the "strategic layer" as it shipped before this session was ~37-41 ELO WORSE than the
+  vanilla AI it overrode - its multipliers (STATUS_TIGHT_MULT 0.35, DOOMED_MULT 0.55 etc)
+  suppressed the vanilla effect-score library's already-sane healing/status play. The v2/v3
+  work recovered exactly that regression and no more. An additive-only variant (every
+  suppressive multiplier disabled, feature :suppress) also lands at 0.495 - i.e. the
+  suppression is not the whole story; 1v1 tactical scoring is simply at its ceiling here.
+
+  THINGS TRIED THAT DID NOT BEAT STOCK (all measured, do not redo blindly):
+    deeper search      beam depth 3 -> 4: nothing. Engine-state cloning is fatal (2 ms/node,
+                       2-ply joint = 17 s/decision), so a real tree search is off the table.
+    switch prediction  two implementations (blended scenario, narrow veto). The veto DID cut
+                       the targeted blunder 15 -> 10 per 112 battles, but total wasted turns
+                       were unchanged and winrate was 0.491-0.492 over ~1200 games. Reverted.
+    team-level planning threat/answer analysis across both parties: preserve a scarce answer,
+                       protect a boosted win condition, do not sack a sole answer. Marginal
+                       0.501; vs vanilla still 0.500 over 1440 games - with BOTH a cheap
+                       offence/bulk proxy AND a proper type-aware party-vs-party matchup
+                       (sidmod_pkmn_vs_pkmn). Kept (it is cheap and principled) but it buys
+                       no measurable strength. Feature gate :team.
+    weight tuning      beam width/weight variants all flat; not pursued further because
+                       tuning a framework worth +0 cannot be worth much.
+
+  WHAT THE WORK DID BUY (and why it is still worth shipping):
+    - a 37-41 Elo REGRESSION fixed: the AI Sid was actually playing against was worse than
+      stock, and now it is not.
+    - blunder elimination: wasted (no-op) moves 191 -> 0 per 6 battles, recovery-move usage
+      0.8% -> correct, immunity clicks respected, no phantom ability messages, statuses a wall
+      it cannot out-race, phazes a boosting sweeper, does not feed replacements into free KOs.
+      An opponent that Hazes into nothing 36 times LOOKS broken even when it wins - for a
+      single-player game this is worth more than the 0 Elo it measures.
+    - a difficulty/style knob: SmartAI.feature? / SmartAI.tune take per-side overrides, so the
+      same engine can express aggressive / stalling / balanced trainers.
+    - a measurement harness that can actually settle these questions (see RUNBOOK 3c).
+
+  METHOD LESSON (the important one): for MONTHS the only baseline used was "the previous
+  SmartAI", so a regression against stock went unnoticed. Always measure a game-AI change
+  against the STOCK AI, and remember that self-play ablation is blind to any fix both sides
+  benefit from equally (six correct fixes each measured ~0.500 individually but were worth
+  +10.4 collectively against the pre-session build).
+
+  RECOMMENDATION: stop investing in AI STRENGTH - the measured headroom on this axis is zero.
+  If more AI work is wanted, spend it on VARIETY (per-trainer personalities via the existing
+  tunables) rather than on trying to out-score the vanilla library.
+
+##############################################
+PC search: live-filter type picker + explicit h:/b: result rows - the old pbMessage prompt chain
+was clumsy next to the "Teach move" picker, and result rows showed only the nickname, which says
+nothing about what the fusion actually is
+052_InfiniteFusion/Menus/PC/PCSearch.rb   (single file, no other file touched - both callers,
+  PokemonStorageScreen#boxCommandSearch ~line 619 and MultiSelect_PokemonStorageScreen
+  #boxCommandSearch ~line 136, still just consume the [box, slot] return value)
+  choose_searchable(entries, what, wide) ~line 240 (new): the live-filter list picker, same UX as
+    pbChooseListSearchable in 020_Debug/001_Editor_Utilities.rb (type to filter, UP/DOWN to move,
+    HOME/END for the ends, ENTER to choose, ESC to cancel; keyboard only for the same reason -
+    with Input.text_input on, the letter keys bound to USE/BACK would fire while typing).
+    Not reused directly from 020_Debug because that one re-sorts alphabetically and formats its own
+    rows: result rows must keep BOX ORDER and carry their own text. pbChooseListSearchable itself
+    is untouched, so the debug item/species/move pickers are unaffected.
+    entries = [row text, search text, value, detail text]; a nil value is a Cancel row.
+    wide = false (type lists): half-width rows + the 4-line key hints bottom right, i.e. the exact
+      move-picker layout. wide = true (result lists): full-width rows (512px - the h:/b: labels do
+      not fit in 256) + a 2-line detail box top right showing the highlighted mon's name and types.
+  filter_by_type ~line 33: was two pbMessage choice lists ("Primary type?" 18 entries + "Secondary
+    type?" 19); now two choose_searchable calls over type_entries (alphabetical, pseudo-types like
+    ??? skipped, Cancel row last). The "(Any / single-type)" row is prepended to the second list as
+    the value :any and is what ENTER lands on by default, so the common "just Water" search is
+    type-3-letters, ENTER, ENTER. Match logic unchanged.
+  pick_match ~line 176: was a pbMessage list of up to 60 rows formatted
+    "[B18.3] <nickname> L100 [Water/Bug]"; now a choose_searchable(wide) list of rows
+    "B18.3 L100 h:Gyarados b:Scizor "Nick"" - match_row/parts_label/fusion_part_names spell out the
+    fusion's head and body species (sd.get_head_species_symbol / get_body_species_symbol on the
+    FusedSpecies entry), fall back to the plain species name for non-fusions and for TRIPLE fusions
+    (isFusion? is already false for those), and append the nickname in quotes only when
+    nicknamed? is true. Types moved out of the row into the detail box (they did not fit).
+    The list also filters live on nickname + species + BOTH fusion halves + box.slot + types
+    (match_search_text), so "scizor" finds every fusion using Scizor as a half.
+  MAX_RESULTS ~line 12: 60 -> 300 (60 existed because a pbMessage list that long is unusable; the
+    new list scrolls). Truncation now says so in a pbMessage BEFORE the list opens, and a PC with
+    more than 300 matches still only offers the first 300 - raise the constant if that ever bites.
+  caveats: gamepad cannot drive these lists (keyboard only, by design - inherited from
+    pbChooseListSearchable); a very long row (long fusion + long nickname) clips at the right edge,
+    which is why box/slot/level/head/body are leftmost and the nickname is last. filter_by_level /
+    filter_by_dex / filter_by_name keep their number/text prompts - only their result list changed.
+  tested: headless harness (scratchpad/test_pcsearch.rb) stubs GameData/Window/Input/Graphics +
+    fake fusions and loads the real PCSearch.rb, driving scripted keystrokes - 33 checks: row
+    formatting for fusion / reversed-halves fusion / plain mon / triple fusion / nicknames, box
+    order preserved, detail line, match count, live filter by fusion half and by box.slot, single
+    and dual type filters, ESC and Cancel-row exits, ENTER with 0 matches, no-match message, all
+    windows disposed + text_input off, list widths, and the level/dex/name filters. ruby -c clean.
+    NOT exercised in-game.
+  to revert: `git checkout Data/Scripts/052_InfiniteFusion/Menus/PC/PCSearch.rb` (whole file is
+    sidmod-owned; the pre-change version is the pbMessage-based one in git history).
+
+##############################################
+random battle: consumed held items + bag stock are put back afterwards - a practice battle should
+cost nothing, and the pool mons' items were being permanently stripped
+055_sidmod/RandomOpponent.rb
+  WHAT ACTUALLY HAPPENS (this is not a random-battle bug, it is the stock rule biting hard here):
+    Battler#pbRemoveItem (011_Battle/001_Battler/006_Battler_AbilityAndItem.rb ~line 141) - when a
+    held item is permanently consumed (berry eaten, White Herb / Focus Sash / Air Balloon / Power
+    Herb used) it does:
+      if $PokemonBag.pbQuantity(initialItem) >= 1 -> $PokemonBag.pbDeleteItem(initialItem)
+      else                                        -> setInitialItem(nil)
+    and pbEndOfBattle (003_Battle_StartAndEnd.rb ~line 513) then does
+    `pkmn.item = @initialItems[0][i]`. So "items get restored after battle" really means "a SPARE IS
+    SILENTLY TAKEN OUT OF YOUR BAG to put back on the mon", and with no spare in the bag the held
+    item is GONE FOR GOOD. That code has no side check and always reads the player's $PokemonBag, so
+    the OPPOSING team's consumptions are charged to your bag too.
+    Why the random battle feels different from a regular battle: the pool is "Lv100 + holding an
+    item" by construction, so a random battle fields 6 opposing item-holders plus your own team =
+    up to ~12 consumptions competing for the same bag stock, and competitive items (Focus Sash,
+    White Herb, berries) put on mons by the save editor usually have ZERO spares in the bag - so
+    they hit the setInitialItem(nil) branch immediately and are lost.
+  start_battle ~line 226: snapshots before the battle and restores after -
+    item_snapshot($Trainer.party) ~line 184: [[pokemon, item_id], ...] keyed by OBJECT (immune to
+      party reordering), restore_items ~line 188 puts each item back. Two deliberate no-ops: it
+      skips a mon that held NOTHING before (so an item picked up during the battle by the Pickup
+      ability survives), and skips a mon that already holds the right item.
+    bag_snapshot ~line 196 / restore_bag ~line 202: records the bag quantity of every item held by
+      EITHER side going in, and tops the bag back up to that quantity afterwards. Restore-only - a
+      surplus the player gained during the battle is never removed, and items not involved in the
+      battle (potions used from the bag, etc.) are not touched.
+  net effect: a random battle is item-neutral - your held items and your stock of the items either
+    team was holding are exactly as they were before. Consequences that are NOT reverted: bag items
+    used from the Bag mid-battle, money, EXP/EVs (the mons are healed either way).
+  the opposing team was already safe (Marshal deep copy at ~line 219) - the PC mons themselves were
+    never mutated; it was the player's party + bag that leaked.
+  NOT changed: regular battles anywhere else in the game still follow the stock spare-from-the-bag
+    rule (including opposing held items being charged to your bag). Say the word if that should
+    become a global "never permanently lose a held item" setting instead.
+  tested: headless harness (scratchpad/test_randomopp_items.rb) loads the real RandomOpponent.rb
+    over stubbed bag/trainer/storage and swaps in a fake pbTrainerBattleCore that reproduces the
+    engine's rule exactly (spare in bag -> bag -1, mon keeps item; no spare -> held item nil) -
+    12 checks: items survive an EMPTY bag, PC pool mons untouched, bag stock restored exactly with
+    stock present, a negative control proving the fake battle really does strip items without the
+    net, Pickup gain kept, object-keyed restore after a party reverse, restore_bag never removing a
+    surplus, and the "pool too small" path touching nothing. ruby -c clean. NOT exercised in-game.
+  to revert: delete the item safety net block (~line 170-208) and the 4 snapshot/restore lines in
+    start_battle.
+
+##############################################
+# old commented-out reference impl kept below for future tweaks
+# max vals
+# PokemonDebugMenuCommands.register("hiddenvalues", {
+#   "parent"      => "levelstats",
+#   "name"        => _INTL("EV/IV/pID..."),
+#   "always_show" => true,
+#   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+#     cmd = 0
+#     loop do
+#       persid = sprintf("0x%08X", pkmn.personalID)
+#       cmd = screen.pbShowCommands(_INTL("Personal ID is {1}.", persid), [
+#            _INTL("Set EVs"),
+#            _INTL("Set IVs"),
+#            _INTL("Randomise pID")], cmd)
+#       break if cmd < 0
+#       case cmd
+#       when 0   # Set EVs
+#         cmd2 = 0
+#         loop do
+#           totalev = 0
+#           evcommands = []
+#           ev_id = []
+#           GameData::Stat.each_main do |s|
+#             evcommands.push(s.name + " (#{pkmn.ev[s.id]})")
+#             ev_id.push(s.id)
+#             totalev += pkmn.ev[s.id]
+#           end
+#           evcommands.push(_INTL("Randomise all"))
+#           evcommands.push(_INTL("Max randomise all"))
+#           evcommands.push(_INTL("Max Attack Speed"))
+#           evcommands.push(_INTL("Max Sp. Attack Speed"))
+#           evcommands.push(_INTL("Max Defenses"))
+#           cmd2 = screen.pbShowCommands(_INTL("Change which EV?\nTotal: {1}/{2} ({3}%)",
+#                                       totalev, Pokemon::EV_LIMIT,
+#                                       100 * totalev / Pokemon::EV_LIMIT), evcommands, cmd2)
+#           break if cmd2 < 0
+#           case cmd2
+#           when ev_id.length - 1
+#             params = ChooseNumberParams.new
+#             upperLimit = 0
+#             GameData::Stat.each_main { |s| upperLimit += pkmn.ev[s.id] if s.id != ev_id[cmd2] }
+#             upperLimit = Pokemon::EV_LIMIT - upperLimit
+#             upperLimit = [upperLimit, Pokemon::EV_STAT_LIMIT].min
+#             thisValue = [pkmn.ev[ev_id[cmd2]], upperLimit].min
+#             params.setRange(0, upperLimit)
+#             params.setDefaultValue(thisValue)
+#             params.setCancelValue(thisValue)
+#             f = pbMessageChooseNumber(_INTL("Set the EV for {1} (max. {2}).",
+#                GameData::Stat.get(ev_id[cmd2]).name, upperLimit), params) { screen.pbUpdate }
+#             if f != pkmn.ev[ev_id[cmd2]]
+#               pkmn.ev[ev_id[cmd2]] = f
+#               pkmn.calc_stats
+#               screen.pbRefreshSingle(pkmnid)
+#             end
+#           when ev_id.length - 2   # (Max) Randomise all
+#             evTotalTarget = Pokemon::EV_LIMIT
+#             if cmd2 == evcommands.length - 2   # Randomize all (not max)
+#               evTotalTarget = rand(Pokemon::EV_LIMIT)
+#             end
+#             GameData::Stat.each_main { |s| pkmn.ev[s.id] = 0 }
+#             while evTotalTarget > 0
+#               r = rand(ev_id.length)
+#               next if pkmn.ev[ev_id[r]] >= Pokemon::EV_STAT_LIMIT
+#               addVal = 1 + rand(Pokemon::EV_STAT_LIMIT / 4)
+#               addVal = addVal.clamp(0, evTotalTarget)
+#               addVal = addVal.clamp(0, Pokemon::EV_STAT_LIMIT - pkmn.ev[ev_id[r]])
+#               next if addVal == 0
+#               pkmn.ev[ev_id[r]] += addVal
+#               evTotalTarget -= addVal
+#             end
+#             pkmn.calc_stats
+#             screen.pbRefreshSingle(pkmnid)
+#           when evcommands.length - 3 # Max Attack Speed
+#             pkmn.ev[:ATTACK] = 252
+#             pkmn.ev[:SPEED] = 252
+#             pkmn.ev[:SPECIAL_ATTACK] = 0
+#             pkmn.ev[:HP] = 6
+#             pkmn.ev[:DEFENSE] = 0
+#             pkmn.ev[:SPECIAL_DEFENSE] = 0
+#             pkmn.calc_stats
+#             screen.pbRefreshSingle(pkmnid)
+#           when evcommands.length - 2 # Max Sp. Attack Speed
+#             pkmn.ev[:SPECIAL_ATTACK] = 252
+#             pkmn.ev[:ATTACK] = 0
+#             pkmn.ev[:SPEED] = 252
+#             pkmn.ev[:HP] = 6
+#             pkmn.ev[:DEFENSE] = 0
+#             pkmn.ev[:SPECIAL_DEFENSE] = 0
+#             pkmn.calc_stats
+#             screen.pbRefreshSingle(pkmnid)
+#           when evcommands.length - 1 # Max Sp. Attack Speed
+#             pkmn.ev[:SPECIAL_ATTACK] = 0
+#             pkmn.ev[:ATTACK] = 0
+#             pkmn.ev[:SPEED] = 0
+#             pkmn.ev[:HP] = 6
+#             pkmn.ev[:DEFENSE] = 252
+#             pkmn.ev[:SPECIAL_DEFENSE] = 252
+#             pkmn.calc_stats
+#             screen.pbRefreshSingle(pkmnid)
+#           end
+#         end
+#       when 1   # Set IVs
+#         cmd2 = 0
+#         loop do
+#           hiddenpower = pbHiddenPower(pkmn)
+#           totaliv = 0
+#           ivcommands = []
+#           iv_id = []
+#           GameData::Stat.each_main do |s|
+#             ivcommands.push(s.name + " (#{pkmn.iv[s.id]})")
+#             iv_id.push(s.id)
+#             totaliv += pkmn.iv[s.id]
+#           end
+#           msg = _INTL("Change which IV?\nHidden Power:\n{1}, power {2}\nTotal: {3}/{4} ({5}%)",
+#              GameData::Type.get(hiddenpower[0]).name, hiddenpower[1], totaliv,
+#              iv_id.length * Pokemon::IV_STAT_LIMIT, 100 * totaliv / (iv_id.length * Pokemon::IV_STAT_LIMIT))
+#           ivcommands.push(_INTL("Max all"))
+#           cmd2 = screen.pbShowCommands(msg, ivcommands, cmd2)
+#           break if cmd2 < 0
+#           if cmd2 < iv_id.length
+#             params = ChooseNumberParams.new
+#             params.setRange(0, Pokemon::IV_STAT_LIMIT)
+#             params.setDefaultValue(pkmn.iv[iv_id[cmd2]])
+#             params.setCancelValue(pkmn.iv[iv_id[cmd2]])
+#             f = pbMessageChooseNumber(_INTL("Set the IV for {1} (max. 31).",
+#                GameData::Stat.get(iv_id[cmd2]).name), params) { screen.pbUpdate }
+#             if f != pkmn.iv[iv_id[cmd2]]
+#               pkmn.iv[iv_id[cmd2]] = f
+#               pkmn.calc_stats
+#               screen.pbRefreshSingle(pkmnid)
+#             end
+#           else   # Randomise all
+#             GameData::Stat.each_main { |s| pkmn.iv[s.id] = Pokemon::IV_STAT_LIMIT }
+#             pkmn.calc_stats
+#             screen.pbRefreshSingle(pkmnid)
+#           end
+#         end
+#       when 2   # Randomise pID
+#         pkmn.personalID = rand(2 ** 16) | rand(2 ** 16) << 16
+#         pkmn.calc_stats
+#         screen.pbRefreshSingle(pkmnid)
+#       end
+#     end
+#     next false
+#   }
+# })
