@@ -125,17 +125,17 @@ module Game
             pokemon.exp_when_fused_head=nil
             pokemon.exp_when_fused_body=nil
             pokemon.exp_gained_since_fused=nil
-            pokemon.level = 5
+            # pokemon.level = 5
 
             echoln pokemon.owner.id
             pokemon.owner.id = $Trainer.id
             pokemon.ot=$Trainer.name
             pokemon.obtain_method = 0
-            pokemon.species = GameData::Species.get(pokemon.species).get_baby_species(false)
+            # pokemon.species = GameData::Species.get(pokemon.species).get_baby_species(false)
             $Trainer.pokedex.set_seen(pokemon.species)
             $Trainer.pokedex.set_owned(pokemon.species)
-            pokemon.reset_moves
-            pokemon.calc_stats
+            # pokemon.reset_moves
+            # pokemon.calc_stats
 
           end
         end

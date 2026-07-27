@@ -49,6 +49,7 @@ def pbCallTitle
 end
 
 def mainFunction
+  $DEBUG=TRUE
   if $DEBUG
     pbCriticalCode { mainFunctionDebug }
   else

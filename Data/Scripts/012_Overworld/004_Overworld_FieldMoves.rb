@@ -552,16 +552,6 @@ HiddenMoveHandlers::UseMove.add(:TELEPORT, proc { |move, pokemon|
 })
 
 def pbCanUseFly(showmsg)
-  return false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_TELEPORT, showmsg)
-  if $game_player.pbHasDependentEvents?
-    pbMessage(_INTL("It can't be used when you have someone with you.")) if showmsg
-    return false
-  end
-  if !GameData::MapMetadata.exists?($game_map.map_id) ||
-    !GameData::MapMetadata.get($game_map.map_id).outdoor_map
-    pbMessage(_INTL("Can't use that here.")) if showmsg
-    return false
-  end
   return true
 end
 

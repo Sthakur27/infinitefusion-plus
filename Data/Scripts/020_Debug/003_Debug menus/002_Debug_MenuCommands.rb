@@ -40,6 +40,27 @@ end
 #===============================================================================
 # Field options
 #===============================================================================
+DebugMenuCommands.register("healparty", {
+  "parent"      => "main",
+  "name"        => _INTL("Heal Party"),
+  "description" => _INTL("Fully heal the HP/status/PP of all Pokémon in the party."),
+  "effect"      => proc {
+    $Trainer.party.each { |pkmn| pkmn.heal }
+    pbMessage(_INTL("Your Pokémon were fully healed."))
+  }
+})
+DebugMenuCommands.register("openstorage", {
+  "parent"      => "main",
+  "name"        => _INTL("Access Pokémon Storage"),
+  "description" => _INTL("Opens the Pokémon storage boxes in Organize Boxes mode."),
+  "effect"      => proc {
+    pbFadeOutIn {
+      scene = PokemonStorageScene.new
+      screen = PokemonStorageScreen.new(scene, $PokemonStorage)
+      screen.pbStartScreen(0)
+    }
+  }
+})
 DebugMenuCommands.register("fieldmenu", {
   "parent"      => "main",
   "name"        => _INTL("Field options..."),
@@ -90,7 +111,7 @@ DebugMenuCommands.register("refreshmap", {
 DebugMenuCommands.register("switches", {
   "parent"      => "fieldmenu",
   "name"        => _INTL("Switches"),
-  "description" => _INTL("Edit all Game Switches (except Script Switches)."),
+  "description" => _INTL("Edit all Game Switches (except Script Switches). Press Z to search by name."),
   "effect"      => proc {
     pbDebugVariables(0)
   }
@@ -99,7 +120,7 @@ DebugMenuCommands.register("switches", {
 DebugMenuCommands.register("variables", {
   "parent"      => "fieldmenu",
   "name"        => _INTL("Variables"),
-  "description" => _INTL("Edit all Game Variables. Can set them to numbers or text."),
+  "description" => _INTL("Edit all Game Variables. Can set them to numbers or text. Press Z to search by name."),
   "effect"      => proc {
     pbDebugVariables(1)
   }
@@ -202,7 +223,9 @@ DebugMenuCommands.register("testwildbattle", {
          GameData::Species.get(species).name), params)
       if level > 0
         $PokemonTemp.encounterType = nil
+        $Trainer.heal_party   # sidmod: heal before debug fight
         pbWildBattle(species, level)
+        $Trainer.heal_party   # sidmod: heal after debug fight
       end
     end
     next false
@@ -232,7 +255,9 @@ DebugMenuCommands.register("testwildbattleadvanced", {
         end
         setBattleRule(sprintf("%dv%d", size0, pkmn.length))
         $PokemonTemp.encounterType = nil
+        $Trainer.heal_party   # sidmod: heal before debug fight
         pbWildBattleCore(*pkmn)
+        $Trainer.heal_party   # sidmod: heal after debug fight
         break
       elsif pkmnCmd == pkmnCmds.length - 2   # Set player side size
         if !pbCanDoubleBattle?
@@ -276,11 +301,13 @@ DebugMenuCommands.register("testwildbattleadvanced", {
 DebugMenuCommands.register("testtrainerbattle", {
   "parent"      => "battlemenu",
   "name"        => _INTL("Test Trainer Battle"),
-  "description" => _INTL("Start a single battle against a trainer of your choice."),
+  "description" => _INTL("Start a single battle against a trainer of your choice. Press Z to search by name."),
   "effect"      => proc {
     trainerdata = pbListScreen(_INTL("SINGLE TRAINER"), TrainerBattleLister.new(0, false))
     if trainerdata
+      $Trainer.heal_party   # sidmod: heal before debug fight
       pbTrainerBattle(trainerdata[0], trainerdata[1], nil, false, trainerdata[2], true)
+      $Trainer.heal_party   # sidmod: heal after debug fight
     end
     next false
   }
@@ -289,7 +316,7 @@ DebugMenuCommands.register("testtrainerbattle", {
 DebugMenuCommands.register("testtrainerbattleadvanced", {
   "parent"      => "battlemenu",
   "name"        => _INTL("Test Trainer Battle Advanced"),
-  "description" => _INTL("Start a battle against 1 or more trainers with a battle size of your choice."),
+  "description" => _INTL("Start a battle against 1 or more trainers with a battle size of your choice. Press Z to search by name when choosing a trainer."),
   "effect"      => proc {
     trainers = []
     size0 = 1
@@ -320,7 +347,9 @@ DebugMenuCommands.register("testtrainerbattleadvanced", {
         setBattleRule(sprintf("%dv%d", size0, size1))
         battleArgs = []
         trainers.each { |t| battleArgs.push(t[1]) }
+        $Trainer.heal_party   # sidmod: heal before debug fight
         pbTrainerBattleCore(*battleArgs)
+        $Trainer.heal_party   # sidmod: heal after debug fight
         break
       elsif trainerCmd == trainerCmds.length - 2   # Set opponent side size
         if trainers.length == 0 || (trainers.length == 1 && trainers[0][1].party_count == 1)
@@ -533,58 +562,8 @@ DebugMenuCommands.register("addpokemon", {
   }
 })
 
-DebugMenuCommands.register("demoparty", {
-  "parent"      => "pokemonmenu",
-  "name"        => _INTL("Give Demo Party"),
-  "description" => _INTL("Give yourself 6 preset Pokémon. They overwrite the current party."),
-  "effect"      => proc {
-    party = []
-    species = [:PIKACHU, :PIDGEOTTO, :KADABRA, :GYARADOS, :DIGLETT, :CHANSEY]
-    for id in species
-      party.push(id) if GameData::Species.exists?(id)
-    end
-    $Trainer.party.clear
-    # Generate Pokémon of each species at level 20
-    party.each do |species|
-      pkmn = Pokemon.new(species, 20)
-      $Trainer.party.push(pkmn)
-      $Trainer.pokedex.register(pkmn)
-      $Trainer.pokedex.set_owned(species)
-      case species
-      when :PIDGEOTTO
-        pkmn.learn_move(:FLY)
-      when :KADABRA
-        pkmn.learn_move(:FLASH)
-        pkmn.learn_move(:TELEPORT)
-      when :GYARADOS
-        pkmn.learn_move(:SURF)
-        pkmn.learn_move(:DIVE)
-        pkmn.learn_move(:WATERFALL)
-      when :DIGLETT
-        pkmn.learn_move(:DIG)
-        pkmn.learn_move(:CUT)
-        pkmn.learn_move(:HEADBUTT)
-        pkmn.learn_move(:ROCKSMASH)
-      when :CHANSEY
-        pkmn.learn_move(:SOFTBOILED)
-        pkmn.learn_move(:STRENGTH)
-        pkmn.learn_move(:SWEETSCENT)
-      end
-      pkmn.record_first_moves
-    end
-    pbMessage(_INTL("Filled party with demo Pokémon."))
-  }
-})
 
-DebugMenuCommands.register("healparty", {
-  "parent"      => "pokemonmenu",
-  "name"        => _INTL("Heal Party"),
-  "description" => _INTL("Fully heal the HP/status/PP of all Pokémon in the party."),
-  "effect"      => proc {
-    $Trainer.party.each { |pkmn| pkmn.heal }
-    pbMessage(_INTL("Your Pokémon were fully healed."))
-  }
-})
+
 
 DebugMenuCommands.register("quickhatch", {
   "parent"      => "pokemonmenu",
@@ -596,82 +575,9 @@ DebugMenuCommands.register("quickhatch", {
   }
 })
 
-DebugMenuCommands.register("fillboxes", {
-  "parent"      => "pokemonmenu",
-  "name"        => _INTL("Fill Storage Boxes"),
-  "description" => _INTL("Add one Pokémon of each species (at Level 50) to storage."),
-  "effect"      => proc {
-    added = 0
-    box_qty = $PokemonStorage.maxPokemon(0)
-    completed = true
-    for num in 1..NB_POKEMON
-      pokemon = getPokemon(num)
-      pbAddPokemonSilent(pokemon,50)
-    end
 
 
-    # GameData::Species.each do |species_data|
-    #   break if species_data.is_fusion
-    #   sp = species_data.species
-    #   f = species_data.form
-    #   # Record each form of each species as seen and owned
-    #   if f == 0
-    #     if [:AlwaysMale, :AlwaysFemale, :Genderless].include?(species_data.gender_ratio)
-    #       g = (species_data.gender_ratio == :AlwaysFemale) ? 1 : 0
-    #       $Trainer.pokedex.register(sp, g, f, false)
-    #     else   # Both male and female
-    #       $Trainer.pokedex.register(sp, 0, f, false)
-    #       $Trainer.pokedex.register(sp, 1, f, false)
-    #     end
-    #     $Trainer.pokedex.set_owned(sp, false)
-    #   elsif species_data.real_form_name && !species_data.real_form_name.empty?
-    #     g = (species_data.gender_ratio == :AlwaysFemale) ? 1 : 0
-    #     $Trainer.pokedex.register(sp, g, f, false)
-    #   end
-    #   # Add Pokémon (if form 0, i.e. one of each species)
-    #   next if f != 0
-    #   if added >= Settings::NUM_STORAGE_BOXES * box_qty
-    #     completed = false
-    #     next
-    #   end
-    #   added += 1
-    #   $PokemonStorage[(added - 1) / box_qty, (added - 1) % box_qty] = Pokemon.new(sp, 50)
-    # end
-    $Trainer.pokedex.refresh_accessible_dexes
-    pbMessage(_INTL("Storage boxes were filled with one Pokémon of each species."))
-    if !completed
-      pbMessage(_INTL("Note: The number of storage spaces ({1} boxes of {2}) is less than the number of species.",
-         Settings::NUM_STORAGE_BOXES, box_qty))
-    end
-  }
-})
 
-DebugMenuCommands.register("clearboxes", {
-  "parent"      => "pokemonmenu",
-  "name"        => _INTL("Clear Storage Boxes"),
-  "description" => _INTL("Remove all Pokémon in storage."),
-  "effect"      => proc {
-    for i in 0...$PokemonStorage.maxBoxes
-      for j in 0...$PokemonStorage.maxPokemon(i)
-        $PokemonStorage[i, j] = nil
-      end
-    end
-    pbMessage(_INTL("The storage boxes were cleared."))
-  }
-})
-
-DebugMenuCommands.register("openstorage", {
-  "parent"      => "pokemonmenu",
-  "name"        => _INTL("Access Pokémon Storage"),
-  "description" => _INTL("Opens the Pokémon storage boxes in Organize Boxes mode."),
-  "effect"      => proc {
-    pbFadeOutIn {
-      scene = PokemonStorageScene.new
-      screen = PokemonStorageScreen.new(scene, $PokemonStorage)
-      screen.pbStartScreen(0)
-    }
-  }
-})
 
 #===============================================================================
 # Player options

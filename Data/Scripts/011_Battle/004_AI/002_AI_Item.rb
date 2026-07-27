@@ -3,6 +3,7 @@ class PokeBattle_AI
   # Decide whether the opponent should use an item on the Pokémon
   #=============================================================================
   def pbEnemyShouldUseItem?(idxBattler)
+    return false   # sidmod: enemy trainers never use items (Full Restore, X items, etc.)
     user = @battle.battlers[idxBattler]
     item, idxTarget = pbEnemyItemToUse(idxBattler)
     return false if !item

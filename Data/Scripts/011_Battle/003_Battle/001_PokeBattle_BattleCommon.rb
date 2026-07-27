@@ -141,11 +141,11 @@ module PokeBattle_BattleCommon
     end
     # Animation of opposing trainer blocking Poké Balls (unless it's a Snag Ball
     # at a Shadow Pokémon)
-    if trainerBattle? && !(GameData::Item.get(ball).is_snag_ball? && battler.shadowPokemon?)
-      @scene.pbThrowAndDeflect(ball, 1)
-      pbDisplay(_INTL("The Trainer blocked your Poké Ball! Don't be a thief!"))
-      return
-    elsif $game_switches[SWITCH_CANNOT_CATCH_POKEMON]
+    # if trainerBattle? && !(GameData::Item.get(ball).is_snag_ball? && battler.shadowPokemon?)
+    #   @scene.pbThrowAndDeflect(ball, 1)
+    #   pbDisplay(_INTL("The Trainer blocked your Poké Ball! Don't be a thief!"))
+    #   return
+    if $game_switches[SWITCH_CANNOT_CATCH_POKEMON]
       @scene.pbThrowAndDeflect(ball, 1)
       pbDisplay(_INTL("The Pokémon is impossible to catch!"))
       return
@@ -213,7 +213,7 @@ module PokeBattle_BattleCommon
   # Calculate how many shakes a thrown Poké Ball will make (4 = capture)
   #=============================================================================
   def pbCaptureCalc(pkmn, battler, catch_rate, ball)
-    return 4 if $DEBUG && Input.press?(Input::CTRL)
+    return 4 if $DEBUG && Input.press?(Input::ACTION)
     # Get a catch rate if one wasn't provided
     catch_rate = pkmn.species_data.catch_rate if !catch_rate
     # Modify catch_rate depending on the Poké Ball's effect

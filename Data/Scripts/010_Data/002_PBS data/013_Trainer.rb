@@ -339,7 +339,9 @@ module GameData
         #replace placeholder species infinite fusion edit
         species = GameData::Species.get(pkmn_data[:species]).species
         original_species = species
-        if placeholder_species.include?(species)
+        # sidmod: debug "Vanilla" benchmark trainers use literal DIALGA/GIRATINA/etc.
+        # (which are otherwise reserved placeholder species) - skip substitution for them.
+        if placeholder_species.include?(species) && !@trainer_type.to_s.start_with?("SIDMOD_")
           species = replace_species_with_placeholder(species)
         else
           species = replace_species_to_randomized(species, self.id, index) if isPlayingRandomized

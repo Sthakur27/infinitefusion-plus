@@ -28,11 +28,19 @@ class Scene_Intro
     @skip = false
 
 
-    playIntroCinematic
+    #playIntroCinematic
+    # sidmod: skip title screen (random fusion animation) - go straight to the load screen
+    if true
+      sscene = PokemonLoad_Scene.new
+      sscreen = PokemonLoadScreen.new(sscene)
+      sscreen.pbStartLoadScreen
+      Graphics.freeze
+      return
+    end
     # Selects title screen style
     @screen = GenOneStyle.new
     # Plays the title screen intro (is skippable)
-    @screen.intro
+    #@screen.intro
     # Creates/updates the main title screen loop
     self.update
     Graphics.freeze

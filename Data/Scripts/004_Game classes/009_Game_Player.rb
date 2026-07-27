@@ -164,8 +164,8 @@ class Game_Player < Game_Character
       return false if !$MapFactory
       return $MapFactory.isPassableFromEdge?(new_x, new_y)
     end
-    # If debug mode is ON and Ctrl key was pressed
-    return true if $DEBUG && Input.press?(Input::CTRL)
+    # sidmod: noclip on Input::ACTION (Xbox X / keyboard C) - was Input::BACK which overlapped with menu
+    return true if $DEBUG && Input.press?(Input::ACTION)
     return super
   end
 

@@ -113,6 +113,11 @@ class PokemonPauseMenu
     cmdDebug = -1
     cmdQuit = -1
     cmdEndGame = -1
+    cmdHeal = -1        # sidmod: pause-menu quick shortcuts
+    cmdStorage = -1
+    cmdTestBattle = -1
+    cmdGameMode = -1
+    cmdRandomOpp = -1   # sidmod: Random Opponent (PC pool), main-menu option
     if $Trainer.has_pokedex && $Trainer.pokedex.accessible_dexes.length > 0
       commands[cmdPokedex = commands.length] = _INTL("Pokédex")
     end
@@ -142,6 +147,15 @@ class PokemonPauseMenu
     else
       commands[cmdSave = commands.length] = _INTL("Save") if $game_system && !$game_system.save_disabled
     end
+    # sidmod: quick-access shortcuts (debug builds) - actions otherwise buried in
+    # submenus. Placed above Options/Debug for fast reach.
+    if $DEBUG
+      commands[cmdHeal = commands.length]       = _INTL("Heal Party")
+      commands[cmdStorage = commands.length]    = _INTL("Pokémon Storage")
+      commands[cmdTestBattle = commands.length] = _INTL("Test Battle")
+      commands[cmdGameMode = commands.length]   = _INTL("Game Mode / Difficulty")
+    end
+    commands[cmdRandomOpp = commands.length] = _INTL("Random Battle") if defined?(SidmodRandomOpp)   # sidmod: fight a team from your Lv100+item PC pool
     commands[cmdOption = commands.length] = _INTL("Options")
     commands[cmdDebug = commands.length] = _INTL("Debug") if $DEBUG
     commands[cmdEndGame = commands.length] = _INTL("Title screen")
@@ -253,6 +267,39 @@ class PokemonPauseMenu
         else
           pbShowMenu
         end
+      elsif cmdHeal >= 0 && command == cmdHeal   # sidmod: quick heal
+        pbPlayDecisionSE
+        $Trainer.heal_party
+        @scene.pbHideMenu
+        pbMessage(_INTL("Your Pokémon were fully healed."))
+        pbShowMenu
+      elsif cmdStorage >= 0 && command == cmdStorage   # sidmod: quick PC storage
+        pbPlayDecisionSE
+        pbFadeOutIn {
+          scene = PokemonStorageScene.new
+          screen = PokemonStorageScreen.new(scene, $PokemonStorage)
+          screen.pbStartScreen(0)
+          @scene.pbRefresh
+        }
+      elsif cmdTestBattle >= 0 && command == cmdTestBattle   # sidmod: quick test battle
+        pbPlayDecisionSE
+        @scene.pbEndScene
+        endscene = false
+        $game_temp.in_menu = false
+        sidmod_quick_trainer_battle
+        return
+      elsif cmdRandomOpp >= 0 && command == cmdRandomOpp   # sidmod: Random Opponent from PC pool
+        pbPlayDecisionSE
+        @scene.pbEndScene
+        endscene = false
+        $game_temp.in_menu = false
+        SidmodRandomOpp.run
+        return
+      elsif cmdGameMode >= 0 && command == cmdGameMode   # sidmod: quick mode/difficulty
+        pbPlayDecisionSE
+        @scene.pbHideMenu
+        sidmod_mode_difficulty_menu
+        pbShowMenu
       elsif cmdOption >= 0 && command == cmdOption
         pbPlayDecisionSE
         pbFadeOutIn {

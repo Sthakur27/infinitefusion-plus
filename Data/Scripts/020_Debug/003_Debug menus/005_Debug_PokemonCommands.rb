@@ -1,4 +1,155 @@
 #===============================================================================
+# sidmod: name-search species picker for debug menu.
+#   Prompts for a substring, lists matching species sorted by best match.
+#   Falls back to the dex-number picker if the user cancels the text entry.
+#   `max_dex` restricts results to base species (used for fusion head/body).
+#===============================================================================
+def pbChooseSpeciesByName(default = nil, max_dex = nil, prompt = nil)
+  max_dex ||= (defined?(NB_POKEMON) ? NB_POKEMON : PBSpecies.maxValue)
+  loop do
+    needle = pbEnterText(prompt || _INTL("Species name (blank = dex #)?"), 0, 20)
+    # cancel / blank -> fall back to dex-number picker
+    if needle.nil? || needle.strip.empty?
+      return pbChooseSpeciesList(default, max_dex)
+    end
+    needle = needle.downcase.strip
+    matches = []  # [score, dex_num, species_data]
+    GameData::Species.each do |sp|
+      next if sp.form != 0
+      next if sp.id_number < 1 || sp.id_number > max_dex
+      name = (sp.real_name || sp.name || "").to_s
+      ln = name.downcase
+      score = if ln == needle then 0
+              elsif ln.start_with?(needle) then 1
+              elsif ln.include?(needle) then 2
+              else next
+              end
+      matches.push([score, sp.id_number, sp])
+    end
+    if matches.empty?
+      pbMessage(_INTL("No species match '{1}'.", needle))
+      next
+    end
+    matches.sort_by! { |score, dex, _sp| [score, dex] }
+    cap = 40
+    truncated = matches.length > cap
+    shown = truncated ? matches[0, cap] : matches
+    items = shown.map { |_score, dex, sp| sprintf("#%03d %s", dex, sp.real_name || sp.name) }
+    items.push(_INTL("(Search again)"))
+    items.push(_INTL("Cancel"))
+    header = truncated ?
+      _INTL("{1} matches (showing first {2})", matches.length, cap) :
+      _INTL("{1} matches", matches.length)
+    cmd = pbMessage(header, items, -1)
+    return nil if cmd < 0 || cmd == items.length - 1  # Cancel
+    next if cmd == items.length - 2                   # Search again
+    return shown[cmd][2]
+  end
+end
+
+#===============================================================================
+# sidmod: name-search move picker for debug menu.
+#   `restrict_to_ids` (optional) limits the searchable pool (used by
+#   "Teach legit move"). Blank input falls back to the letter-bucket browser.
+#   Returns a move id symbol or nil if cancelled.
+#===============================================================================
+def pbChooseMoveByName(restrict_to_ids = nil, prompt = nil)
+  pool = []  # [id_number, real_name, id]
+  if restrict_to_ids
+    restrict_to_ids.each do |m|
+      data = GameData::Move.try_get(m)
+      next if !data
+      pool.push([data.id_number, data.real_name, data.id])
+    end
+  else
+    GameData::Move.each { |m| pool.push([m.id_number, m.real_name, m.id]) }
+  end
+  if pool.empty?
+    pbMessage(_INTL("No moves available."))
+    return nil
+  end
+  loop do
+    needle = pbEnterText(prompt || _INTL("Move name (blank = browse)?"), 0, 20)
+    # blank / cancel -> letter-bucket browser fallback
+    if needle.nil? || needle.strip.empty?
+      return pbChooseMoveByLetterBucket(pool)
+    end
+    needle = needle.downcase.strip
+    matches = []  # [score, dex_num, name, id]
+    pool.each do |dex, name, id|
+      ln = name.to_s.downcase
+      score = if ln == needle then 0
+              elsif ln.start_with?(needle) then 1
+              elsif ln.include?(needle) then 2
+              else next
+              end
+      matches.push([score, dex, name, id])
+    end
+    if matches.empty?
+      pbMessage(_INTL("No moves match '{1}'.", needle))
+      next
+    end
+    matches.sort_by! { |score, dex, _n, _i| [score, dex] }
+    cap = 40
+    truncated = matches.length > cap
+    shown = truncated ? matches[0, cap] : matches
+    items = shown.map { |_score, _dex, name, _id| name.to_s }
+    items.push(_INTL("(Search again)"))
+    items.push(_INTL("Cancel"))
+    header = truncated ?
+      _INTL("{1} matches (showing first {2})", matches.length, cap) :
+      _INTL("{1} matches", matches.length)
+    cmd = pbMessage(header, items, -1)
+    return nil if cmd < 0 || cmd == items.length - 1  # Cancel
+    next if cmd == items.length - 2                   # Search again
+    return shown[cmd][3]
+  end
+end
+
+def pbChooseMoveSearchOrBrowse(restrict_to_ids = nil)
+  cmd = pbMessage(_INTL("How to pick the move?"), [
+    _INTL("Search by name"),
+    _INTL("Browse full list"),
+    _INTL("Cancel")
+  ], -1)
+  case cmd
+  when 0 then pbChooseMoveByName(restrict_to_ids, _INTL("Move name?"))
+  when 1
+    pool = []
+    if restrict_to_ids
+      restrict_to_ids.each do |m|
+        data = GameData::Move.try_get(m)
+        next if !data
+        pool.push([data.id_number, data.real_name, data.id])
+      end
+    else
+      GameData::Move.each { |m| pool.push([m.id_number, m.real_name, m.id]) }
+    end
+    pbChooseMoveByLetterBucket(pool)
+  else nil
+  end
+end
+
+def pbChooseMoveByLetterBucket(pool)
+  buckets = {}
+  pool.each do |dex, name, id|
+    first = name.to_s[0].to_s.upcase
+    first = "#" if first.empty? || !first.match?(/[A-Z]/)
+    buckets[first] ||= []
+    buckets[first].push([dex, name, id])
+  end
+  letters = buckets.keys.sort
+  letter_cmd = 0
+  loop do
+    letter_cmd = pbMessage(_INTL("Choose first letter."), letters, -1)
+    return nil if letter_cmd < 0
+    letter = letters[letter_cmd]
+    move = pbChooseList(buckets[letter].dup, nil, nil, 1)
+    return move if move
+  end
+end
+
+#===============================================================================
 #
 #===============================================================================
 module PokemonDebugMenuCommands
@@ -291,6 +442,9 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
           end
           evcommands.push(_INTL("Randomise all"))
           evcommands.push(_INTL("Max randomise all"))
+          evcommands.push(_INTL("Max Attack Speed"))
+          evcommands.push(_INTL("Max Sp. Attack Speed"))
+          evcommands.push(_INTL("Max Defenses"))
           cmd2 = screen.pbShowCommands(_INTL("Change which EV?\nTotal: {1}/{2} ({3}%)",
                                       totalev, Pokemon::EV_LIMIT,
                                       100 * totalev / Pokemon::EV_LIMIT), evcommands, cmd2)
@@ -312,9 +466,9 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
               pkmn.calc_stats
               screen.pbRefreshSingle(pkmnid)
             end
-          else   # (Max) Randomise all
+          elsif cmd2 < ev_id.length + 2   # (Max) Randomise all
             evTotalTarget = Pokemon::EV_LIMIT
-            if cmd2 == evcommands.length - 2   # Randomize all (not max)
+            if cmd2 == ev_id.length   # Randomize all (not max)
               evTotalTarget = rand(Pokemon::EV_LIMIT)
             end
             GameData::Stat.each_main { |s| pkmn.ev[s.id] = 0 }
@@ -327,6 +481,32 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
               next if addVal == 0
               pkmn.ev[ev_id[r]] += addVal
               evTotalTarget -= addVal
+            end
+            pkmn.calc_stats
+            screen.pbRefreshSingle(pkmnid)
+          else   # Presets
+            case cmd2 - (ev_id.length + 2)
+            when 0   # Max Attack Speed
+              pkmn.ev[:ATTACK] = 252
+              pkmn.ev[:SPEED] = 252
+              pkmn.ev[:SPECIAL_ATTACK] = 0
+              pkmn.ev[:HP] = 6
+              pkmn.ev[:DEFENSE] = 0
+              pkmn.ev[:SPECIAL_DEFENSE] = 0
+            when 1   # Max Sp. Attack Speed
+              pkmn.ev[:SPECIAL_ATTACK] = 252
+              pkmn.ev[:ATTACK] = 0
+              pkmn.ev[:SPEED] = 252
+              pkmn.ev[:HP] = 6
+              pkmn.ev[:DEFENSE] = 0
+              pkmn.ev[:SPECIAL_DEFENSE] = 0
+            when 2   # Max Defenses
+              pkmn.ev[:SPECIAL_ATTACK] = 0
+              pkmn.ev[:ATTACK] = 0
+              pkmn.ev[:SPEED] = 0
+              pkmn.ev[:HP] = 6
+              pkmn.ev[:DEFENSE] = 252
+              pkmn.ev[:SPECIAL_DEFENSE] = 252
             end
             pkmn.calc_stats
             screen.pbRefreshSingle(pkmnid)
@@ -348,6 +528,7 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
              GameData::Type.get(hiddenpower[0]).name, hiddenpower[1], totaliv,
              iv_id.length * Pokemon::IV_STAT_LIMIT, 100 * totaliv / (iv_id.length * Pokemon::IV_STAT_LIMIT))
           ivcommands.push(_INTL("Randomise all"))
+          ivcommands.push(_INTL("Max all"))
           cmd2 = screen.pbShowCommands(msg, ivcommands, cmd2)
           break if cmd2 < 0
           if cmd2 < iv_id.length
@@ -362,8 +543,12 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
               pkmn.calc_stats
               screen.pbRefreshSingle(pkmnid)
             end
-          else   # Randomise all
+          elsif cmd2 == iv_id.length   # Randomise all
             GameData::Stat.each_main { |s| pkmn.iv[s.id] = rand(Pokemon::IV_STAT_LIMIT + 1) }
+            pkmn.calc_stats
+            screen.pbRefreshSingle(pkmnid)
+          else   # Max all
+            GameData::Stat.each_main { |s| pkmn.iv[s.id] = Pokemon::IV_STAT_LIMIT }
             pkmn.calc_stats
             screen.pbRefreshSingle(pkmnid)
           end
@@ -519,14 +704,47 @@ PokemonDebugMenuCommands.register("moves", {
   "always_show" => true
 })
 
+# sidmod: debug-taught moves should always come with max PP Ups and full PP,
+# so a freshly taught move is immediately usable without a trip to "Set move PP".
+def pbDebugMaxMovePP(pkmn, move_id)
+  return if !pkmn || !move_id
+  move_id = GameData::Move.get(move_id).id
+  pkmn.moves.each do |m|
+    next if !m || !m.id || m.id != move_id || m.total_pp <= 0
+    m.ppup = 3
+    m.pp   = m.total_pp
+  end
+end
+
 PokemonDebugMenuCommands.register("teachmove", {
   "parent"      => "moves",
   "name"        => _INTL("Teach move"),
   "always_show" => true,
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
-    move = pbChooseMoveList
+    move = pbChooseMoveListSearchable(nil, nil, _INTL("move"))   # sidmod: searchable list of every move
+#    move = pbChooseMoveSearchOrBrowse(nil)   # sidmod: old behaviour
     if move
-      pbLearnMove(pkmn, move)
+      pbDebugMaxMovePP(pkmn, move) if pbLearnMove(pkmn, move)   # sidmod
+      screen.pbRefreshSingle(pkmnid)
+    end
+    next false
+  }
+})
+
+PokemonDebugMenuCommands.register("teachlegitmove", {
+  "parent"      => "moves",
+  "name"        => _INTL("Teach legit move"),
+  "always_show" => true,
+  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+    legal = pbGetLegalMoves(pkmn.species)
+    if legal.empty?
+      pbMessage(_INTL("No legitimate moves found for this Pokémon."))
+      next false
+    end
+    move = pbChooseMoveListSearchable(legal, nil, _INTL("legit move"))   # sidmod: searchable, still restricted to the legal movepool
+#    move = pbChooseMoveSearchOrBrowse(legal)   # sidmod: old behaviour
+    if move
+      pbDebugMaxMovePP(pkmn, move) if pbLearnMove(pkmn, move)   # sidmod
       screen.pbRefreshSingle(pkmnid)
     end
     next false
@@ -619,6 +837,22 @@ PokemonDebugMenuCommands.register("setmovepp", {
         pkmn.heal_PP
       end
     end
+    next false
+  }
+})
+
+PokemonDebugMenuCommands.register("maxppall", {
+  "parent"      => "moves",
+  "name"        => _INTL("Max PP all moves"),
+  "always_show" => true,
+  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+    pkmn.moves.each do |move|
+      next if !move.id || move.total_pp <= 0
+      move.ppup = 3
+      move.pp   = move.total_pp
+    end
+    screen.pbDisplay(_INTL("{1}'s moves were maxed out (PP Up 3/3, full PP).", pkmn.name))
+    screen.pbRefreshSingle(pkmnid)
     next false
   }
 })
@@ -823,34 +1057,33 @@ PokemonDebugMenuCommands.register("setgender", {
   "name"        => _INTL("Set gender"),
   "always_show" => true,
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
-    if pkmn.singleGendered?
-      screen.pbDisplay(_INTL("{1} is single-gendered or genderless.", pkmn.speciesName))
-    else
-      cmd = 0
-      loop do
-        msg = [_INTL("Gender is male."), _INTL("Gender is female.")][pkmn.male? ? 0 : 1]
-        cmd = screen.pbShowCommands(msg, [
-           _INTL("Make male"),
-           _INTL("Make female"),
-           _INTL("Reset")], cmd)
-        break if cmd < 0
-        case cmd
-        when 0   # Make male
-          pkmn.makeMale
-          if !pkmn.male?
-            screen.pbDisplay(_INTL("{1}'s gender couldn't be changed.", pkmn.name))
-          end
-        when 1   # Make female
-          pkmn.makeFemale
-          if !pkmn.female?
-            screen.pbDisplay(_INTL("{1}'s gender couldn't be changed.", pkmn.name))
-          end
-        when 2   # Reset
-          pkmn.gender = nil
-        end
-        $Trainer.pokedex.register(pkmn) if !settingUpBattle
+    # sidmod: bypass single-gendered/genderless lock - cosmetic only
+    cmd = 0
+    loop do
+      gtxt = pkmn.male? ? _INTL("male") : (pkmn.female? ? _INTL("female") : _INTL("genderless"))
+      lock = pkmn.singleGendered? ? _INTL(" (species is single-gendered)") : ""
+      msg = _INTL("Gender is {1}.{2}", gtxt, lock)
+      cmd = screen.pbShowCommands(msg, [
+         _INTL("Make male"),
+         _INTL("Make female"),
+         _INTL("Make genderless"),
+         _INTL("Reset")], cmd)
+      break if cmd < 0
+      case cmd
+      when 0   # Make male
+        pkmn.instance_variable_set(:@gender, 0)
+        screen.pbRefreshSingle(pkmnid)
+      when 1   # Make female
+        pkmn.instance_variable_set(:@gender, 1)
+        screen.pbRefreshSingle(pkmnid)
+      when 2   # Make genderless
+        pkmn.instance_variable_set(:@gender, 2)
+        screen.pbRefreshSingle(pkmnid)
+      when 3   # Reset
+        pkmn.instance_variable_set(:@gender, nil)
         screen.pbRefreshSingle(pkmnid)
       end
+      $Trainer.pokedex.register(pkmn) if !settingUpBattle
     end
     next false
   }
@@ -881,7 +1114,7 @@ PokemonDebugMenuCommands.register("speciesform", {
       break if cmd < 0
       case cmd
       when 0   # Set species
-        species = pbChooseSpeciesList(pkmn.species)
+        species = pbChooseSpeciesByName(pkmn.species, nil, _INTL("Species name (blank = dex #)?"))
         if species && species != pkmn.species
           pkmn.species = species
           if pkmn.shiny?
@@ -895,10 +1128,12 @@ PokemonDebugMenuCommands.register("speciesform", {
       when 1   # Set form
         old_head_dex = get_head_number_from_symbol(pkmn.species)
         old_body_dex = get_body_number_from_symbol(pkmn.species)
-        pbMessage('Head species?')
-        head_species = pbChooseSpeciesList(old_head_dex,NB_POKEMON)
-        pbMessage('Body species?')
-        body_species = pbChooseSpeciesList(old_body_dex,NB_POKEMON)
+        head_species = pbChooseSpeciesListSearchable(old_head_dex, NB_POKEMON, _INTL("head species"))   # sidmod
+#        head_species = pbChooseSpeciesByName(old_head_dex, NB_POKEMON, _INTL("Head species (name; blank = dex #)?"))   # sidmod: old behaviour
+        next if head_species.nil?
+        body_species = pbChooseSpeciesListSearchable(old_body_dex, NB_POKEMON, _INTL("body species"))   # sidmod
+#        body_species = pbChooseSpeciesByName(old_body_dex, NB_POKEMON, _INTL("Body species (name; blank = dex #)?"))   # sidmod: old behaviour
+        next if body_species.nil?
 
         fused_species_dex = getFusionSpecies(body_species.species, head_species.species)
         species = GameData::Species.get(fused_species_dex)

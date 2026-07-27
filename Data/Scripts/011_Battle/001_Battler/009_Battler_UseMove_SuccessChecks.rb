@@ -111,7 +111,8 @@ class PokeBattle_Battler
     # Pokémon may be disobedient; calculate if it is
     badgeLevel = 10 * (@battle.pbPlayer.badge_count + 1)
     badgeLevel = GameData::GrowthRate.max_level if @battle.pbPlayer.badge_count >= 8
-    if (@pokemon.foreign?(@battle.pbPlayer) && @level>badgeLevel) || @pokemon.force_disobey
+    # sidmod: foreign mons always obey -- bypassed trade disobedience check (kept force_disobey for story/debug uses)
+    if (false && @pokemon.foreign?(@battle.pbPlayer) && @level>badgeLevel) || @pokemon.force_disobey
       a = ((@level+badgeLevel)*@battle.pbRandom(256)/256).floor
       disobedient |= (a>=badgeLevel)
     end

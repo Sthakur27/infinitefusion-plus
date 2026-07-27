@@ -4,6 +4,15 @@ class Hangup < Exception; end
 
 module RPG
   module Cache
+    # sidmod: @cache is never initialised anywhere in Data/Scripts (and self.clear,
+    # called from Scene_Map / BattleIntroAnim / AnimEditor, isn't defined here
+    # either) - both are expected to come from the engine's RGSS layer. When it
+    # arrives nil, the first bitmap load at boot (showLoadingScreen -> pbBitmap ->
+    # load_bitmap_path -> fromCache) dies with "undefined method `include?' for
+    # nil", and 999_Main's retry loop then re-crashes forever. These guards are a
+    # no-op whenever @cache is already a Hash.
+    @cache ||= {}
+
     def self.debug
       t = Time.now
       filename = t.strftime("%H %M %S.%L.txt")
@@ -21,10 +30,12 @@ module RPG
     end
 
     def self.setKey(key, obj)
+      @cache ||= {}   # sidmod: see above
       @cache[key] = obj
     end
 
     def self.fromCache(i)
+      @cache ||= {}   # sidmod: see above
       return nil if !@cache.include?(i)
       obj = @cache[i]
       return nil if obj && obj.disposed?

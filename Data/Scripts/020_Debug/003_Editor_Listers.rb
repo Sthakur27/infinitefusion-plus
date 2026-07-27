@@ -47,6 +47,19 @@ def pbListScreen(title,lister)
       break
     elsif Input.trigger?(Input::USE)
       break
+    elsif Input.trigger?(Input::SPECIAL) && lister.respond_to?(:filter=)   # sidmod: name search (Z key)
+      term = pbMessageFreeText(_INTL("Search by name (blank = show all):"),
+         lister.filter || "", false, 250, Graphics.width)
+      lister.filter = term
+      commands = lister.commands
+      if commands.length == 0
+        pbMessage(_INTL("No matches for \"{1}\".", term))
+        lister.filter = ""
+        commands = lister.commands
+      end
+      list.commands = commands
+      list.index = lister.startIndex
+      selectedmap = -1
     end
   end
   value = lister.value(selectedmap)
@@ -519,6 +532,17 @@ class TrainerBattleLister
     @ids = []
     @includeNew = includeNew
     @index = 0
+    @filter = ""   # sidmod: name search filter
+  end
+
+  # sidmod: name search support (Z key in pbListScreen)
+  def filter
+    @filter
+  end
+
+  def filter=(value)
+    @filter = value.to_s
+    @selection = 0
   end
 
   def dispose
@@ -539,6 +563,9 @@ class TrainerBattleLister
   def commands
     @commands.clear
     @ids.clear
+    # sidmod: register the vanilla benchmark opponents (OU / Ubers Off / Ubers Bal)
+    # the first time the battle list is built, so they show up + are battleable.
+    sidmod_register_vanilla_trainers if defined?(sidmod_register_vanilla_trainers)
     cmds = []
     GameData::Trainer.each do |trainer|
       cmds.push([trainer.id_number, trainer.trainer_type, trainer.real_name, trainer.version])
@@ -554,18 +581,47 @@ class TrainerBattleLister
         a[1].to_s.downcase <=> b[1].to_s.downcase
       end
     }
+    # sidmod: pin key rematch trainers to the top of the battle list for easy
+    # rebattle access. Order = Champion Blue (hardest) -> Cynthia -> Gold ->
+    # Elite Four -> all gym leaders. Each is picked at its most-advanced
+    # (highest) version so drift in the data can't stale the pins.
+    sidmod_pin_types = [
+      :CHAMPION,             # Blue (final champion rematch, hardest team)
+      :CHAMPION_Sinnoh,      # Cynthia
+      :POKEMONTRAINER_Gold,  # Gold
+      :ELITEFOUR_Lorelei, :ELITEFOUR_Bruno, :ELITEFOUR_Agatha, :ELITEFOUR_Lance,
+      # sidmod: vanilla benchmark teams (registered in 007_sidmod_VanillaTrainers.rb):
+      :SIDMOD_OU, :SIDMOD_UBERSOFF, :SIDMOD_UBERSBAL,
+      # gym leaders, Kanto then Johto badge order:
+      :LEADER_Brock, :LEADER_Misty, :LEADER_Surge, :LEADER_Erika,
+      :LEADER_Koga, :LEADER_Sabrina, :LEADER_Blaine, :LEADER_Giovanni,
+      :LEADER_Falkner, :LEADER_Whitney, :LEADER_Morty, :LEADER_Chuck,
+      :LEADER_Jasmine, :LEADER_Pryce, :LEADER_Clair, :LEADER_Kurt
+    ]
+    sidmod_pinned = []
+    sidmod_pin_types.each do |ttype|
+      matches = cmds.select { |c| c[1] == ttype }
+      next if matches.empty?
+      sidmod_pinned.push(matches.max_by { |c| c[3] })   # highest version = most advanced
+    end
+    cmds = sidmod_pinned + (cmds - sidmod_pinned)
     if @includeNew
       @commands.push(_INTL("[NEW TRAINER BATTLE]"))
       @ids.push(true)
     end
+    flt = (@filter || "").downcase   # sidmod: name search filter
     for t in cmds
+      ttypename = GameData::TrainerType.get(t[1]).name
+      if !flt.empty?
+        next unless (ttypename + " " + t[2]).downcase.include?(flt)
+      end
       if t[3] > 0
         @commands.push(_INTL("{1} {2} ({3}) x{4}",
-           GameData::TrainerType.get(t[1]).name, t[2], t[3],
+           ttypename, t[2], t[3],
            GameData::Trainer.get(t[1], t[2], t[3]).pokemon.length))
       else
         @commands.push(_INTL("{1} {2} x{3}",
-           GameData::TrainerType.get(t[1]).name, t[2],
+           ttypename, t[2],
            GameData::Trainer.get(t[1], t[2], t[3]).pokemon.length))
       end
       @ids.push([t[1], t[2], t[3]])

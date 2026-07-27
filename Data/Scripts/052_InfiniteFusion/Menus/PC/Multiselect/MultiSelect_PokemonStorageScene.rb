@@ -250,6 +250,28 @@ class PokemonStorageScene
     end
   end
 
+  # sidmod: pick up a group that is already OUT of storage (used by the multi-swap:
+  # the mons that were sitting in the target slots have been lifted in data, so
+  # there are no box sprites left to grab - build fresh ones and hand them to the
+  # arrow). "held" is the screen's [[pokemon, dx, dy], ...] format.
+  def animate_hold_multi_pokemon(held)
+    return if !held || held.empty?
+    sprites = []
+    held.each do |h|
+      sprite = PokemonBoxIcon.new(h[0], @arrowviewport)
+      sprite.heldox = h[1]
+      sprite.heldoy = h[2]
+      sprites.push(sprite)
+    end
+    pbSEPlay("GUI storage pick up")
+    @sprites["arrow"].grabMulti(sprites)
+    while @sprites["arrow"].grabbing?
+      Graphics.update
+      Input.update
+      self.update
+    end
+  end
+
   def animate_place_multi(box, index)
     pbSEPlay("GUI storage put down")
     heldpokesprites = @sprites["arrow"].multiHeldPokemon

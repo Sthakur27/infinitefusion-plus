@@ -207,12 +207,135 @@ end
 
 # Displays a list of all items, and returns the ID of the item selected (or nil
 # if the selection was canceled). "default", if specified, is the ID of the item
-# to initially select. Pressing Input::ACTION will toggle the list sorting
-# between numerical and alphabetical.
+# to initially select.
+# sidmod: now alphabetical with a live type-to-search box (was pbChooseList with
+# sortType -1, i.e. ID-ordered with an ACTION toggle for alphabetical).
 def pbChooseItemList(default = nil)
   commands = []
   GameData::Item.each { |i| commands.push([i.id_number, i.name, i.id]) }
-  return pbChooseList(commands, default, nil, -1)
+  return pbChooseListSearchable(commands, default, _INTL("item"))
+#  return pbChooseList(commands, default, nil, -1)   # sidmod: old behaviour
+end
+
+# sidmod: alphabetically-sorted list picker with a live search box.
+# "commands" is an array of [id_number, display name, id symbol]; returns the id
+# symbol (or id number) of the entry chosen, or nil if cancelled.
+# Keyboard only: type to filter, UP/DOWN (HOME/END for top/bottom) to move, ENTER
+# to choose, ESC to cancel. Gamepad buttons are ignored on purpose - while text
+# input is on, the letter keys bound to USE/BACK would fire while typing.
+def pbChooseListSearchable(commands, default = nil, what = _INTL("entry"))
+  entries = commands.sort { |a, b| a[1].downcase <=> b[1].downcase }
+  searchwin = Window_TextEntry_Keyboard.new("", 0, 0, Graphics.width / 2, 96,
+                                            _INTL("Search {1}:", what), true)
+  searchwin.maxlength = 20
+  searchwin.z = 99999
+  searchwin.active = true
+  cmdwin = Window_CommandPokemon.newWithSize([], 0, 96, Graphics.width / 2,
+                                             Graphics.height - 96)
+  cmdwin.ignore_input = true   # navigated below; LEFT/RIGHT belong to the search box
+  cmdwin.rowHeight = 24
+  pbSetSmallFont(cmdwin.contents)
+  cmdwin.z = 99999
+  cmdwin.active = true
+  helpwin = Window_UnformattedTextPokemon.newWithSize("", Graphics.width / 2,
+                                                      Graphics.height - 192,
+                                                      Graphics.width / 2, 192)
+  helpwin.letterbyletter = false
+  helpwin.z = 99999
+  filtered = []
+  oldtext = nil
+  ret = nil
+  Input.text_input = true
+  loop do
+    if oldtext != searchwin.text   # Rebuild the filtered list
+      oldtext = searchwin.text
+      query = oldtext.downcase.strip
+      filtered = entries.select do |e|
+        query == "" || e[1].downcase.include?(query) || e[2].to_s.downcase.include?(query)
+      end
+      cmdwin.commands = filtered.map { |e| sprintf("%s (%03d)", e[1], e[0]) }
+      index = 0
+      if default
+        filtered.each_with_index { |e, i| index = i if e[2] == default || e[0] == default }
+      end
+      cmdwin.index = index
+      helpwin.text = _INTL("Type to search.\nUP/DOWN: move (HOME/END: ends)\nENTER: choose, ESC: cancel\n{1} match(es)",
+                           filtered.length)
+    end
+    Graphics.update
+    Input.update
+    searchwin.update
+    cmdwin.update
+    if filtered.length > 0   # Move the selection (the list ignores input itself)
+      oldindex = cmdwin.index
+      if Input.triggerex?(:DOWN) || Input.repeatex?(:DOWN)
+        cmdwin.index = (cmdwin.index + 1) % filtered.length
+      elsif Input.triggerex?(:UP) || Input.repeatex?(:UP)
+        cmdwin.index = (cmdwin.index - 1 + filtered.length) % filtered.length
+      elsif Input.triggerex?(:HOME)
+        cmdwin.index = 0
+      elsif Input.triggerex?(:END)
+        cmdwin.index = filtered.length - 1
+      end
+      pbPlayCursorSE if cmdwin.index != oldindex
+    end
+    if Input.triggerex?(:RETURN)
+      chosen = filtered[cmdwin.index]
+      if chosen
+        ret = chosen[2] || chosen[0]
+        break
+      end
+    elsif Input.triggerex?(:ESCAPE)
+      break
+    end
+  end
+  Input.text_input = false
+  searchwin.dispose
+  cmdwin.dispose
+  helpwin.dispose
+  Input.update
+  return ret
+end
+
+# sidmod: searchable picker over the BASE species (form 0, dex 1..max), built on
+# pbChooseListSearchable. GameData::Species.each only walks the symbol-keyed
+# entries (fusions are generated on demand by GameData::Species.get and are NOT
+# in DATA), so this list is bounded by NB_POKEMON - no fusion explosion.
+# "default" may be a species id symbol or a dex number. Returns the chosen
+# GameData::Species entry (same as pbChooseSpeciesList), or nil if cancelled.
+def pbChooseSpeciesListSearchable(default = nil, max = nil, what = _INTL("species"))
+  max ||= (defined?(NB_POKEMON) ? NB_POKEMON : PBSpecies.maxValue)
+  commands = []
+  GameData::Species.each do |s|
+    next if s.form != 0
+    next if s.id_number < 1 || s.id_number > max
+    commands.push([s.id_number, s.real_name, s.id])
+  end
+  return nil if commands.empty?
+  ret = pbChooseListSearchable(commands, default, what)
+  return nil if ret.nil?
+  return GameData::Species.get(ret)
+end
+
+# sidmod: searchable picker over moves, built on pbChooseListSearchable.
+# "move_ids", when given, restricts the list to exactly those moves (that is how
+# the debug menu's "Teach legit move" stays inside pbGetLegalMoves); nil lists
+# every move in the game. Returns a move id symbol, or nil if cancelled/empty.
+def pbChooseMoveListSearchable(move_ids = nil, default = nil, what = _INTL("move"))
+  commands = []
+  if move_ids
+    seen = {}
+    move_ids.each do |m|
+      move_data = GameData::Move.try_get(m)
+      next if !move_data || seen[move_data.id]
+      seen[move_data.id] = true
+      commands.push([move_data.id_number, move_data.real_name, move_data.id])
+    end
+  else
+    GameData::Move.each { |m| commands.push([m.id_number, m.real_name, m.id]) }
+  end
+  return nil if commands.empty?
+  return pbChooseListSearchable(commands, default, what)
 end
 
 # Displays a list of all abilities, and returns the ID of the ability selected

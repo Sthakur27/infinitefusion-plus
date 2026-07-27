@@ -5,16 +5,10 @@ class PokemonStorage
     cmd_cancel = _INTL("Cancel")
     commands = [cmd_play, cmd_info, cmd_cancel]
 
-    $Trainer.quest_points = initialize_quest_points unless $Trainer.quest_points
-    choice = pbMessage(_INTL("\\qpWould you like to play the Wallpaper Lottery? (Costs \\C[1]1 Quest point\\C[0])"),commands,2)
+    choice = pbMessage(_INTL("Would you like to play the Wallpaper Lottery? (\\C[1]Free\\C[0])"),commands,2)
 
     case commands[choice]
     when cmd_play
-      if $Trainer.quest_points <= 0
-        pbMessage(_INTL("You don't have any \\C[1]Quest points\\C[0]. Complete quests to obtain more!"))
-        return
-      end
-
       locked_wallpapers = []
       for i in BASICWALLPAPERQTY..allWallpapers.length-1
         locked_wallpapers << i unless isAvailableWallpaper?(i)
@@ -25,8 +19,6 @@ class PokemonStorage
       end
 
       unlocked_index = locked_wallpapers.sample
-      $Trainer.quest_points -= 1
-
 
       $game_system.bgm_memorize
       $game_system.bgm_stop
@@ -38,7 +30,7 @@ class PokemonStorage
       obtain_wallpaper(unlocked_index)
     when cmd_info
       pbMessage(_INTL("The Wallpaper Lottery allows you to unlock \\C[1]new wallpapers\\C[0] for your PC boxes background."))
-      pbMessage(_INTL("Participating in the lottery costs \\C[1]1 Quest point\\C[0]. You obtain one Quest Point per quest that you complete."))
+      pbMessage(_INTL("Participating in the lottery is \\C[1]free\\C[0]!"))
 
     end
   end

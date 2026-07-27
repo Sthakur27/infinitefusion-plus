@@ -581,6 +581,8 @@ class PokemonStorageScreen
   end
 
   def pbBoxCommands
+    cmd_search = _INTL("Search")   # sidmod: PC search/filter
+    cmd_swap = _INTL("Swap party")   # sidmod: party <-> box row team swap
     cmd_jump = _INTL("Jump")
     cmd_wallpaper = _INTL("Wallpaper")
     cmd_name = _INTL("Name")
@@ -588,6 +590,8 @@ class PokemonStorageScreen
     cmd_cancel = _INTL("Cancel")
 
     commands = []
+    commands << cmd_search
+    commands << cmd_swap if !pbHolding? && !@storage[@storage.currentBox].is_a?(StorageTransferBox)
     commands << cmd_jump
     commands << cmd_wallpaper
     commands << cmd_name if !@storage[@storage.currentBox].is_a?(StorageTransferBox)
@@ -597,6 +601,10 @@ class PokemonStorageScreen
     command = pbShowCommands(
       _INTL("What do you want to do?"), commands)
     case commands[command]
+    when cmd_search
+      boxCommandSearch
+    when cmd_swap
+      boxCommandSwapPartyRow
     when cmd_jump
       boxCommandJump
     when cmd_wallpaper
@@ -606,6 +614,14 @@ class PokemonStorageScreen
     when cmd_info
       boxCommandTransferInfo
     end
+  end
+
+  def boxCommandSearch
+    result = PCSearch.open(@storage)
+    return if result.nil?
+    target_box, target_slot = result
+    @scene.pbJumpToBox(target_box)
+    @scene.instance_variable_set(:@selection, target_slot)
   end
 
   def boxCommandTransferInfo

@@ -110,7 +110,7 @@ def type_expert_battle(type_id)
     gym_randomizer_index = GYM_TYPES_CLASSIC.index(type_id)
     echoln gym_randomizer_index
     pbSet(VAR_CURRENT_GYM_TYPE, gym_randomizer_index)
-    if PokemonSelection.choose(1, 4, true, true, proc { |poke| poke.hasType?(type_id) })
+    if PokemonSelection.choose(1, 4, true, true, nil)
       #Level is equal to the highest level in player's party
       $game_switches[Settings::OVERRIDE_BATTLE_LEVEL_SWITCH]=true
       $game_switches[SWITCH_DONT_RANDOMIZE]=true

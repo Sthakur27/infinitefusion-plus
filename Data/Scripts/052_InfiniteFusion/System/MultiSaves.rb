@@ -426,11 +426,11 @@ class PokemonLoadScreen
     updateHttpSettingsFile
     updateCustomDexFile
     newer_version = find_newer_available_version
-    if newer_version
+    if false && newer_version # sidmod: silence "Version X is now available" update nag
       pbMessage(_INTL("Version {1} is now available! Please use the game's installer to download the newest version. Check the Discord for more information.", newer_version))
     end
 
-    if Settings::STARTUP_MESSAGES != ""
+    if false && Settings::STARTUP_MESSAGES != "" # sidmod: silence startup announcements (PIF2/Hoenn ads)
       pbMessage(_INTL(Settings::STARTUP_MESSAGES))
     end
     if ($game_temp.unimportedSprites && $game_temp.unimportedSprites.size > 0)

@@ -1,0 +1,21 @@
+{
+  "_comment": "SAMPLE ONLY. The live file the injector reads is injections.json (no .example). Claude writes that from your chat descriptions. default_box is 0-indexed internally but the game shows it +1; set default_box to the box you're working out of and every mon without its own \"box\" lands there.",
+  "default_box": 0,
+  "pokemon": [
+    {
+      "head": "BLISSEY",
+      "body": "GLISCOR",
+      "level": 100,
+      "nickname": "Tox",
+      "ability": "POISON_HEAL",
+      "nature": "CAREFUL",
+      "item": "TOXIC_ORB",
+      "moves": ["EARTHQUAKE", "TOXIC", "PROTECT", "SOFTBOILED"],
+      "evs": { "HP": 252, "SPECIAL_DEFENSE": 252, "DEFENSE": 6 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "shiny": false,
+      "gender": "male",
+      "ball": "ULTRA_BALL"
+    }
+  ]
+}

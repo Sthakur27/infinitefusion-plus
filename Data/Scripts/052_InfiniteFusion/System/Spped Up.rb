@@ -28,7 +28,7 @@ PluginManager.register({
                        })
 
 # When the user clicks F, it'll pick the next number in this array.
-SPEEDUP_STAGES = [1,2,3]
+SPEEDUP_STAGES = [2,3,1]
 
 
 def pbAllowSpeedup

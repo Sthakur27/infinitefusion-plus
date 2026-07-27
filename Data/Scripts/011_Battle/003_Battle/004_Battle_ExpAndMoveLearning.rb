@@ -136,6 +136,7 @@ class PokeBattle_Battle
     else
       exp /= 7
     end
+    exp = (exp * 0.9).floor   # sidmod: global 0.9x exp dampener (only surviving exp tweak)
     # Foreign Pokémon gain more Exp
     isOutsider = (pkmn.owner.id != pbPlayer.id ||
       (pkmn.owner.language != 0 && pkmn.owner.language != pbPlayer.language)) ||

@@ -69,17 +69,54 @@ end
 #===============================================================================
 class SpriteWindow_DebugVariables < Window_DrawableCommand
   attr_reader :mode
+  attr_reader :filter   # sidmod: search filter (lowercased) for switch/variable names
 
   def initialize(viewport)
+    @filter   = ""        # sidmod: set before super -- super's refresh calls itemCount
+    @filtered = []
     super(0,0,Graphics.width,Graphics.height,viewport)
   end
 
   def itemCount
-    return (@mode==0) ? $data_system.switches.size-1 : $data_system.variables.size-1
+    return (@filtered) ? @filtered.size : 0
+  end
+
+  # sidmod: real switch/variable id under the cursor (display index -> real id)
+  def current_real_id
+    return nil if @filtered.empty?
+    i = self.index
+    i = 0 if i < 0
+    i = @filtered.size-1 if i > @filtered.size-1
+    return @filtered[i]
+  end
+
+  # sidmod: rebuild the visible id list from the current mode + filter
+  def build_list
+    total = (@mode==0) ? $data_system.switches.size-1 : $data_system.variables.size-1
+    data  = (@mode==0) ? $data_system.switches : $data_system.variables
+    @filtered = []
+    for i in 1..total
+      if @filter.nil? || @filter.empty?
+        @filtered.push(i)
+      else
+        name = data[i]
+        name = "" if name.nil?
+        @filtered.push(i) if name.downcase.include?(@filter)
+      end
+    end
   end
 
   def mode=(mode)
     @mode = mode
+    build_list
+    refresh
+  end
+
+  # sidmod: set the search filter, rebuild the list, jump back to the top
+  def filter=(value)
+    @filter = (value || "").downcase
+    build_list
+    self.index = 0
     refresh
   end
 
@@ -102,10 +139,12 @@ class SpriteWindow_DebugVariables < Window_DrawableCommand
   def drawItem(index,_count,rect)
     pbSetNarrowFont(self.contents)
     colors = 0; codeswitch = false
+    id = @filtered[index]   # sidmod: map display row -> real switch/variable id
+    return if id.nil?
     if @mode==0
-      name = $data_system.switches[index+1]
+      name = $data_system.switches[id]
       codeswitch = (name[/^s\:/])
-      val = (codeswitch) ? (eval($~.post_match) rescue nil) : $game_switches[index+1]
+      val = (codeswitch) ? (eval($~.post_match) rescue nil) : $game_switches[id]
       if val.nil?
         status = "[-]"
         colors = 0
@@ -118,12 +157,12 @@ class SpriteWindow_DebugVariables < Window_DrawableCommand
         colors = 1
       end
     else
-      name = $data_system.variables[index+1]
-      status = $game_variables[index+1].to_s
+      name = $data_system.variables[id]
+      status = $game_variables[id].to_s
       status = "\"__\"" if nil_or_empty?(status)
     end
     name = '' if name==nil
-    id_text = sprintf("%04d:",index+1)
+    id_text = sprintf("%04d:",id)
     rect = drawCursor(index,rect)
     totalWidth = rect.width
     idWidth     = totalWidth*15/100
@@ -182,7 +221,15 @@ def pbDebugVariables(mode)
       pbPlayCancelSE
       break
     end
-    current_id = right_window.index+1
+    if Input.trigger?(Input::SPECIAL) # sidmod: search switch/variable names (Z key)
+      pbPlayDecisionSE
+      term = pbMessageFreeText(_INTL("Search names (blank = show all):"),
+         right_window.filter,false,250,Graphics.width)
+      right_window.filter = term
+      next
+    end
+    current_id = right_window.current_real_id
+    next if current_id.nil?
     if mode==0 # Switches
       if Input.trigger?(Input::USE)
         pbPlayDecisionSE

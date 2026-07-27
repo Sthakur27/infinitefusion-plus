@@ -83,14 +83,15 @@ class PokemonStorageScreen
 
   def pbBoxCommands
     is_holding_pokemon = pbHolding?
-    if @scene.cursormode == "multiselect"
-      if is_holding_pokemon
-        return dropAllHeldPokemon
-      else
-        return selectAllBox
-      end
-
+    if @scene.cursormode == "multiselect" && !is_holding_pokemon
+      return selectAllBox
     end
+    # sidmod: while carrying a group, the box name used to dump everything at slot
+    # 0 immediately (dropAllHeldPokemon), so Jump was unreachable and you had to
+    # walk box by box. Now it opens the menu, with that dump as an explicit entry.
+    cmd_search = _INTL("Search")   # sidmod: PC search/filter
+    cmd_swap = _INTL("Swap party")   # sidmod: party <-> box row team swap
+    cmd_place = _INTL("Place at start")   # sidmod: the old carrying behaviour
     cmd_jump = _INTL("Jump")
     cmd_select = _INTL("Select all")
     cmd_wallpaper = _INTL("Wallpaper")
@@ -98,8 +99,12 @@ class PokemonStorageScreen
     cmd_info = _INTL("Info")
     cmd_cancel = _INTL("Cancel")
 
+    is_transfer_box = @storage[@storage.currentBox].is_a?(StorageTransferBox)
     commands = []
+    commands << cmd_search
+    commands << cmd_swap if !is_holding_pokemon && !is_transfer_box
     commands << cmd_jump
+    commands << cmd_place if is_holding_pokemon && @scene.cursormode == "multiselect"
     commands << cmd_select unless is_holding_pokemon
     commands << cmd_wallpaper
     commands << cmd_name if !@storage[@storage.currentBox].is_a?(StorageTransferBox)
@@ -109,6 +114,12 @@ class PokemonStorageScreen
     command = pbShowCommands(
       _INTL("What do you want to do?"), commands)
     case commands[command]
+    when cmd_search
+      boxCommandSearch
+    when cmd_swap
+      boxCommandSwapPartyRow
+    when cmd_place
+      dropAllHeldPokemon
     when cmd_jump
       boxCommandJump
     when cmd_wallpaper
@@ -120,6 +131,14 @@ class PokemonStorageScreen
     when cmd_select
       selectAllBox
     end
+  end
+
+  def boxCommandSearch
+    result = PCSearch.open(@storage)
+    return if result.nil?
+    target_box, target_slot = result
+    @scene.pbJumpToBox(target_box)
+    @scene.instance_variable_set(:@selection, target_slot)
   end
 
   def singlePokemonCommands(selected)
@@ -158,7 +177,18 @@ class PokemonStorageScreen
   end
 
   def dropAllHeldPokemon
-    multiSelectAction([@storage.currentBox, 0])
+    # sidmod: anchor so the group's top-left corner lands in slot 0, instead of
+    # anchoring the cursor itself at slot 0. A lasso's anchor is whichever corner
+    # you finished on, so its offsets are usually NEGATIVE; with the new
+    # "must fit inside the Box" rule a raw slot-0 drop would just be refused.
+    # Offsets are left untouched, so the held sprites stay in sync.
+    anchor = 0
+    if @multiheldpkmn && !@multiheldpkmn.empty?
+      minx = @multiheldpkmn.map { |h| h[1] }.min
+      miny = @multiheldpkmn.map { |h| h[2] }.min
+      anchor = [-minx, 0].max + ([-miny, 0].max * PokemonBox::BOX_WIDTH)
+    end
+    multiSelectAction([@storage.currentBox, anchor])
   end
 
   # Multi-select flow: validates and delegates animations to scene.
@@ -253,32 +283,26 @@ class PokemonStorageScreen
 
     selected_pos = getBoxPosition(box, selected_index)
     if box >= 0
-      # Validate every target slot is in-bounds and unoccupied
-      need_fill = false
+      # sidmod: the lasso shape must land WHOLLY inside the Box - a group hanging
+      # over an edge is simply illegal now. It used to fall through to
+      # pbStoreBatch, which scattered the group across whatever free slots it
+      # could find (spiral fallback), which looked like random teleporting.
+      occupied_slots = []
       for held in @multiheldpkmn
         held_x = held[1] + selected_pos[0]
         held_y = held[2] + selected_pos[1]
-        if out_of_bounds?(box, held_x, held_y) || occupied?(box, held_x, held_y)
-          need_fill = true
-        end
-      end
-      if need_fill
-        store_result = @storage.pbStoreBatch(@multiheldpkmn, box, selected_pos[0], selected_pos[1])
-        if store_result == :CANT_PLACE || !store_result
-          pbDisplay(_INTL("There's not enough room!"))
+        if out_of_bounds?(box, held_x, held_y)
+          pbPlayBuzzerSE
+          pbDisplay(_INTL("It won't fit there!"))
           return
         end
-        @scene.animate_place_multi(box, selected_index)
-        @multiheldpkmn = []
-        @scene.pbHardRefresh
-
-        @scene.restartBox(self, @command, false)
-        @storage = $PokemonStorage
-        @scene.pbRefresh
-        @multiheldpkmn = []
-        @boxForMosaic = @storage.currentBox
-        @selectionForMosaic = selected_index
-        return store_result
+        idx = held_x + held_y * PokemonBox::BOX_WIDTH
+        occupied_slots.push(idx) if @storage[box, idx]
+      end
+      # sidmod: landing on occupied slots now SWAPS the two groups (what Shift
+      # does for a single Pokémon) instead of scattering them elsewhere.
+      if occupied_slots.length > 0
+        return pbSwapMulti(box, selected_index, selected_pos, occupied_slots)
       end
 
       # All validated: animate then commit
@@ -306,6 +330,38 @@ class PokemonStorageScreen
     end
     @scene.pbRefresh
     @multiheldpkmn = []
+  end
+
+  # sidmod: swap the held group with whatever occupies the target slots.
+  # Caller has already proven every target slot is in-bounds; "occupied_slots" are
+  # the target indices that currently hold a Pokémon. Ours go down, theirs come up
+  # into the cursor, so nothing is ever displaced to a slot you didn't point at.
+  def pbSwapMulti(box, selected_index, selected_pos, occupied_slots)
+    swap_out = []
+    for idx in occupied_slots
+      pokemon = @storage[box, idx]
+      next if !pokemon
+      pos = getBoxPosition(box, idx)
+      swap_out.push([pokemon, pos[0] - selected_pos[0], pos[1] - selected_pos[1]])
+    end
+    # Put ours down first (this animation empties the cursor)...
+    @scene.animate_place_multi(box, selected_index)
+    for idx in occupied_slots
+      @storage[box, idx] = nil
+    end
+    for held in @multiheldpkmn
+      idx = (held[1] + selected_pos[0]) + (held[2] + selected_pos[1]) * PokemonBox::BOX_WIDTH
+      @storage[box, idx] = held[0]
+    end
+    @multiheldpkmn = []
+    @scene.pbHardRefresh   # rebuild the grid: ours are in, theirs are gone
+    # ...then pick theirs up, keeping the shape they were in.
+    @multiheldpkmn = swap_out
+    @scene.animate_hold_multi_pokemon(swap_out)
+    @scene.pbRefresh
+    @boxForMosaic = @storage.currentBox
+    @selectionForMosaic = selected_index
+    return :PLACED_OCCUPIED
   end
 
   # Validate release rules, animate release, then delete from storage
