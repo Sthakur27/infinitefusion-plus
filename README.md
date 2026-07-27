@@ -35,7 +35,7 @@ Built on upstream **6.8.2**. Tracks upstream's `releases` branch — see [FORK.m
 | **Items are refunded** | A practice battle shouldn't cost you a Life Orb. Consumed held items and bag stock are restored afterwards — for both sides. |
 | **Smart Trainer AI** | A plan-based enemy AI (`055_sidmod/SmartTrainerAI.rb`) that compares attacking, setup, status, healing, phazing and switching as competing plans, with a beam search over an abstract state and an expected-damage model. |
 | **No item cheese** | Enemy trainers never use Full Restore / potions / X items mid-battle. |
-| **Hard mode, retuned** | Enemy level scaling is a single flat multiplier with no curve (`Settings::HARD_MODE_LEVEL_MODIFIER`), applied consistently to enemy levels, your level cap and the over-levelled exp penalty. Hard mode also **shows you the incoming Pokémon** on a switch. |
+| **Hard mode, retuned** | Enemy level scaling is a single flat multiplier with no curve (`Settings::HARD_MODE_LEVEL_MODIFIER`), applied consistently to enemy levels, your level cap and the over-levelled exp penalty — and **adjustable per save from the debug menu** (*Player options → Set Game Mode / Difficulty → Hard multiplier*, 100–500%) instead of only by editing Settings. Hard mode also **shows you the incoming Pokémon** on a switch. |
 | **Exp dampener** | A single global **×0.9** on exp gained. Earlier, larger exp experiments (always-on exp share, steeper over-level penalties) were all reverted to vanilla — only the dampener survives. |
 | **Catch anything** | The "Trainer blocked your Poké Ball" guard is off, so trainer Pokémon can be caught. |
 

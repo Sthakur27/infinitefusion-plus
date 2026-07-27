@@ -46,7 +46,7 @@ def getCurrentLevelCap()
   else
     current_max_level = Settings::LEVEL_CAPS_HOENN[$Trainer.badge_count]
   end
-  current_max_level *= Settings::HARD_MODE_LEVEL_MODIFIER if $game_switches[SWITCH_GAME_DIFFICULTY_HARD]
+  current_max_level *= hardModeLevelModifier if $game_switches[SWITCH_GAME_DIFFICULTY_HARD]   # sidmod: debug-overridable
   current_max_level *= Settings::EASY_MODE_LEVEL_MODIFIER if $game_switches[SWITCH_GAME_DIFFICULTY_EASY] && Settings::HOENN
 
   return current_max_level&.floor || 100

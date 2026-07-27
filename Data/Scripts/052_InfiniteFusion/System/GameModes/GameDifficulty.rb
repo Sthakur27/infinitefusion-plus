@@ -1,3 +1,20 @@
+# sidmod: hard mode's level multiplier is overridable per-save from the debug menu
+# (Player options -> Set Game Mode / Difficulty -> Hard multiplier). Stored on
+# $PokemonGlobal so it rides along in the save file; nil means "follow
+# Settings::HARD_MODE_LEVEL_MODIFIER", which is also what old saves have.
+class PokemonGlobalMetadata
+  attr_accessor :sidmodHardModeLevelModifier
+end
+
+# sidmod: call sites use this instead of Settings::HARD_MODE_LEVEL_MODIFIER so the
+# debug override applies. Safe before a save is loaded ($PokemonGlobal is nil on the
+# title screen) and safe against a garbage/zero stored value.
+def hardModeLevelModifier
+  override = $PokemonGlobal&.sidmodHardModeLevelModifier
+  return override if override.is_a?(Numeric) && override > 0
+  return Settings::HARD_MODE_LEVEL_MODIFIER
+end
+
 def setDifficulty(index)
   $Trainer.selected_difficulty = index
   case index

@@ -52,7 +52,9 @@ DebugMenuCommands.register("sidmodleaguetier", {
         _INTL("Close")
       ]
       close_index = cmds.length - 1
-      cmd = pbMessage(header, cmds, close_index)
+      # sidmod bugfix: cmdIfCancel is ONE-BASED (pbShowCommands returns
+      # cmdIfCancel - 1 on B), so close_index made B silently pick "Tier 5".
+      cmd = pbMessage(header, cmds, close_index + 1)
       break if cmd < 0 || cmd == close_index
       sidmod_set_league_tier(cmd + 1)
     end

@@ -59,11 +59,41 @@ def sidmod_current_mode_text
   end
 end
 
+# sidmod: "1.5" rather than "1.5000000000000002" in menu text.
+def sidmod_multiplier_text(value)
+  return format("%g", value.round(3))
+end
+
+# sidmod: set hard mode's level multiplier for THIS save (see hardModeLevelModifier
+# in 052_InfiniteFusion/System/GameModes/GameDifficulty.rb). Asked for in percent
+# because pbMessageChooseNumber only does integers.
+def sidmod_set_hard_mode_multiplier
+  default_pct = (Settings::HARD_MODE_LEVEL_MODIFIER * 100).round
+  params = ChooseNumberParams.new
+  params.setRange(100, 500)
+  params.setDefaultValue((hardModeLevelModifier * 100).round)
+  params.setCancelValue(-1)   # must come after setDefaultValue, which nils the cancel value
+  pct = pbMessageChooseNumber(
+    _INTL("Hard mode level multiplier, in percent.\n100 = no scaling, {1} = the default {2}x.",
+          default_pct, sidmod_multiplier_text(Settings::HARD_MODE_LEVEL_MODIFIER)), params)
+  return if !pct.is_a?(Numeric) || pct < 100
+  if pct == default_pct
+    # Back to the default -> drop the override so the save follows Settings again.
+    $PokemonGlobal.sidmodHardModeLevelModifier = nil
+  else
+    $PokemonGlobal.sidmodHardModeLevelModifier = pct / 100.0
+  end
+  pbMessage(_INTL("Hard mode level multiplier is now {1}x.",
+                  sidmod_multiplier_text(hardModeLevelModifier)))
+  pbMessage(_INTL("Applies to trainer teams built from now on, and to your own level cap while on Hard."))
+end
+
 # sidmod: extracted so both the debug menu and the pause-menu shortcut can call it.
 def sidmod_mode_difficulty_menu
     loop do
-      header = _INTL("Current mode: {1}\nCurrent difficulty: {2}",
-                     sidmod_current_mode_text, getDisplayDifficulty)
+      header = _INTL("Current mode: {1}\nCurrent difficulty: {2} (Hard multiplier {3}x)",
+                     sidmod_current_mode_text, getDisplayDifficulty,
+                     sidmod_multiplier_text(hardModeLevelModifier))
       cmds = [
         _INTL("Mode: Classic"),
         _INTL("Mode: Remix"),
@@ -71,10 +101,14 @@ def sidmod_mode_difficulty_menu
         _INTL("Difficulty: Easy"),
         _INTL("Difficulty: Normal"),
         _INTL("Difficulty: Hard"),
+        _INTL("Hard multiplier: {1}x", sidmod_multiplier_text(hardModeLevelModifier)),
         _INTL("Close")
       ]
       close_index = cmds.length - 1
-      cmd = pbMessage(header, cmds, close_index)
+      # sidmod bugfix: pbShowCommands' cmdIfCancel is ONE-BASED (it returns
+      # cmdIfCancel - 1 on B). Passing close_index made B pick the entry *above*
+      # Close - i.e. "Difficulty: Hard" - instead of closing. Pass close_index + 1.
+      cmd = pbMessage(header, cmds, close_index + 1)
       break if cmd < 0 || cmd == close_index
       case cmd
       when 0 then sidmod_set_game_mode(:CLASSIC)
@@ -88,6 +122,8 @@ def sidmod_mode_difficulty_menu
         # picked difficulty actually shows and applies with no residual gating.
         $Trainer.lowest_difficulty = idx if $Trainer.respond_to?(:lowest_difficulty=)
         pbMessage(_INTL("Difficulty set to {1}.", getDisplayDifficultyFromIndex(idx)))
+      when 6
+        sidmod_set_hard_mode_multiplier
       end
     end
 end
@@ -95,7 +131,7 @@ end
 DebugMenuCommands.register("sidmodmodeswitch", {
   "parent"      => "playermenu",
   "name"        => _INTL("Set Game Mode / Difficulty"),
-  "description" => _INTL("sidmod: switch this save between Classic/Remix/Legendary and Easy/Normal/Hard."),
+  "description" => _INTL("sidmod: switch this save between Classic/Remix/Legendary and Easy/Normal/Hard, and set Hard's level multiplier."),
   "effect"      => proc {
     sidmod_mode_difficulty_menu
   }
