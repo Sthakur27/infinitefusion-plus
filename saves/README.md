@@ -40,7 +40,7 @@ Save folder is `%APPDATA%\infinitefusion` on Windows,
 `~/Library/Application Support/infinitefusion` on macOS, else
 `${XDG_CONFIG_HOME:-~/.config}/infinitefusion`. Override with `SAVE_DIR=/path` on the shell script.
 
-`sha256: cf3132a892c1f9d1133f3acb651b8a8969dbb1ad82576e4990bf90911696da7f`
+`sha256: 1932920e76b944e65f2cc4a30b6a71504e1f054db648ac95987e08dc0af70c9e`
 
 ## What's in it
 
