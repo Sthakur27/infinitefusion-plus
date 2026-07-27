@@ -5,12 +5,16 @@ class PokemonStorage
     cmd_cancel = _INTL("Cancel")
     commands = [cmd_play, cmd_info, cmd_cancel]
 
-    choice = pbMessage(_INTL("Would you like to play the Wallpaper Lottery? (\\C[1]Free\\C[0])"),commands,2)
+    # sidmod: lottery is free - no Quest point cost check and no deduction below.
+    # Upstream's initializer is kept so $Trainer.quest_points is never nil for
+    # other 6.8 code paths that read it.
+    $Trainer.quest_points = initialize_quest_points unless $Trainer.quest_points
+    choice = pbMessage(_INTL("Would you like to play the Wallpaper Lottery? (\\C[1]Free\\C[0])"), commands, 2)
 
     case commands[choice]
     when cmd_play
       locked_wallpapers = []
-      for i in BASICWALLPAPERQTY..allWallpapers.length-1
+      for i in BASICWALLPAPERQTY..allWallpapers.length - 1
         locked_wallpapers << i unless isAvailableWallpaper?(i)
       end
       if locked_wallpapers.empty?
@@ -39,7 +43,7 @@ class PokemonStorage
     wallpaper_name = allWallpapers[wallpaper_id]
     pbUnlockWallpaper(wallpaper_id)
     path = "Graphics/Pictures/Storage/Wallpapers/box_#{wallpaper_id}"
-    pictureViewport = showPicture(path, 50,-45)
+    pictureViewport = showPicture(path, 50, -45)
     musical_effect = "Key item get"
     pbMessage(_INTL("\\qp\\me[{1}]Obtained a new wallpaper: \\c[1]{2}\\c[0]!", musical_effect, wallpaper_name))
     pictureViewport.dispose if pictureViewport
@@ -48,7 +52,12 @@ end
 
 class WallpaperLotteryPC
   def shouldShow?
-    return player_has_quest_journal?
+    if Settings::KANTO
+      return player_has_quest_journal?
+    end
+    if Settings::HOENN
+      return $game_switches[SWITCH_UNLOCKED_WALLPAPER_LOTTERY]
+    end
   end
 
   def name
