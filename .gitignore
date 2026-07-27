@@ -10,3 +10,36 @@ Game.rxproj
 .DS_Store
 PBS/*
 rpgmaker.sh
+
+# ============================================================
+# sidmod: generated / downloaded artifacts — never commit these
+# ============================================================
+# Downloaded custom fusion sprite packs (~670MB). Numeric dirs only:
+# upstream tracks the named dirs (Eggs/ Shiny/ special/ spritesheets_autogen/).
+Graphics/Battlers/[0-9]*/
+# Generated fusion icons. Upstream tracks only .gitkeep + icon502.png there, and
+# gitignore does not affect already-tracked files, so ignoring the glob is safe.
+Graphics/Pokemon/FusionIcons/*.png
+# Battle animations shipped by the installer, not mod source (~90MB)
+Animations/
+# Installer/updater payload
+REQUIRED_BY_INSTALLER_UPDATER/
+INSTALL_OR_UPDATE.bat
+
+# Offline toolchain output: ~190MB of benchmark TSV + save snapshots of a
+# live playthrough. The tooling *code* under tools/sidmod_editor is tracked.
+tools/sidmod_editor/sim/nreports/
+tools/sidmod_editor/sim/reports/
+tools/sidmod_editor/reports/
+tools/sidmod_editor/sim/upgrade_sets/
+
+# Save files. The one deliberately shipped save is force-added (see saves/).
+File [A-H].rxdata
+save_snapshot.rxdata
+
+# Secrets & local state
+*.apikey
+.claude/settings.local.json
+
+# Runtime logs
+errorlog.txt
