@@ -1124,6 +1124,55 @@ cost nothing, and the pool mons' items were being permanently stripped
     start_battle.
 
 ##############################################
+PC wallpaper live preview - see the wallpaper before you pick it (end goal: no more
+picking blind from a list of 84 names)
+016_UI/PokemonStorage/PokemonStorageScene.rb
+  PokemonStorageScene#pbShowCommands ~line 122: signature gained an optional block
+    (message, commands, index = 0, &on_change). When a block is given it is called
+    once with the starting index, then again with cmdwindow.index every time the
+    cursor moves (tracked with a `lastindex` local). No block = byte-for-byte the
+    old behaviour, so the other ~15 callers in the storage screen are unaffected.
+  PokemonStorageScene#pbPreviewBackground ~line 436 (NEW, sits just above
+    pbChangeBackground): instant wallpaper swap - sets
+    @storage[currentBox].background, flips @sprites["box"].refreshBox = true and
+    calls refresh. No white fade, no Graphics.update, returns early if the
+    wallpaper is already the current one. pbChangeBackground (the animated set)
+    is untouched.
+016_UI/PokemonStorage/PokemonStorageScreen.rb
+  PokemonStorageScreen#pbShowCommands ~line 355: now takes &on_change and forwards
+    it to the scene.
+  PokemonStorageScreen#boxCommandSetWallpaper ~line 714: records `oldpaper` before
+    opening the list, passes a block that calls @scene.pbPreviewBackground for the
+    highlighted id, and calls pbPreviewBackground(oldpaper) after the list closes.
+    The `if wpaper >= 0 -> pbChangeBackground` tail is unchanged.
+  both PC entry points get this from the one edit - the multiselect
+    pbBoxCommands (052_InfiniteFusion/Menus/PC/Multiselect/
+    MultiSelect_PokemonStorageScreen.rb ~line 125) calls the same
+    boxCommandSetWallpaper, so no second patch was needed here (unlike PC search).
+  behaviour: cursor opens on the box's current wallpaper as before; scrolling
+    redraws the box behind the list instantly; BACK restores the original; USE
+    restores the original and then runs the stock fade (old -> white -> new), so
+    confirming looks exactly like it always did. The restore-then-fade means the
+    old wallpaper is on screen for the one frame before the fade starts - same as
+    stock, and it is immediately whited out.
+  caveats: each cursor move does a real AnimatedBitmap load of
+    Graphics/Pictures/Storage/Wallpapers/box_<id>.png (the old one is disposed
+    first, so no leak), so holding the d-pad through a long unlocked list is doing
+    one PNG load per step. The preview writes the live @storage box background
+    while the list is open - safe because both exit paths restore it and the game
+    cannot save from inside the PC.
+  tested: scratchpad/wp_preview_test.rb extracts the real pbShowCommands,
+    pbPreviewBackground and boxCommandSetWallpaper out of the two files and runs
+    them over stubbed Input/Graphics/window/sprite objects. Confirms cursor-open
+    preview is a no-op, a scroll draws the new wallpaper, BACK leaves the box
+    background at its original value, USE ends on the new one, and no-move+BACK
+    draws nothing at all. ruby -c clean on both files. NOT exercised in-game.
+  to revert: drop &on_change from both pbShowCommands (and the lastindex/on_change
+    lines in the scene loop), delete pbPreviewBackground, and put
+    boxCommandSetWallpaper's `wpaper = pbShowCommands(...)` back to a plain call
+    with no block, deleting the oldpaper lines.
+
+##############################################
 # old commented-out reference impl kept below for future tweaks
 # max vals
 # PokemonDebugMenuCommands.register("hiddenvalues", {
@@ -1333,4 +1382,43 @@ rollback: git tag pre-6.8.2-merge  ->  git reset --hard pre-6.8.2-merge
 local sprite/dex churn (dex.json, Data/sprites/*) was reset to upstream 6.8.2's
 versions to let the merge run; the game re-syncs these at boot. pre-merge copies
 were backed up outside the repo in case custom sprites misbehave.
+#############################################
+
+
+#############################################
+live wallpaper preview - the box behind the wallpaper list updates as you scroll
+016_UI/PokemonStorage/PokemonStorageScene.rb + PokemonStorageScreen.rb
+  pbShowCommands gained an optional &on_change block, called with the highlighted index
+  on open and on every cursor move. Scene#pbPreviewBackground(wp) swaps the box
+  background instantly (no white fade - pbChangeBackground still does the real animated
+  set). The wallpaper picker passes a block that previews papers[1][i], remembers the
+  paper it started on, and restores it when you back out.
+  the &on_change hook is generic - any pbShowCommands caller can use it for live preview.
+
+#############################################
+generative sprite pipeline - custom art for fusions that have none
+tools/sidmod_editor/sprites/   (offline tooling, not a game patch)
+  missing_sprites.rb    READ-ONLY save dump: every fusion in party+boxes, flags which have
+                        no custom sprite -> missing.json
+  extract_autogen.py    pulls the game's own autogen sprite out of
+                        Graphics/Battlers/spritesheets_autogen/<head>.png (96px cells, 10
+                        cols, cell index = body id - mirrors AutogenExtracter.rb). This is
+                        both the baseline to beat and the conditioning image for an edit pass.
+  descriptions.md       hand-written aesthetic brief per fusion. IF convention: head donor
+                        gives head/face/crest + colour identity, body donor gives torso/
+                        limbs/tail/posture, and good customs bleed the head palette down.
+                        Written to a PALETTE BUDGET: real sprites use 12-16 colours (median
+                        14), so each entry names 3-4 three-step ramps + outline + accents.
+                        Also carries a target box footprint for spritefit.
+  gen_sprite.py         image-model call (OpenAI gpt-image-*). Key read from
+                        sim/.openaiapikey, never printed - covered by the *apikey* gitignore.
+  spritefit.py          fits/crops the result onto the 96px grid (--box <WxH>)
+  batch.sh              resumable batch over missing.json; skips a fusion whose _fit.png exists
+  install.py            copies into Graphics/CustomBattlers/local_sprites/indexed/<head>/
+                        <head>.<body>.png, backing up any existing file first
+  verify_install.rb     checks what actually landed
+  blocked.json          12 head/body pairs the model refused or that failed twice
+  committed: code + descriptions + the game-ready *_fit sprites (28KB).
+  gitignored: out/*_raw.png (4.2MB of 1024px intermediates), comparison strips, autogen/
+              baselines (re-extractable in seconds).
 #############################################

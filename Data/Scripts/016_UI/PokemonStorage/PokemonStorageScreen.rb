@@ -352,8 +352,8 @@ class PokemonStorageScreen
     return pbShowCommands(str, [_INTL("Yes"), _INTL("No")]) == 0
   end
 
-  def pbShowCommands(msg, commands, index = 0)
-    return @scene.pbShowCommands(msg, commands, index)
+  def pbShowCommands(msg, commands, index = 0, &on_change)
+    return @scene.pbShowCommands(msg, commands, index, &on_change)   # sidmod: pass the preview hook through
   end
 
   def pbAble?(pokemon)
@@ -719,7 +719,13 @@ class PokemonStorageScreen
         index = i; break
       end
     end
-    wpaper = pbShowCommands(_INTL("Pick the wallpaper."), papers[0], index)
+    # sidmod: live preview - the box behind the list shows the highlighted
+    # wallpaper as you scroll; backing out restores the one you started with.
+    oldpaper = @storage[@storage.currentBox].background
+    wpaper = pbShowCommands(_INTL("Pick the wallpaper."), papers[0], index) do |i|
+      @scene.pbPreviewBackground(papers[1][i])
+    end
+    @scene.pbPreviewBackground(oldpaper)
     if wpaper >= 0
       @scene.pbChangeBackground(papers[1][wpaper])
     end

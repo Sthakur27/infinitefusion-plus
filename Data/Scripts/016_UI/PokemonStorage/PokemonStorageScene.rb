@@ -119,7 +119,9 @@ class PokemonStorageScene
     Input.update
   end
 
-  def pbShowCommands(message, commands, index = 0)
+  # sidmod: optional block is called with the highlighted index whenever the
+  # cursor moves (used by the wallpaper picker to preview the wallpaper live).
+  def pbShowCommands(message, commands, index = 0, &on_change)
     ret = -1
     msgwindow = Window_UnformattedTextPokemon.newWithSize("", 180, 0, Graphics.width - 180, 32)
     msgwindow.viewport = @viewport
@@ -136,11 +138,17 @@ class PokemonStorageScene
     pbBottomRight(cmdwindow)
     cmdwindow.y -= msgwindow.height
     cmdwindow.index = index
+    lastindex = cmdwindow.index
+    on_change.call(cmdwindow.index) if on_change   # sidmod: preview the starting entry
     loop do
       Graphics.update
       Input.update
       msgwindow.update
       cmdwindow.update
+      if on_change && cmdwindow.index != lastindex   # sidmod: live preview on cursor move
+        lastindex = cmdwindow.index
+        on_change.call(cmdwindow.index)
+      end
       if Input.trigger?(Input::BACK)
         ret = -1
         break
@@ -431,6 +439,15 @@ class PokemonStorageScene
 
   def pbSelectParty(party)
     return pbSelectPartyInternal(party, true)
+  end
+
+  # sidmod: swap the wallpaper instantly, no white fade - for previewing while the
+  # wallpaper list is open. pbChangeBackground still does the real (animated) set.
+  def pbPreviewBackground(wp)
+    return if @storage[@storage.currentBox].background == wp
+    @storage[@storage.currentBox].background = wp
+    @sprites["box"].refreshBox = true
+    @sprites["box"].refresh
   end
 
   def pbChangeBackground(wp)
