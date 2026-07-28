@@ -466,6 +466,55 @@ module SidmodRandomOpp
     (GameData::TrainerType.keys.first rescue :YOUNGSTER)
   end
 
+  # =============================================================================
+  # SIDES - who plays which team (stage 1 of the menu)
+  #
+  #   [who_plays_your_side, is_the_AI_driving_it]
+  #   :real = your actual party        :gen = a generated team, lent to you
+  # =============================================================================
+  SIDES = [[:real, false], [:gen, false], [:real, true], [:gen, true]]
+  SIDE_LABELS = ["You vs AI", "Mirror - you get a team too",
+                 "Watch - AI plays your team", "Watch - AI vs AI"]
+
+  # ---- borrowing a team for the player's side ---------------------------------
+  # pbTrainerBattleCore reads `playerParty = $Trainer.party` directly, so the only
+  # way to lend the player a team is to swap the live party for the battle.
+  # THIS IS THE ONE PLACE THIS FILE TOUCHES THE PLAYER'S OWN PARTY, so:
+  #   - the real party is written to disk FIRST (survives a hard crash / kill, which
+  #     `ensure` does not), and
+  #   - the restore is in an `ensure`, so any raise inside the battle still puts the
+  #     real party back before this returns.
+  # The lent mons are deep copies, so nothing the battle does can reach a PC mon.
+  PARTY_BACKUP = "sidmod_manual_backups/party_before_random_battle.rxdata"
+
+  def backup_party(party)
+    root = File.join(ENV['APPDATA'].to_s, "infinitefusion")
+    path = File.join(root, PARTY_BACKUP)
+    dir  = File.dirname(path)
+    Dir.mkdir(dir) if !Dir.exist?(dir)
+    File.binwrite(path, Marshal.dump(party))
+    path
+  rescue
+    nil   # a failed backup must not block the battle; the ensure below still covers it
+  end
+
+  # Runs the block with `mons` as the player's party (or untouched if mons is nil).
+  def with_player_team(mons)
+    return yield if mons.nil?
+    saved = $Trainer.party
+    backup_party(saved)
+    begin
+      $Trainer.party = mons.map { |pk| c = Marshal.load(Marshal.dump(pk)); c.heal; c }
+      yield
+    ensure
+      $Trainer.party = saved
+    end
+  end
+
+  # Set while a "Watch" battle is running; read by the pbPrepareBattle hook at the
+  # bottom of this file, which is what actually turns on battle.controlPlayer.
+  def spectating?; @spectate ? true : false; end
+
   # ---- item safety net --------------------------------------------------------
   # How the engine really handles a permanently-consumed held item (berry, White
   # Herb, Focus Sash, Air Balloon...): Battler#pbRemoveItem
@@ -506,7 +555,7 @@ module SidmodRandomOpp
     end
   end
 
-  def start_battle(sel, tier, arch = nil)
+  def start_battle(sel, tier, arch = nil, who = :real, spectate = false)
     result = build_team_named(sel, tier, rand(1_000_000), arch)
     unless result
       if sel == :smart2 && arch && arch != :random
@@ -520,6 +569,19 @@ module SidmodRandomOpp
       return
     end
     refs, arch_used = result
+    # A second, independently rolled team for the player's side. Drawn from the same
+    # pool and the same mode, so it's a fair mirror; no Species Clause ACROSS sides
+    # (real Pokemon doesn't have one either), and both sides are deep-copied anyway.
+    mine = nil
+    if who == :gen
+      r2 = build_team_named(sel, tier, rand(1_000_000), arch)
+      unless r2
+        pbMessage(_INTL("Couldn't build a second team for your side from this pool."))
+        return
+      end
+      mine = r2[0]
+      pbMessage(_INTL("You're lent:\n{1}!", mine.map { |pk| pk.name || pk.speciesName }.join(", ")))
+    end
     style = if sel == :smart2 then ARCH_LABELS[arch_used] || "planned"
             elsif sel == :smart then "balanced"
             else "random"
@@ -527,12 +589,15 @@ module SidmodRandomOpp
     names = refs.map { |pk| pk.name || pk.speciesName }.join(", ")
     fight(refs, _INTL("Random Challenger"),
           _INTL("A {1} {2} challenger appears with:\n{3}!",
-                style, tier == :ou ? "OU" : "Ubers", names))
+                style, tier == :ou ? "OU" : "Ubers", names),
+          mine, spectate)
   end
 
   # Shared battle runner for every mode. `mons` are TEMPLATES - each is deep-copied,
   # so neither a stored PC mon nor a pack entry is ever mutated by a battle.
-  def fight(mons, trainer_name, announce)
+  #   my_mons  - a team to LEND the player for this battle (nil = use the real party)
+  #   spectate - let the AI drive the player's side too (a "Watch" battle)
+  def fight(mons, trainer_name, announce, my_mons = nil, spectate = false)
     trainer = NPCTrainer.new(trainer_name, trainer_type)
     mons.each do |pk|
       c = Marshal.load(Marshal.dump(pk))
@@ -540,6 +605,16 @@ module SidmodRandomOpp
       trainer.party.push(c)
     end
     pbMessage(announce)
+    with_player_team(my_mons) do
+      run_core(trainer, spectate, spectate || !my_mons.nil?)
+    end
+  end
+
+  # The battle itself, with the item/bag net around it.
+  #   spectate - hand the player's side to the AI (sets battle.controlPlayer)
+  #   inert    - suppress exp, so a battle you didn't pilot, or fought with a lent
+  #              team, can't train your real party
+  def run_core(trainer, spectate, inert)
     # sidmod: nothing this battle consumes should survive it - see the item safety
     # net above. Covers both sides: the player's held items, and the bag stock that
     # BOTH teams' consumptions get charged to.
@@ -558,8 +633,16 @@ module SidmodRandomOpp
     # neither rule leaks into the next real battle.
     setBattleRule("canLose")
     setBattleRule("nomoney")
+    # A battle the AI played for you, or one you fought with a lent team, shouldn't
+    # feed your real party exp/EVs. Piloting your own team still trains it.
+    setBattleRule("noexp") if inert
     $Trainer.heal_party
-    pbTrainerBattleCore(trainer)
+    begin
+      @spectate = spectate
+      pbTrainerBattleCore(trainer)
+    ensure
+      @spectate = false   # never leave controlPlayer armed for a real battle
+    end
     restore_items(party_snap)
     restore_bag(bag_snap)
     $Trainer.heal_party
@@ -600,7 +683,7 @@ module SidmodRandomOpp
     format("#%d  %d Elo  %s", t["rank"], t["elo"].to_i, niche)
   end
 
-  def run_apex
+  def run_apex(who = :real, spectate = false)
     teams = apex_teams
     if teams.empty?
       pbMessage(_INTL("No OU Apex pack installed. Build one from a ladder run:\n" \
@@ -610,11 +693,24 @@ module SidmodRandomOpp
     i = pbShowCommands(nil, teams.map { |t| apex_label(t) }, -1)
     return if i < 0
     t = teams[i]
+    # Lending an apex team: pick a DIFFERENT one, so it's never a self-mirror (which
+    # with fixed rosters would just be a coin flip decided by turn order).
+    mine = nil
+    if who == :gen
+      others = teams.reject { |x| x.equal?(t) }
+      m = others.empty? ? t : others[rand(others.length)]
+      mine = m["mons"]
+      pbMessage(_INTL("You're lent ladder team {1} ({2} Elo, {3}):\n{4}!",
+                      m["rank"], m["elo"].to_i,
+                      ARCH_LABELS[m["niche"].to_s.to_sym] || m["niche"],
+                      m["names"].join(", ")))
+    end
     fight(t["mons"], _INTL("Apex {1}", t["rank"]),
           _INTL("Ladder team {1} ({2} Elo, {3}) accepts your challenge:\n{4}!",
                 t["rank"], t["elo"].to_i,
                 ARCH_LABELS[t["niche"].to_s.to_sym] || t["niche"],
-                t["names"].join(", ")))
+                t["names"].join(", ")),
+          mine, spectate)
   end
 
   # SMART v2 opens a second menu to choose the plan.
@@ -625,18 +721,59 @@ module SidmodRandomOpp
     i.zero? ? :random : ARCHETYPES[i - 1]
   end
 
+  # Two stages: WHO plays which side, then WHICH team generator. B backs out at
+  # every step.
   def run
+    s = pbShowCommands(nil, SIDE_LABELS, -1)
+    return if s < 0
+    who, spectate = SIDES[s]
     idx = pbShowCommands(nil, MODES, -1)
     return if idx < 0
     sel = MODE_SEL[idx]
-    return run_apex if sel == :apex   # fixed recorded rosters - no tier/archetype step
+    return run_apex(who, spectate) if sel == :apex   # fixed rosters - no tier step
     tier = (idx <= 2) ? :ou : :ubers
     arch = nil
     if sel == :smart2
       arch = pick_archetype
-      return if arch.nil?   # B on the archetype menu backs out of the whole thing
+      return if arch.nil?
     end
-    start_battle(sel, tier, arch)
+    start_battle(sel, tier, arch, who, spectate)
+  end
+end
+
+#===============================================================================
+# sidmod: two engine hooks that make the "Watch" modes possible.
+# Both are inert unless a Watch battle is running - nothing in normal play changes.
+#===============================================================================
+
+# 1) Turn on battle.controlPlayer for a Watch battle.
+# pbTrainerBattleCore builds the battle object locally and never exposes it, but it
+# hands it to pbPrepareBattle(battle) right before starting - the one place a mod
+# can reach in. (Checked: pbPrepareBattle is defined exactly once, no IF override.)
+unless Object.private_method_defined?(:sidmod_orig_pbPrepareBattle)
+  alias sidmod_orig_pbPrepareBattle pbPrepareBattle
+  def pbPrepareBattle(battle)
+    sidmod_orig_pbPrepareBattle(battle)
+    battle.controlPlayer = true if defined?(SidmodRandomOpp) && SidmodRandomOpp.spectating?
+  end
+end
+
+# 2) Let the AI pick the player's replacement after a faint.
+# Stock pbSwitchInBetween (011_Battle/003_Battle/006_Battle_Action_Switching.rb ~136)
+# routes ANY player-owned battler to pbPartyScreen. In a Watch battle that stops the
+# fight and demands input from the person who is supposed to be watching, once per
+# faint. Gated on @controlPlayer, so this only fires when the engine is already
+# driving that side - normal battles still open the party screen exactly as before.
+# (Same fix the offline harness needs: nbattle.rb patch_replacement_symmetry!.)
+class PokeBattle_Battle
+  unless method_defined?(:sidmod_orig_pbSwitchInBetween)
+    alias sidmod_orig_pbSwitchInBetween pbSwitchInBetween
+    def pbSwitchInBetween(idxBattler, checkLaxOnly = false, canCancel = false)
+      if @controlPlayer && pbOwnedByPlayer?(idxBattler)
+        return @battleAI.pbDefaultChooseNewEnemy(idxBattler, pbParty(idxBattler))
+      end
+      sidmod_orig_pbSwitchInBetween(idxBattler, checkLaxOnly, canCancel)
+    end
   end
 end
 

@@ -193,7 +193,13 @@ class PokeBattle_AI
     return false if !@battle.trainerBattle?
     # Strategic layer reasons about a 1v1 race; doubles fall back to vanilla
     return false if @battle.pbSideSize(0) > 1 || @battle.pbSideSize(1) > 1
-    return false if @battle.pbOwnedByPlayer?(idxBattler)
+    # sidmod: normally the player's own battlers are never AI-driven, so they're
+    # exempt. But controlPlayer means the engine is driving that side itself (the
+    # Random Battle "Watch" modes) - and then vanilla AI on your side vs SmartAI on
+    # theirs would be a badly lopsided fake, not an AI-vs-AI match. Same reason the
+    # offline harness patches this gate (nbattle.rb patch_ai_both_sides!).
+    # controlPlayer is false in all normal play, so this changes nothing there.
+    return false if @battle.pbOwnedByPlayer?(idxBattler) && !@battle.controlPlayer
     return true
   end
 
