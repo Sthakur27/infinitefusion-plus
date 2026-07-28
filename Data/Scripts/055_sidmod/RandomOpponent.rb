@@ -546,6 +546,18 @@ module SidmodRandomOpp
     party_snap = item_snapshot($Trainer.party)
     bag_snap   = bag_snapshot(party_snap.map { |_pk, it| it } +
                              trainer.party.map { |pk| (pk.item_id rescue nil) })
+    # sidmod: a practice battle must not punish you for losing. Without these, losing
+    # a Random Battle runs the full defeat path: Events.onEndBattle -> pbStartOver
+    # (black out + warp to a Pokemon Center, and handle_no_reviving_defeat if the
+    # no-reviving option is on), plus pbLoseMoney paying the winner out of your wallet
+    # (003_Battle_StartAndEnd.rb ~495, which runs BEFORE the canLose check, so canLose
+    # alone doesn't stop it). Same intent as the item/bag refund above.
+    #   canLose -> no pbStartOver, party healed after the loss
+    #   nomoney -> moneyGain = false, so pbLoseMoney early-returns
+    # pbTrainerBattleCore calls $PokemonTemp.clearBattleRules after applying them, so
+    # neither rule leaks into the next real battle.
+    setBattleRule("canLose")
+    setBattleRule("nomoney")
     $Trainer.heal_party
     pbTrainerBattleCore(trainer)
     restore_items(party_snap)

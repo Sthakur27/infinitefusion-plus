@@ -1724,3 +1724,38 @@ random battle "OU Apex" - fight the best teams the offline ladder ever produced
     all 15 menu labels render; three head-to-head sets (6 games each, sides mirrored) ran
     with 0 engine errors. NOT yet fought in-game.
 #############################################
+
+#############################################
+random battle - losing a practice battle no longer blacks you out or costs money
+055_sidmod/RandomOpponent.rb
+  fight() ~line 545, immediately before pbTrainerBattleCore:
+    added setBattleRule("canLose") and setBattleRule("nomoney").
+  THE BUG: Random Battle never set any battle rules, so a loss ran the FULL defeat
+    path exactly like losing to a real trainer:
+      - Events.onEndBattle (012_Overworld/002_Battle triggering/001_Overworld_BattleStarting.rb
+        ~948) does `pbStartOver if !canLose` -> black out, warp to a Pokemon Center, and
+        handle_no_reviving_defeat() if the no-reviving option is on.
+      - pbLoseMoney (011_Battle/003_Battle/003_Battle_StartAndEnd.rb ~495) pays the winner
+        out of the player's wallet, scaled by badge count and team level.
+    Both fire on decision 2 (loss) AND decision 5 (draw), and a 100-turn stall mirror can
+    legitimately end in a draw.
+  IMPORTANT ORDERING DETAIL: pbLoseMoney runs BEFORE the `if !@canLose` blackout message,
+    and is gated only on `!@internalBattle || !@moneyGain` - so canLose ALONE does not stop
+    the money loss. "nomoney" (-> moneyGain=false) is required as well. Both rules were
+    needed; neither is redundant.
+  rationale: this mode is a practice/testing sandbox against your own PC mons - it already
+    refunds every consumed held item and bag charge (see the item safety net in the same
+    file). Being teleported across the map and fined for testing a team contradicted that.
+  scope: applies to ALL Random Battle modes (Chaos / Smart / Smart v2 / OU Apex) because
+    they all route through fight(). Deliberate - confirmed with Sid that direct piloting
+    shouldn't white out either, "since its for fun and test".
+  NOT changed: exp/EV gain is still on (setBattleRule("noexp") would disable it). Winning
+    a Random Battle still trains your party, which is existing behaviour and wanted.
+  no leak risk: pbTrainerBattleCore calls $PokemonTemp.clearBattleRules right after
+    pbPrepareBattle applies them, so the next real trainer battle is unaffected. Verified
+    head-less: after both setBattleRule calls the rules hash is
+    {"canLose"=>true, "moneyGain"=>false}, and clearBattleRules empties it.
+  revert: delete the two setBattleRule lines.
+  verified: ruby -c Syntax OK; rule keys + clearing confirmed against the real engine.
+    NOT yet confirmed by actually losing a battle in-game.
+#############################################
