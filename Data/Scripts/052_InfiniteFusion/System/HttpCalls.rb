@@ -68,7 +68,13 @@ def download_file(url, saveLocation)
       echoln "Failed to download file #{url}"
     end
     return nil
-  rescue MKXPError, Errno::ENOENT => error
+  # sidmod: was `rescue MKXPError, Errno::ENOENT`. That let any OTHER file-system
+  # error out of File.open escape and kill the boot - observed as
+  # "Errno::EINVAL @ rb_sysopen - Data/pokedex/dex.json" from updateCustomDexFile,
+  # which runs in pbStartLoadScreen before the load screen exists. SystemCallError
+  # is the parent of every Errno::* (ENOENT included, so nothing is lost) and covers
+  # EINVAL / EACCES / ENOSPC alike. A failed background download must never be fatal.
+  rescue MKXPError, SystemCallError => error
     echo error
     return nil
   end

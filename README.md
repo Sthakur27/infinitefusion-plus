@@ -95,6 +95,7 @@ backing out restores the one you started on. **Wallpaper lottery is free** — n
 
 | | |
 |---|---|
+| **Boot doesn't stall on a 19 MB download** | Vanilla re-fetches the custom Pokédex (`dex.json`, ~19 MB) synchronously on the main thread *every* launch, before the load screen can draw — and an interrupted write to it is a hard boot crash. Now it only re-downloads once the local copy is a day old, so entries still stay current. A failed download also can't kill startup any more: the rescue in `download_file` caught only `ENOENT`, and now catches every `SystemCallError`. |
 | **New Game+ keeps your Pokémon intact** | Transferred Pokémon keep their **level**, their **evolved form** (no de-evolving back to babies), their **moves** and their **stats**. Vanilla resets all four. Ownership, OT and Pokédex registration still update normally. |
 | **Turbo by default** | Speed-up starts at **2×** and cycles 2 → 3 → 1, instead of starting at 1×. |
 | **Straight into your save** | Title screen, intro cinematic and the startup announcement popups are all skipped — you land on the save-select / continue menu. |
