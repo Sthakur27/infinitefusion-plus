@@ -1924,42 +1924,40 @@ random battle - active party joins the pool, + per-side plan picking with descri
 #############################################
 
 #############################################
-boot speed - stop re-downloading the 19 MB custom pokedex on every launch
-055_sidmod/BootSpeed.rb (new file)  +  052_InfiniteFusion/System/HttpCalls.rb (1 line)
-  THE FREEZE: pbStartLoadScreen (052_InfiniteFusion/System/MultiSaves.rb ~line 531) calls
-    updateHttpSettingsFile then updateCustomDexFile BEFORE the load screen can draw.
-    updateCustomDexFile does a SYNCHRONOUS HTTPLite.get of Settings::CUSTOM_DEX_FILE_URL
-    into Data/pokedex/dex.json - a ~19 MB file - on the main thread, unconditionally, every
-    single launch. That is the multi-second-to-minute hang on startup.
-    CONFIRMED, not guessed: dex.json's mtime moved 18:25 -> 21:15 across two launches on
-    2026-07-27, while the sprite caches (sprites_rate_limit.log, updated_spritesheets_cache)
-    stayed at 18:55 - so it is the dex specifically, re-fetched each boot.
-    It is also what caused the Errno::EINVAL boot CRASH earlier the same day: an interrupted
-    write to that path, raised out of File.open, from a code path with no load screen yet.
-  FIX 1 - 055_sidmod/BootSpeed.rb redefines updateCustomDexFile (055_ loads after 052_, so
-    it wins) to skip the download while the local copy is younger than
-    SidmodBoot::DEX_MAX_AGE (24h). New dex entries still arrive daily; boot is instant the
-    rest of the time; the interrupted-write crash window drops from every launch to once a
-    day. Set DEX_MAX_AGE = 0 for stock behaviour, or huge to pin the local copy.
-    The replacement is kept structurally identical to the original so an upstream change to
-    it is easy to notice.
-  WHY NOT JUST DISABLE DOWNLOADS: downloadAllowed? is `$PokemonSystem.download_sprites == 0`
-    - the same Options toggle also gates CUSTOM FUSION SPRITE fetching. Turning it off to
-    fix boot time would silently cost you fusion art. This targets only the dex.
-  FIX 2 - HttpCalls.rb, download_file ~line 71:
+a failed background download can no longer kill the boot
+052_InfiniteFusion/System/HttpCalls.rb
+  download_file ~line 71:
       rescue MKXPError, Errno::ENOENT => error
     ->  rescue MKXPError, SystemCallError => error
-    The old list let ANY other file-system error escape File.open and kill the boot -
-    exactly what Errno::EINVAL did. SystemCallError is the parent of every Errno::* (ENOENT
-    included, so nothing stops being caught) and also covers EACCES / ENOSPC. A failed
-    background download must never be fatal.
-  NOT changed: updateHttpSettingsFile still runs every boot - it is a tiny file and it is
-    what gates everything else. Only the 19 MB dex is throttled.
-  revert: delete 055_sidmod/BootSpeed.rb, and restore the original rescue list in
-    HttpCalls.rb.
-  verified: ruby -c on both files; head-less against the real engine - SidmodBoot loads,
-    the override references the freshness check, dex_age reads the real file (1.93h at the
-    time), dex_fresh? true, and Errno::EINVAL / Errno::ENOENT both confirmed to be
-    SystemCallError subclasses. NOT verified in-game - the next launch is the real test
-    (expect it to skip the dex fetch and leave dex.json's mtime unchanged).
+  THE CRASH THIS FIXES (seen 2026-07-27, before the dex throttle above was in place):
+      Exception: Errno::EINVAL
+      Message: Invalid argument @ rb_sysopen - Data/pokedex/dex.json
+      HttpCalls.rb:39:in `initialize' / `open' / `download_file'
+      HttpCalls.rb:22:in `updateCustomDexFile'
+      MultiSaves.rb:534:in `pbStartLoadScreen'
+    The rescue list caught only ENOENT, so any OTHER file-system error out of
+    File.open(saveLocation, "wb") escaped - and updateCustomDexFile runs inside
+    pbStartLoadScreen, before there is a load screen, so it took the whole boot down
+    rather than degrading to "dex not updated this launch".
+  SystemCallError is the parent class of every Errno::* - Errno::ENOENT included, so
+    nothing that was caught before stops being caught - and it additionally covers
+    EINVAL (the observed one), EACCES (file locked / read-only) and ENOSPC (disk full).
+    Verified head-less that both Errno::EINVAL and Errno::ENOENT are SystemCallError
+    subclasses.
+  This is orthogonal to the DEX_REFRESH_INTERVAL_HOURS throttle logged above: the
+    throttle makes the risky write rare (once a day instead of every launch), this makes
+    it non-fatal when it does happen. Both are wanted - the throttle does not help the
+    launch that actually does re-download.
+  scope: download_file is shared by updateHttpSettingsFile / updateCreditsFile /
+    updateCustomDexFile, so all three now degrade instead of crashing. fetch_sprite_from_web
+    already had a `rescue Exception` catch-all and was never affected.
+  revert: restore `rescue MKXPError, Errno::ENOENT => error`.
+  verified: ruby -c Syntax OK; SystemCallError ancestry confirmed against the real engine.
+    NOT reproduced in-game (the original crash was a transient interrupted write).
+  NOTE FOR FUTURE ME: an earlier pass in this session started re-implementing the dex
+    throttle as a 055_sidmod/BootSpeed.rb override of updateCustomDexFile, not realising
+    commit 21eb4e210 had already solved it properly in HttpCalls.rb. That override would
+    have SHADOWED the real guard and made Settings::DEX_REFRESH_INTERVAL_HOURS dead
+    config. It was removed before landing. Check `git log` for recent work on a subsystem
+    before patching it - the working tree diff alone won't show an already-committed fix.
 #############################################
