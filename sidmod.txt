@@ -1869,3 +1869,56 @@ random battle - two-stage menu: who plays which side (mirror matches + watch AI 
     The riskiest untested path is the party swap around a live pbTrainerBattleCore - the
     disk backup exists precisely for that. First run should be on a throwaway slot.
 #############################################
+
+#############################################
+random battle - active party joins the pool, + per-side plan picking with descriptions
+055_sidmod/RandomOpponent.rb
+  1) ACTIVE PARTY IS NOW IN THE POOL. battle_pool only walked $PokemonStorage, so the six
+     mons you are actually using - usually your best-built ones - were the ONLY Lv100+item
+     mons that could never be drawn. The pool was quietly unrepresentative of your roster.
+     It now scans $Trainer.party first (same Lv100 + held-item test), then the boxes.
+     Measured on the live save: 478 -> 481 candidates.
+     GUARD: @lending. During a lent-team battle $Trainer.party holds BORROWED copies, and
+     those must never re-enter the pool (they'd be drafted as if they were yours). with_
+     player_team sets @lending for the swap and battle_pool skips the party while it's set.
+     Verified: pool = 481 normally, 478 mid-lend, 481 again after.
+     A generated team can now field a copy of a mon you're currently using. Intended - it
+     is deep-copied, so the battle can never touch your real one.
+     SIM DIVERGENCE (harmless, noted): nbattle.rb builds its own pool straight from
+     $PokemonStorage and the sim's $Trainer is an empty stub, so the offline pool still has
+     no party mons. 3 of 481 - far below the noise floor of any rating - but it means the
+     in-game pool is now a strict superset of the sim's.
+  2) PER-SIDE PLAN PICKING (Smart v2). Previously one archetype was chosen and used for
+     BOTH sides, so a mirror match was always rain-vs-rain. Now, when you're being lent a
+     team (Mirror / Watch AI vs AI), pick_archetypes asks twice:
+       "YOUR PLAN"      -> the team you get
+       "OPPONENT'S PLAN"-> theirs, defaulting to "Random archetype" (the first entry)
+     so the common case Sid asked for - "give me rain, surprise me with the rest" - is one
+     extra keypress, while rain-vs-sand can still be set up deliberately for testing.
+     When you bring your own party there is still ONE picker (the opponent's), as before.
+  3) A RANDOM OPPONENT PLAN AVOIDS YOURS. select_smart2 takes `avoid`: a random roll tries
+     every OTHER plan first and only mirrors as a last resort if the pool supports nothing
+     else. "Surprise me" should mean a different fight. build_team_named gained a 5th
+     optional arg for it; the 3- and 4-arg forms the sim uses are unchanged.
+     YOUR side is built FIRST in start_battle, so the opponent's roll knows what to avoid
+     (it avoids the plan you ACTUALLY got, which can differ from the one you asked for if
+     plan_intact? had to fall back).
+     Verified: 30 rolls of "mine = rain, theirs = random" -> 0 mirrors, 10 distinct foe
+     plans (sand 5, sun 5, hazardstack 4, trickroom 3, priority 3, stall 3, ...).
+  4) PICKER NOW EXPLAINS ITSELF. pick_archetype uses pbShowCommandsWithHelp instead of
+     pbShowCommands, with a one-line ARCH_HELP description per plan ("Rain: a Drizzle
+     setter leading, then Swift Swim and Dry Skin mons that only pay off in rain."). The
+     `whose` argument prefixes every help line with YOUR PLAN / OPPONENT'S PLAN, so when
+     both are being chosen you always know which menu you're on - without burning an extra
+     dialog box on a title. 007_Objects and windows/011_Messages.rb ~1025; passing
+     cmdIfCancel = -1 keeps B backing out.
+  5) cant_build(sel, tier, arch, side) replaces the inline failure message, so a pool that
+     can't support a plan now says WHICH SIDE failed, and the generic message mentions
+     "party or PC" rather than just PC.
+  revert: restore battle_pool to the storage-only loop, drop @lending, drop ARCH_HELP +
+    pick_archetypes and go back to a single pick_archetype with pbShowCommands, drop the
+    `avoid` arg from select_smart2 / build_team_named, and drop my_arch from start_battle.
+  verified: ruby -c Syntax OK; 14/14 head-less checks pass against the real engine and a
+    read-only save snapshot. NOT verified in-game - the two-picker flow and the help text
+    have not been seen on a real screen.
+#############################################

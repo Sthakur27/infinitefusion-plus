@@ -139,6 +139,21 @@ module SidmodRandomOpp
                   balance: "Balance", hazardstack: "Hazard Stack", trickroom: "Trick Room",
                   priority: "Priority", scarf: "Choice Scarf", bulkysetup: "Bulky Setup",
                   stall: "Stall" }
+  # Shown under the highlighted entry in the picker, so the plans are self-explanatory
+  # instead of being jargon you have to already know.
+  ARCH_HELP = {
+    rain:         "A Drizzle setter leading, then Swift Swim and Dry Skin mons that only pay off in rain.",
+    sun:          "A Drought setter leading, feeding Chlorophyll sweepers and Solar Power attackers.",
+    sand:         "A Sand Stream setter leading, with Sand Rush and Sand Force mons behind it.",
+    hyperoffense: "No walls at all - setup sweepers and the hardest hitters available.",
+    balance:      "Two bulky mons with recovery or phazing, a pivot, then offensive threats.",
+    hazardstack:  "Three hazard setters plus a phazer, to tax every switch the other side makes.",
+    trickroom:    "Trick Room first, then slow heavy hitters that suddenly move first under it.",
+    priority:     "Stacked priority moves - picks off anything weakened, ignores Speed.",
+    scarf:        "Three Choice Scarf users for permanent speed control.",
+    bulkysetup:   "Setup sweepers bulky enough to set up more than once.",
+    stall:        "Walls with recovery, hazards and phazing. Wins on attrition, not damage."
+  }
 
   WEATHER_ABILITY = { DRIZZLE: :rain, PRIMORDIALSEA: :rain, DROUGHT: :sun,
                       DESOLATELAND: :sun, SANDSTREAM: :sand, SNOWWARNING: :hail }
@@ -360,8 +375,17 @@ module SidmodRandomOpp
   # `arch` is an ARCHETYPES symbol, or :random / nil to try every plan in a shuffled
   # order and take the first one the pool actually supports.
   # -> [team, archetype_used] | nil
-  def select_smart2(cands, arch, rng)
-    names = (arch.nil? || arch == :random) ? ARCHETYPES.shuffle(random: rng) : [arch]
+  # `avoid` is the plan the OTHER side already got. A random roll tries every other
+  # plan first and only falls back to a mirror if nothing else the pool supports is
+  # left - "surprise me" should mean a different fight, not rain vs rain.
+  def select_smart2(cands, arch, rng, avoid = nil)
+    names =
+      if arch.nil? || arch == :random
+        rest = ARCHETYPES.reject { |a| a == avoid }.shuffle(random: rng)
+        avoid ? rest + [avoid] : rest
+      else
+        [arch]
+      end
     fallback = nil
     names.each do |n|
       t = select_archetype(cands, n, rng)
@@ -419,9 +443,22 @@ module SidmodRandomOpp
       stats: stat_array(pk), ref: pk }
   end
 
-  # Battle-ready pool: every PC mon at Lv100 holding an item.
+  # Battle-ready pool: every Lv100 mon holding an item, in the PC *or the party*.
+  # sidmod: the ACTIVE PARTY used to be excluded, which made the pool quietly
+  # unrepresentative - your party is usually your six best-built mons, and they were
+  # the only ones that could never be drawn. They're eligible like any other mon now,
+  # so a generated team can field (a copy of) something you're currently using.
+  # @lending guards the one case where $Trainer.party is NOT yours: during a lent-team
+  # battle the party holds borrowed copies, which must never re-enter the pool.
   def battle_pool
     ready = []
+    if !@lending
+      ($Trainer.party rescue []).each do |pk|
+        next if pk.nil? || (pk.egg? rescue false)
+        next unless pk.level == 100 && (pk.hasItem? rescue item_sym(pk))
+        ready << pk
+      end
+    end
     $PokemonStorage.maxBoxes.times do |b|
       $PokemonStorage.maxPokemon(b).times do |i|
         pk = $PokemonStorage[b, i]
@@ -434,7 +471,7 @@ module SidmodRandomOpp
   end
 
   # -> [[pokemon x6], archetype_used_or_nil] | nil
-  def build_team_named(sel, tier, seed, arch = nil)
+  def build_team_named(sel, tier, seed, arch = nil, avoid = nil)
     rng   = Random.new(seed)
     cands = battle_pool.map { |pk| candidate(pk) }
     cands = cands.reject { |c| ((c[:moves] || []) & BANNED_MOVES).any? }   # Spore clause (all modes)
@@ -444,7 +481,7 @@ module SidmodRandomOpp
     used   = nil
     case sel
     when :smart2
-      r = select_smart2(cands, arch, rng)
+      r = select_smart2(cands, arch, rng, avoid)
       chosen, used = r if r
     when :smart then chosen = select_smart(cands, rng)
     else             chosen = select_chaos(cands, rng)
@@ -504,10 +541,12 @@ module SidmodRandomOpp
     saved = $Trainer.party
     backup_party(saved)
     begin
+      @lending = true   # keeps the borrowed party out of battle_pool
       $Trainer.party = mons.map { |pk| c = Marshal.load(Marshal.dump(pk)); c.heal; c }
       yield
     ensure
       $Trainer.party = saved
+      @lending = false
     end
   end
 
@@ -555,32 +594,40 @@ module SidmodRandomOpp
     end
   end
 
-  def start_battle(sel, tier, arch = nil, who = :real, spectate = false)
-    result = build_team_named(sel, tier, rand(1_000_000), arch)
-    unless result
-      if sel == :smart2 && arch && arch != :random
-        pbMessage(_INTL("Your battle-ready {1}pool can't build a {2} team - it's missing the pieces " \
-                        "(a weather setter, enough walls, etc.). Try another archetype.",
-                        tier == :ou ? "OU-legal " : "", ARCH_LABELS[arch]))
-      else
-        pbMessage(_INTL("Need 6+ battle-ready {1}PC Pokemon (Lv100 + held item). Upgrade more mons first.",
-                        tier == :ou ? "OU-legal " : ""))
+  def cant_build(sel, tier, arch, side)
+    if sel == :smart2 && arch && arch != :random
+      pbMessage(_INTL("Your battle-ready {1}pool can't build a {2} team for {3} - it's missing the " \
+                      "pieces (a weather setter, enough walls, etc.). Try another plan.",
+                      tier == :ou ? "OU-legal " : "", ARCH_LABELS[arch], side))
+    else
+      pbMessage(_INTL("Need 6+ battle-ready {1}Pokemon at Lv100 holding an item (party or PC). " \
+                      "Upgrade more mons first.", tier == :ou ? "OU-legal " : ""))
+    end
+  end
+
+  # `my_arch` is the plan for the player's lent team; `arch` is the opponent's. YOUR
+  # side is built FIRST so the opponent's random roll knows which plan to avoid.
+  def start_battle(sel, tier, arch = nil, who = :real, spectate = false, my_arch = nil)
+    mine = nil
+    mine_used = nil
+    if who == :gen
+      r2 = build_team_named(sel, tier, rand(1_000_000), my_arch)
+      unless r2
+        cant_build(sel, tier, my_arch, _INTL("your side"))
+        return
       end
+      mine, mine_used = r2
+    end
+    result = build_team_named(sel, tier, rand(1_000_000), arch, mine_used)
+    unless result
+      cant_build(sel, tier, arch, _INTL("the opponent"))
       return
     end
     refs, arch_used = result
-    # A second, independently rolled team for the player's side. Drawn from the same
-    # pool and the same mode, so it's a fair mirror; no Species Clause ACROSS sides
-    # (real Pokemon doesn't have one either), and both sides are deep-copied anyway.
-    mine = nil
-    if who == :gen
-      r2 = build_team_named(sel, tier, rand(1_000_000), arch)
-      unless r2
-        pbMessage(_INTL("Couldn't build a second team for your side from this pool."))
-        return
-      end
-      mine = r2[0]
-      pbMessage(_INTL("You're lent:\n{1}!", mine.map { |pk| pk.name || pk.speciesName }.join(", ")))
+    if mine
+      pbMessage(_INTL("You're lent a {1} team:\n{2}!",
+                      mine_used ? ARCH_LABELS[mine_used] : (sel == :smart ? "balanced" : "random"),
+                      mine.map { |pk| pk.name || pk.speciesName }.join(", ")))
     end
     style = if sel == :smart2 then ARCH_LABELS[arch_used] || "planned"
             elsif sel == :smart then "balanced"
@@ -713,12 +760,34 @@ module SidmodRandomOpp
           mine, spectate)
   end
 
-  # SMART v2 opens a second menu to choose the plan.
-  def pick_archetype
+  # SMART v2's plan picker. `whose` prefixes every help line ("YOUR TEAM" /
+  # "OPPONENT"), so when both sides are being chosen you can always see which one
+  # you're on without spending an extra dialog box on a title.
+  # Returns an ARCHETYPES symbol, :random, or nil if the player backed out.
+  def pick_archetype(whose = nil)
     labels = [_INTL("Random archetype")] + ARCHETYPES.map { |a| ARCH_LABELS[a] }
-    i = pbShowCommands(nil, labels, -1)
+    tag    = whose ? "#{whose}\n" : ""
+    help   = [tag + _INTL("Roll a plan at random.")] +
+             ARCHETYPES.map { |a| tag + ARCH_HELP[a].to_s }
+    i = pbShowCommandsWithHelp(nil, labels, help, -1)
     return nil if i < 0
     i.zero? ? :random : ARCHETYPES[i - 1]
+  end
+
+  # Both plans for a lent-team battle. Yours first (it's the one you care about),
+  # then theirs - whose default entry is "Random archetype", so the common case
+  # ("give me rain, surprise me with the rest") is one extra keypress.
+  # -> [my_arch, foe_arch] or nil if backed out
+  def pick_archetypes(lending)
+    if !lending
+      a = pick_archetype(_INTL("OPPONENT'S PLAN"))
+      return a && [nil, a]
+    end
+    mine = pick_archetype(_INTL("YOUR PLAN"))
+    return nil if mine.nil?
+    foe = pick_archetype(_INTL("OPPONENT'S PLAN"))
+    return nil if foe.nil?
+    [mine, foe]
   end
 
   # Two stages: WHO plays which side, then WHICH team generator. B backs out at
@@ -733,11 +802,13 @@ module SidmodRandomOpp
     return run_apex(who, spectate) if sel == :apex   # fixed rosters - no tier step
     tier = (idx <= 2) ? :ou : :ubers
     arch = nil
+    my_arch = nil
     if sel == :smart2
-      arch = pick_archetype
-      return if arch.nil?
+      picked = pick_archetypes(who == :gen)
+      return if picked.nil?
+      my_arch, arch = picked
     end
-    start_battle(sel, tier, arch, who, spectate)
+    start_battle(sel, tier, arch, who, spectate, my_arch)
   end
 end
 
