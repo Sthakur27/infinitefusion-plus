@@ -40,6 +40,8 @@ tools/sidmod_editor/sprites/out/*_raw.png
 tools/sidmod_editor/sprites/out/cmp_*.png
 tools/sidmod_editor/sprites/out/compare*.png
 tools/sidmod_editor/sprites/autogen/
+tools/sidmod_editor/sprites/backup/
+__pycache__/
 
 # Save files. The one deliberately shipped save is force-added (see saves/).
 File [A-H].rxdata

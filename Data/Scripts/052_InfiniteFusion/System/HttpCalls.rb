@@ -19,7 +19,30 @@ end
 
 def updateCustomDexFile
   return if !downloadAllowed?()
+  # sidmod: dex.json is ~18MB and pbStartLoadScreen re-downloads it in full on EVERY
+  # launch - download_file sends no If-None-Match/If-Modified-Since, and the
+  # requestRateExceeded? guard is only wired up for spritesheets. Skip the fetch while
+  # the local copy is still fresh. Set DEX_REFRESH_INTERVAL_HOURS = 0 to restore the
+  # stock every-launch behaviour.
+  if sidmod_file_fresh?(Settings::CUSTOM_DEX_ENTRIES_PATH, Settings::DEX_REFRESH_INTERVAL_HOURS)
+    echoln "Skipping dex download - local copy is under #{Settings::DEX_REFRESH_INTERVAL_HOURS}h old"
+    return
+  end
   download_file(Settings::CUSTOM_DEX_FILE_URL, Settings::CUSTOM_DEX_ENTRIES_PATH,)
+end
+
+# sidmod: true when `path` exists and was last written less than `hours` ago.
+# Deliberately fails "not fresh" on any doubt (missing file, unreadable, clock skew,
+# empty download) so the worst case is the stock behaviour, never a missing dex.
+def sidmod_file_fresh?(path, hours)
+  return false if !hours || hours <= 0
+  return false if !File.file?(path)
+  return false if File.size(path) <= 0
+  age = Time.now - File.mtime(path)
+  return false if age < 0
+  return age < (hours * 3600)
+rescue StandardError
+  return false
 end
 
 def createCustomSpriteFolders()

@@ -55,12 +55,15 @@ def verify(path):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true")
-    ap.add_argument("--uninstall", action="store_true")
+    ap.add_argument("--uninstall", action="store_true",
+                    help="remove installed sprites; pass pairs to remove only those")
+    ap.add_argument("pairs", nargs="*", help="head.body pairs to act on (default: all)")
     a = ap.parse_args()
 
     if a.uninstall:
         removed = 0
-        for p, _ in candidates():
+        targets = [(p, s) for p, s in candidates() if not a.pairs or p in a.pairs]
+        for p, _ in targets:
             head, body = p.split(".")
             f = os.path.join(DEST, head, f"{head}.{body}.png")
             if os.path.exists(f):

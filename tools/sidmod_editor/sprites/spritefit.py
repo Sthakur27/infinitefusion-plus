@@ -61,7 +61,7 @@ def strip_bg(im, mode, tol):
     return im
 
 
-def fit(im, colors, box=None, n_accents=3):
+def fit(im, colors, box=None, n_accents=3, contrast=1.35, outline=True):
     """box = (w, h) target footprint on the 96 grid. A generated image has no inherent
     scale, so the intended size has to be supplied — it comes from the description step.
     Defaults to the measured median footprint (56x52)."""
@@ -75,12 +75,16 @@ def fit(im, colors, box=None, n_accents=3):
     s = min(tw / w, th / h)
     nw, nh = max(1, round(w * s)), max(1, round(h * s))
     # Pick accents from the FULL-RES art, before downsampling. A 3px red collar is
-    # still vivid red here; after LANCZOS it has blended into desaturated mud and is
+    # still vivid red here; after downsampling it has blended into mud and is
     # unrecoverable. This is the difference between keeping an eye/collar and losing it.
     full_accents = pick_accents_rgba(art, n_accents)
 
-    # LANCZOS down to near-target, then hard-threshold alpha: keeps shape, kills soft edges
-    art = art.resize((nw, nh), Image.LANCZOS)
+    # Downsample by MAJORITY COLOUR, not by averaging. Averaging (LANCZOS/BOX) blends
+    # across block boundaries, which rounds off every hard edge and dissolves the black
+    # outline — the result reads as a blurry shrunk illustration next to real sprites.
+    # Taking the most common colour in each source cell keeps flat areas flat and edges
+    # hard, and never invents an intermediate colour that wasn't in the art.
+    art = mode_downsample(art, nw, nh, prequant=32)
 
     canvas = Image.new("RGBA", (GRID, GRID), (0, 0, 0, 0))
     canvas.paste(art, (CENTER - nw // 2, BASELINE - nh), art)
@@ -88,6 +92,16 @@ def fit(im, colors, box=None, n_accents=3):
     # binary alpha — the format has one transparent index, there is no partial alpha
     a = canvas.getchannel("A").point(lambda v: 255 if v >= 128 else 0)
     canvas.putalpha(a)
+
+    # Every real IF sprite reads because of two things the generated art lacks at this
+    # size: punchy colour and a continuous dark outline. The model draws its outline as
+    # thin 1024px linework, which loses the per-cell majority vote and survives only as
+    # scattered dots. Rebuild both here rather than hoping the prompt lands them.
+    if contrast != 1.0:
+        canvas = boost(canvas, contrast)
+        canvas.putalpha(a)
+    if outline:
+        canvas = draw_outline(canvas, a)
 
     # quantise the opaque pixels only, so no palette slot is wasted on background
     rgb = canvas.convert("RGB")
@@ -125,6 +139,69 @@ def fit(im, colors, box=None, n_accents=3):
             op[x, y] = accent_base + best if best is not None and bd < d_base else qi + 1
     out.info["transparency"] = 0
     return out.resize((GRID * SCALE, GRID * SCALE), Image.NEAREST)
+
+
+def boost(im, factor):
+    """Push saturation and contrast. Downsampled renders sit in a narrow mid-tone
+    band; real sprites use the full range, which is most of why they read at 96px."""
+    from PIL import ImageEnhance
+    rgb = im.convert("RGB")
+    rgb = ImageEnhance.Color(rgb).enhance(factor)
+    rgb = ImageEnhance.Contrast(rgb).enhance(1.0 + (factor - 1.0) * 0.8)
+    out = rgb.convert("RGBA")
+    return out
+
+
+def draw_outline(im, alpha):
+    """Darken the one-pixel rim of the silhouette into an outline. Derived from each
+    edge pixel's own colour rather than flat black, so it reads as shading rather than
+    a sticker cut-out — which is what the hand-drawn sprites do."""
+    px, ap = im.load(), alpha.load()
+    edge = []
+    for y in range(GRID):
+        for x in range(GRID):
+            if not ap[x, y]:
+                continue
+            for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                nx, ny = x + dx, y + dy
+                if not (0 <= nx < GRID and 0 <= ny < GRID) or not ap[nx, ny]:
+                    edge.append((x, y))
+                    break
+    for x, y in edge:
+        r, g, b, _ = px[x, y]
+        px[x, y] = (int(r * 0.30), int(g * 0.30), int(b * 0.32), 255)
+    return im
+
+
+def mode_downsample(art, nw, nh, prequant=32):
+    """Shrink RGBA `art` to nw x nh by taking the most common colour in each source
+    cell. Pre-quantising first makes the mode meaningful — with 27k distinct colours
+    almost every pixel is unique and the mode degenerates to an arbitrary pick."""
+    art = art.convert("RGBA")
+    w, h = art.size
+    rgb = art.convert("RGB").quantize(colors=prequant, method=Image.MEDIANCUT,
+                                      dither=Image.NONE).convert("RGB")
+    src, alpha = rgb.load(), art.getchannel("A").load()
+    out = Image.new("RGBA", (nw, nh), (0, 0, 0, 0))
+    dst = out.load()
+    for ty in range(nh):
+        y0, y1 = ty * h // nh, max(ty * h // nh + 1, (ty + 1) * h // nh)
+        for tx in range(nw):
+            x0, x1 = tx * w // nw, max(tx * w // nw + 1, (tx + 1) * w // nw)
+            counts, opaque, total = {}, 0, 0
+            for y in range(y0, y1):
+                for x in range(x0, x1):
+                    total += 1
+                    if alpha[x, y] < 128:
+                        continue
+                    opaque += 1
+                    c = src[x, y]
+                    counts[c] = counts.get(c, 0) + 1
+            # a cell is solid only if it is mostly opaque — keeps the silhouette tight
+            if not counts or opaque * 2 < total:
+                continue
+            dst[tx, ty] = max(counts.items(), key=lambda kv: kv[1])[0] + (255,)
+    return out
 
 
 def pick_accents_rgba(art, n):
@@ -167,6 +244,8 @@ def main():
     ap.add_argument("--colors", type=int, default=15, help="palette size excl. transparent (real sprites: 12-16)")
     ap.add_argument("--bg", default="auto", help="auto | none | #RRGGBB")
     ap.add_argument("--tol", type=int, default=32)
+    ap.add_argument("--contrast", type=float, default=1.35, help="saturation/contrast boost; 1.0 = off")
+    ap.add_argument("--no-outline", action="store_true", help="skip the rebuilt silhouette outline")
     ap.add_argument("--accents", type=int, default=3, help="palette slots reserved for saturated accent colours")
     ap.add_argument("--box", default="56x52", help="target art footprint on the 96 grid (median real sprite = 56x52)")
     ap.add_argument("--selftest", action="store_true")
@@ -183,7 +262,7 @@ def main():
             src = Image.open(f).convert("RGBA")
             sa = src.resize((GRID, GRID), Image.NEAREST).getbbox()
             own = (sa[2] - sa[0], sa[3] - sa[1])
-            out = fit(strip_bg(src.copy(), "auto", 32), a.colors, own, a.accents)
+            out = fit(strip_bg(src.copy(), "auto", 32), a.colors, own, a.accents, a.contrast, not a.no_outline)
             oa = out.resize((GRID, GRID), Image.NEAREST).getbbox()
             d = max(abs(oa[2] - oa[0] - own[0]), abs(oa[3] - oa[1] - own[1]))
             worst = max(worst, d)
@@ -196,7 +275,7 @@ def main():
     if not (a.src and a.dst):
         ap.error("need src and dst (or --selftest)")
     im = Image.open(a.src).convert("RGBA")
-    out = fit(strip_bg(im, a.bg, a.tol), a.colors, box, a.accents)
+    out = fit(strip_bg(im, a.bg, a.tol), a.colors, box, a.accents, a.contrast, not a.no_outline)
     out.save(a.dst, optimize=True, transparency=0)
     print(f"{a.src} -> {a.dst}  {out.size}  mode={out.mode}  colors_used={used_colors(out)}")
 

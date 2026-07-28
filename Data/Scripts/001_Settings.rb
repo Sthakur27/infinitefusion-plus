@@ -51,6 +51,9 @@ module Settings
   CUSTOM_SPRITES_FILE_PATH = "Data/sprites/CUSTOM_SPRITES"
   BASE_SPRITES_FILE_PATH = "Data/sprites/BASE_SPRITES"
   CUSTOM_DEX_ENTRIES_PATH = "Data/pokedex/dex.json"
+  # sidmod: how long a downloaded dex.json stays fresh before it is re-fetched.
+  # Stock behaviour re-downloads all ~18MB on every launch; 0 restores that.
+  DEX_REFRESH_INTERVAL_HOURS = 24
   AI_DEX_ENTRIES_PATH = "Data/pokedex/generated_entries.json"
   POKEDEX_ENTRIES_PATH = "Data/pokedex/all_entries.json"
 

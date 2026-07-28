@@ -1301,6 +1301,53 @@ NO SCRIPT CHANGES. Pure graphics + offline tooling; the engine already supports 
 
 
 ##############################################
+stop re-downloading the 18MB pokedex on every launch - cut startup traffic
+
+Data/Scripts/052_InfiniteFusion/System/HttpCalls.rb
+  updateCustomDexFile (~line 20): added an early return when the local dex.json is
+    still fresh, gated on the new Settings::DEX_REFRESH_INTERVAL_HOURS.
+    old -> unconditional download_file(...) on every call.
+  sidmod_file_fresh?(path, hours) (~line 36): new helper. Returns true only when the
+    file exists, is non-empty, and its mtime is between 0 and `hours` ago. Every
+    doubtful case (missing, empty, unreadable, future mtime from clock skew, hours
+    nil/<=0) returns false, so the worst case is the stock every-launch download and
+    never a missing dex.
+
+Data/Scripts/001_Settings.rb
+  DEX_REFRESH_INTERVAL_HOURS = 24 (~line 54): new tunable. 0 restores stock behaviour.
+
+  why: MultiSaves#pbStartLoadScreen (~line 532) calls updateHttpSettingsFile then
+    updateCustomDexFile on every trip through the load screen. download_file is a bare
+    HTTPLite.get with no If-None-Match / If-Modified-Since and no version check, and the
+    requestRateExceeded? throttle is only wired to spritesheet downloads - so the full
+    dex came down every launch. Measured 19,173,037 bytes (~18.3MB), which matches the
+    local file byte-for-byte.
+  gotcha worth remembering: the URL in 001_Settings.rb is NOT the one used.
+    DownloadedSettings.rb is itself downloaded each launch and loads after 001_Settings,
+    so its CUSTOM_DEX_FILE_URL (infinitefusion/pokedex-entries, 18.3MB) wins over the
+    001_Settings one (pif-downloadables, 5.7MB). Measure the right URL before trusting
+    any size here.
+  why not ETag/304: the server does support it (verified: If-None-Match -> 304 Not
+    Modified), and HTTPLite.get accepts a headers hash (see pbDownloadData in
+    003_HTTP_Utilities.rb ~line 51). But nothing in the codebase ever reads
+    ret[:headers], so there is no confirmation the ETag comes back out, HTTPLite is a
+    native mkxp-z binding that cannot be exercised headlessly, and the ETag is NOT the
+    content sha256 (checked - they differ) so it cannot be computed locally. A
+    time throttle needs none of that. If ret[:headers] is ever confirmed to carry the
+    ETag, storing it and sending If-None-Match is strictly better: it would always
+    check for updates while transferring ~200 bytes instead of 18MB.
+  settings download left alone on purpose: DownloadedSettings.rb is only ~3.5KB and it
+    carries the dex URL, so it must stay live or a URL change would never be picked up.
+  tested: 9/9 unit cases on sidmod_file_fresh? (fresh/stale/missing/empty/future-mtime/
+    interval-0/nil/directory), plus a real SimEngine.boot confirming the constant
+    resolves, both methods are defined, and the guard flips skip->download when the
+    real dex.json is aged past the window (mtime restored afterwards). ruby -c clean on
+    both files. NOT yet exercised in an actual game launch.
+  to revert: set DEX_REFRESH_INTERVAL_HOURS = 0, or delete the early-return block in
+    updateCustomDexFile and the sidmod_file_fresh? helper.
+
+
+##############################################
 # old commented-out reference impl kept below for future tweaks
 # max vals
 # PokemonDebugMenuCommands.register("hiddenvalues", {
