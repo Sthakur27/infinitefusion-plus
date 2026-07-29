@@ -1961,3 +1961,21 @@ a failed background download can no longer kill the boot
     config. It was removed before landing. Check `git log` for recent work on a subsystem
     before patching it - the working tree diff alone won't show an already-committed fix.
 #############################################
+
+##############################################
+PC box organization convention (Sid's collection) - reference note, NOT a code change
+  the PC has 40 boxes; there is a hard split in how they're used:
+  - AESTHETIC / "looks cool" boxes = idx 0-16 (display #1-17): the PMD-dungeon-named
+    boxes -> Apple Woods, Miracle Sea, Heavensgale, Blizzardisle, Castelia, Titanworks,
+    Dark Crater, Haina Desert, Gleamspire, Amp Plains, Lake Afar, Star Resort, Crystal
+    Cave, Pangea, Lush Jungle, Deep Abyss, Kroasa. These hold cool-looking / collection
+    fusions, NOT competitively built. Do not distribute battle-ready mons here.
+  - COMPETITIVE boxes = idx 17+ (display #18 onward): Rain(17), Sand(18), Bench(19),
+    OU(20), Sandbox(21), Ubers(22), Sun(23), then the numbered/role boxes Box25-30
+    (24-29), BLISSSSS(30), Triples(32), Squads/Squads2/Squads3(33-35), Laboratory(36),
+    UU(37), OU(38 - 2nd), Ubers(39 - 2nd). Weather/tier/role-themed, all battle-built.
+  Sid's rule of thumb was "after ~box 15 it's all competitive"; the precise boundary is
+    the last PMD box "Kroasa" (idx 16) = aesthetic, "Rain" (idx 17) = first competitive.
+  usage: when distributing built L100+item mons, target the competitive boxes by
+    archetype (weather -> Rain/Sand/Sun; tier -> OU/UU/Ubers; Sandbox = scratch/WIP).
+    the offline editor addresses boxes 0-indexed, so competitive = box index >= 17.

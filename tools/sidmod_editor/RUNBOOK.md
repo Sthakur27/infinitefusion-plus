@@ -125,7 +125,7 @@ RB sim\nsymmetry.rb [matchups] [seeds]   # side-bias + noise-floor measurement
 ```
 `BAN` = comma-separated pool keys, or the token `WONDERGUARD` (expands to every Wonder Guard mon — see below).
 
-**Pool** = every PC mon at Lv100 holding an item, with the in-game Random Battle clauses (Species / Spore / OU-legal-legend), keyed `b<box>s<slot>`. Reuses `SidmodRandomOpp` so the sim's OU tier is *exactly* the tier the game generates.
+**Pool** = every PC mon at Lv100 holding an item, with the in-game Random Battle clauses (Species / Spore / OU-legal-legend), keyed `b<box>s<slot>`. Reuses `SidmodRandomOpp` so the sim's OU tier is *exactly* the tier the game generates. **The player's PARTY is also folded in** (keyed `pt<i>`, same L100+item / Spore / OU clauses) — `build_pool!` reads `save[:player] @party` after the boxes; party mons show `box: 'party'` in ratings output.
 
 **Shipping a ladder's champions into the game — `sim/nexport_apex.rb`.**
 

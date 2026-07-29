@@ -41,6 +41,8 @@ module NativeSim
     $DEBUG = false
     save = StubLoader.load_file(save_path)
     $PokemonStorage = save[:storage_system]
+    # sidmod: also expose the player's PARTY so it can join the rating pool
+    @party_src = (save[:player].instance_variable_get(:@party) rescue nil) || []
     patch_ai_both_sides!
     patch_replacement_symmetry!
     patch_faint_tracking!
@@ -148,6 +150,22 @@ module NativeSim
                    types: c[:types], bases: c[:bases],
                    item: c[:item], moves: c[:moves] }
       end
+    end
+    # sidmod: fold the player's PARTY into the pool (keyed pt<i> to avoid box-key
+    # collision). Same clauses as PC mons: L100 + item, no egg, Spore-banned skipped.
+    (@party_src || []).each_with_index do |pk, i|
+      next if pk.nil? || (pk.egg? rescue false)
+      next unless pk.level == 100 && (pk.hasItem? rescue false)
+      c = SidmodRandomOpp.candidate(pk)
+      next if (c[:moves] & SidmodRandomOpp::BANNED_MOVES).any?    # Spore clause
+      @pool << { key: "pt#{i}", box: 'party', slot: i,
+                 name: (pk.name || pk.speciesName).to_s,
+                 species: (pk.speciesName rescue pk.species.to_s),
+                 cand: c, ref: pk,
+                 ou: SidmodRandomOpp.ou_legal?(c),
+                 roles: SidmodRandomOpp.classify(c),
+                 types: c[:types], bases: c[:bases],
+                 item: c[:item], moves: c[:moves] }
     end
     @by_key = @pool.each_with_object({}) { |e, h| h[e[:key]] = e }
     @pool
@@ -278,7 +296,8 @@ module NativeSim
     st  = STATS6.map { |s| (pk.calcStats && pk.calcStats[s]) rescue nil }
     st  = STATS6.map { |s| (pk.send(s == :HP ? :totalhp : { ATTACK: :attack, DEFENSE: :defense,
           SPECIAL_ATTACK: :spatk, SPECIAL_DEFENSE: :spdef, SPEED: :speed }[s]) rescue 0) } if st.compact.empty?
-    { key: key, name: e[:name], species: e[:species], box: e[:box] + 1, slot: e[:slot] + 1,
+    { key: key, name: e[:name], species: e[:species],
+      box: (e[:box].is_a?(Integer) ? e[:box] + 1 : e[:box]), slot: e[:slot] + 1,
       types: e[:types].join('/'), ability: (pk.ability&.name rescue '?'),
       nature: (pk.nature&.name rescue '?'), item: (pk.item&.name rescue e[:item].to_s),
       moves: e[:moves].map { |m| (GameData::Move.get(m).name rescue m.to_s) },
