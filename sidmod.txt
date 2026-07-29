@@ -1348,6 +1348,83 @@ Data/Scripts/001_Settings.rb
 
 
 ##############################################
+reverse fusion debug button - swap head<->body in place, keep ability/moves/etc (end goal: flip a fusion without rebuilding it)
+020_Debug/003_Debug menus/005_Debug_PokemonCommands.rb
+  new PokemonDebugMenuCommands.register("reversefusion", parent "main") ~line 1151 (just
+    before the Cosmetic section) - shows as "Reverse fusion (swap head/body)" in the pokemon
+    debug menu alongside Set nature / Set gender / Species-form.
+  what it does: new head = old body, new body = old head via getFusionSpecies(old_head, old_body)
+    (getFusionSpecies takes (body, head) - FusionUtils.rb:351). Everything not tied to head/body
+    order is preserved automatically because only pkmn.species changes.
+  ability KEPT explicitly: Pokemon#species= (014_Pokemon/001_Pokemon.rb:277) sets @ability=nil,
+    so a naive species swap would re-derive the ability from ability_index against the NEW
+    head/body and change it. Fix: capture old_ability = pkmn.ability_id BEFORE the swap, then
+    pkmn.ability = old_ability AFTER (force-sets @ability, same as the "Set any ability" path).
+  moves / EVs / IVs / nature / item / nickname / OT / ball: untouched by species= (verified the
+    setter only touches @species/@form/@forced_form/@level/@ability + calc_stats), so they carry over.
+  shininess: head_shiny/body_shiny are SWAPPED so a shiny half follows its component to the other
+    slot; debug_shiny=true re-asserted if still shiny (mirrors the Set-species code).
+  calc_stats after (fusion base stats depend on which half is head vs body); pokedex register/set_owned
+    like the Set-fusion-species command.
+  guards: non-fusion -> "isn't a two-part fusion" message (triple fusions report false for isFusion?,
+    so they hit this branch and are left alone); head==body self-fusion -> "nothing to reverse".
+    pbConfirm shows "Reverse <old name> into <new name>?" before committing. Reversible (run it again).
+  ruby -c clean. NOT yet exercised in an actual game launch.
+  to revert: delete the register("reversefusion", ...) block.
+
+##############################################
+the great rename - GPT-nicknamed PC boxes 17-40 (offline, save-safe) - end goal: cool thematic nicknames, junk cleaned
+new toolchain: tools/sidmod_editor/rename/  (external, NOT loaded by the game)
+  build_worklist.rb <save> <lo_idx0> <hi_idx0> <out.json>  - READ-ONLY dump of each occupied slot
+    (box/slot 0idx, decoded head/body species + types via species_table.json, current nickname, ability).
+  openai_client.rb  - minimal OpenAI Chat Completions client (JSON mode). Key from ENV['OPENAI_API_KEY']
+    or tools/sidmod_editor/sim/.openaiapikey (sk-proj-...). Mirrors the Anthropic claude_client.rb pattern.
+  gpt_rename.rb <worklist> <decisions> [model gpt-4o] [batch 25]  - GPT decides per mon KEEP (existing
+    name already good) or RENAME (junk/none) + a <=16-char letters-only portmanteau. Missing mons default
+    to keep (safe). System prompt carries the owner's style (Leviatide/Cragwing/Steelwyrm vibe) + explicit
+    junk criteria (box labels, weather/role words, placeholders/memes, digits, species name).
+  dedup_rename.rb <decisions> <out> [model]  - guarantees every RESULTING name is unique across the range:
+    keeps all KEPT names + first use of each new name, re-rolls later collisions via GPT (fed the taken
+    list), deterministic letter-suffix fallback. Leaves pre-existing kept dups (Overload/Momentum x6) alone.
+  decisions_to_spec.rb <decisions> <spec>  - emits {"mode":"edit","box","slot","nickname"} per rename.
+apply path: reused the offline editor's SAFE pipeline (see "OFFLINE fusion save editor" block above) -
+  apply.ps1 -Spec spec_rename.json -Slot A  ->  refuses if game running, backs up File A, edit_save.rb
+  writes nickname-only edits on a COPY (edit mode w/ only @name = NO stat recompute, species/PID/OT/EVs/
+  moves untouched), verify_edit.rb gates on "collateral problems: NONE" (whitelists exactly the edited
+  slots), atomic-replace. Always dry-run first (-DryRun).
+run 2026-07-28 (File A = active save): boxes idx 17 "Rain 17" through idx 39 "Box 40" (23 boxes, 459 mons).
+  361 renamed, 98 kept, 12 deduped (Terradrake x7 -> Tyradrake/Gliscorn/Maronite/Goodrachomp/Raygron/
+  Dragroudon etc.). User approved: dedup ON, keep GPT names for borderline overwrites (Defogscor/Zapmory/
+  dino names replaced too). Backup: %APPDATA%/infinitefusion/sidmod_manual_backups/20260728_223929/File A.rxdata.
+  review artifacts: rename/rename_review.txt (by box), rename/rename_overwrites.txt (54 existing-name replacements).
+to re-run for other boxes: build_worklist -> gpt_rename -> dedup_rename -> decisions_to_spec -> apply.ps1.
+to revert this run: restore File A from the 20260728_223929 backup (game closed), or re-apply a spec that
+  sets the old names back (nicknames only; no other data was touched).
+
+##############################################
+set every OT to the player - make all party+PC mons "mine" (fixes foreign + "Unnamed" OT) - end goal: no foreign mons
+new tools (external, NOT loaded by the game): tools/sidmod_editor/
+  set_all_ot.rb <in> <out>  - rewrites every party + box mon's @owner to the player's identity
+    (id/name/gender/language). Clones an existing Owner object then sets its 4 ivars - can't call
+    Pokemon::Owner.new offline (its initialize runs the engine's validate). player id/name/language read
+    from save[:player] (@id/@name/@language); OT gender inferred as the mode gender among mons already
+    owned by the player id (fallback male=0), since Player has no @gender ivar offline.
+  verify_ot.rb <in> <out>  - collateral gate: deep-eq the WHOLE save except each mon's @owner, asserts
+    every mon's new @owner == player identity AND no non-owner field on any mon changed (prints
+    "collateral problems: NONE"). Stronger than verify_edit's slot-whitelist, which is meaningless when
+    every slot changes.
+  apply_ot.ps1 [-Slot A] [-DryRun]  - same safe pipeline as apply.ps1 (refuse if game running, backup
+    File A, edit a copy, verify_ot gate, atomic replace) but calls set_all_ot + verify_ot (no spec).
+mechanic: foreign?(trainer) is purely @owner.id != trainer.id (001_Pokemon.rb:1221); OT NAME shown on the
+  summary is @owner.name. Many mons had the player id but name "Unnamed" - setting all 4 fields fixes both.
+run 2026-07-28 (File A): player OT id=4183030398 name="Sid" gender=0 lang=2. 856 mons total, 619 changed,
+  237 already correct; after: distinct OT names = ["Sid"], 0 foreign. Backup:
+  %APPDATA%/infinitefusion/sidmod_manual_backups/20260728_224847/File A.rxdata.
+side effects (intended): traded mons are no longer foreign -> lose the outsider EXP bonus and can't trade-
+  disobey (disobey already disabled anyway, see "foreign mons always obey"). No other data touched.
+to revert: restore File A from the 20260728_224847 backup (game closed).
+
+##############################################
 # old commented-out reference impl kept below for future tweaks
 # max vals
 # PokemonDebugMenuCommands.register("hiddenvalues", {

@@ -1148,6 +1148,52 @@ PokemonDebugMenuCommands.register("speciesform", {
   }
 })
 
+# sidmod: reverse a fusion - swap head <-> body, keep everything else
+#   (ability, moves, EVs, IVs, nature, item, nickname, OT, ball...).
+#   species= nils @ability, so we capture ability_id first and force it back.
+#   head_shiny/body_shiny are swapped so shininess follows its component.
+PokemonDebugMenuCommands.register("reversefusion", {
+  "parent"      => "main",
+  "name"        => _INTL("Reverse fusion (swap head/body)"),
+  "always_show" => true,
+  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+    if !pkmn.isFusion?
+      screen.pbDisplay(_INTL("{1} isn't a two-part fusion, so it can't be reversed.", pkmn.speciesName))
+      next false
+    end
+    old_head_dex = get_head_number_from_symbol(pkmn.species)
+    old_body_dex = get_body_number_from_symbol(pkmn.species)
+    if old_head_dex == old_body_dex
+      screen.pbDisplay(_INTL("{1}'s head and body are the same species - nothing to reverse.", pkmn.speciesName))
+      next false
+    end
+    # new head = old body, new body = old head. getFusionSpecies takes (body, head).
+    reversed = getFusionSpecies(old_head_dex, old_body_dex)
+    if !reversed
+      screen.pbDisplay(_INTL("Couldn't build the reversed fusion."))
+      next false
+    end
+    if !screen.pbConfirm(_INTL("Reverse {1} into {2}?", pkmn.speciesName, reversed.name))
+      next false
+    end
+    old_ability   = pkmn.ability_id     # force-keep the exact current ability (species= nils @ability)
+    old_head_shny = pkmn.head_shiny
+    old_body_shny = pkmn.body_shiny
+    pkmn.species = reversed
+    pkmn.ability = old_ability          # restore the ability slot lost by species=
+    # shininess follows its component: the old head is now the body and vice versa
+    pkmn.head_shiny = old_body_shny
+    pkmn.body_shiny = old_head_shny
+    pkmn.debug_shiny = true if pkmn.shiny?
+    pkmn.calc_stats
+    $Trainer.pokedex.register(pkmn) if !settingUpBattle
+    $Trainer.pokedex.set_owned(pkmn.species) if !settingUpBattle
+    screen.pbRefreshSingle(pkmnid)
+    screen.pbDisplay(_INTL("Reversed into {1}.", pkmn.speciesName))
+    next false
+  }
+})
+
 #===============================================================================
 # Cosmetic options
 #===============================================================================

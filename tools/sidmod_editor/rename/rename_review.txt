@@ -1,0 +1,507 @@
+THE GREAT RENAME - review (boxes idx 17-39). RENAME = will change, keep = unchanged.
+
+== Box idx 17  "Rain 17"  (15 renames / 25 mons) ==
+  Poliwrath/Regigigas        [WATER/NORMAL] (none)         -> Gigatide
+  Poliwrath/Swampert         [WATER/GROUND] (none)         -> Swampwrath
+  Azumarill/Lycanroc         [WATER/ROCK]   (none)         -> Azucrag
+  Kabutops/Kingler           [ROCK/WATER]   Rain           -> Krabust
+  Volcarona/Blastoise        [BUG/WATER]    Rain           -> Volcatoise
+  Togekiss/Dragonite         [FAIRY/FLYING] Rain           -> Dragokiss
+  Gengar/Omastar             [GHOST/WATER]  keep: Krasus
+  Goodra/Toxapex             [DRAGON/WATER] keep: Vireef
+  Chandelure/Omastar         [GHOST/WATER]  (none)         -> Ombralure
+  Goodra/Slaking             [DRAGON/NORMAL] keep: Gootyrant
+  Ludicolo/Sceptile          [WATER/GRASS]  keep: Monsoon
+  Gyarados/Scizor            [WATER/STEEL]  keep: Riptide
+  Ninjask/Bisharp            [BUG/STEEL]    (none)         -> Ninsharpe
+  Raikou/Suicune             [ELECTRIC/WATER] (none)         -> Raicune
+  Gyarados/Garchomp          [WATER/GROUND] keep: Riptide
+  Swampert/Haxorus           [WATER/DRAGON] (none)         -> Swamprus
+  Kingdra/Empoleon           [WATER/STEEL]  keep: Hydroking
+  Kingdra/Hydreigon          [WATER/DRAGON] keep: Kingdrake
+  Feraligatr/Slaking         [WATER/NORMAL] (none)         -> Feralak
+  Vaporeon/Dragonite         [WATER/FLYING] keep: Aqueon
+  Blissey/Gliscor            [NORMAL/FLYING] Toxtest        -> Glissey
+  Politoed/Forretress        [WATER/STEEL]  (none)         -> Toedsteel
+  Kingdra/Magnezone          [WATER/ELECTRIC] (none)         -> Hydrozone
+  Feraligatr/Garchomp        [WATER/GROUND] keep: Spinosaurus
+  Metagross/Feraligatr       [STEEL/WATER]  (none)         -> Metagatr
+
+== Box idx 18  "Sand"  (19 renames / 26 mons) ==
+  Tyranitar/Articuno         [ROCK/FLYING]  keep: Cragwing
+  Slaking/Sandslash          [NORMAL/GROUND] keep: Sandking
+  Metagross/Garchomp         [STEEL/GROUND] keep: Ironchomp
+  Registeel/Hydreigon        [STEEL/DRAGON] keep: Mecharon
+  Jolteon/Nidoking           [ELECTRIC/GROUND] Terravolt      -> Voltking
+  Rhyperior/Salamence        [GROUND/FLYING] (none)         -> Ravager
+  Garchomp/Rampardos         [DRAGON/ROCK]  (none)         -> Rampageon
+  Tyranitar/Aerodactyl       [ROCK/FLYING]  (none)         -> Aeroquake
+  Gliscor/Milotic            [GROUND/WATER] (none)         -> Tideclaw
+  Tyranitar/Zapdos           [ROCK/FLYING]  keep: Cragwing
+  Tyranitar/Salamence        [ROCK/FLYING]  (none)         -> Terradrake
+  Ferrothorn/Quagsire        [STEEL/GROUND] keep: Bogthorn
+  Tyranitar/Crobat           [ROCK/FLYING]  (none)         -> Bataclysm
+  Volcarona/Empoleon         [BUG/STEEL]    (none)         -> Voltalon
+  Tyranitar/Dragonite        [ROCK/FLYING]  Atari          -> Terradrake
+  Volcarona/Nidoking         [BUG/GROUND]   Sand           -> Burrowmoth
+  Azumarill/Garchomp         [WATER/GROUND] Sand           -> Geyserchomp
+  Tyrantrum/Aerodactyl       [ROCK/FLYING]  Sand           -> Aerohelm
+  Cradily/Blastoise          [ROCK/WATER]   (none)         -> Coralguard
+  Tyranitar/Regigigas        [ROCK/NORMAL]  Sand           -> Regirock
+  Krookodile/Salamence       [GROUND/FLYING] (none)         -> Sandwing
+  Raichu/Scizor              [ELECTRIC/STEEL] Sand           -> Voltrazor
+  Regirock/Gliscor           [ROCK/FLYING]  keep: Stonewall
+  Metagross/Haxorus          [STEEL/DRAGON] Sand           -> Metarax
+  Tyranitar/Slaking          [ROCK/NORMAL]  Atari          -> Slaktar
+  Aegislash/Toxapex          [STEEL/WATER]  (none)         -> Aqualash
+
+== Box idx 19  "Bench"  (23 renames / 28 mons) ==
+  Suicune/Quagsire           [WATER/GROUND] keep: Rainsponge
+  Vaporeon/Registeel         [WATER/STEEL]  (none)         -> Aquasteel
+  Blissey/Shuckle            [NORMAL/ROCK]  Sand           -> Rockbliss
+  Tyranitar/Golisopod        [ROCK/WATER]   (none)         -> Tidepod
+  Gliscor/Haxorus            [GROUND/DRAGON] (none)         -> Terradrake
+  Chandelure/Greninja        [GHOST/DARK]   (none)         -> Wraithninja
+  Golisopod/Blaziken         [BUG/FIGHTING] (none)         -> Bugiken
+  Lurantis/Infernape         [GRASS/FIGHTING] keep: Vivero
+  Tyranitar/Leafeon          [ROCK/GRASS]   (none)         -> Graniteaf
+  Metagross/Salamence        [STEEL/FLYING] keep: Aegeon
+  Chandelure/Jolteon         [GHOST/ELECTRIC] keep: Terravolt
+  Sandslash/Infernape        [GROUND/FIGHTING] OUSand         -> Infernersh
+  Zoroark/Alakazam           [DARK/PSYCHIC] (none)         -> Illuzam
+  Dusknoir/Blaziken          [GHOST/FIGHTING] (none)         -> Phantomkick
+  Golem/Steelix              [ROCK/GROUND]  (none)         -> Stoneiron
+  Noivern/Blaziken           [FLYING/FIGHTING] (none)         -> Blazenvern
+  Hakamo-o/Talonflame        [DRAGON/FLYING] (none)         -> Aerokamo
+  Slurpuff/Dragonite         [FAIRY/FLYING] (none)         -> Fairywings
+  Chandelure/Lucario         [GHOST/STEEL]  (none)         -> Spectrionix
+  Metagross/Dragonite        [STEEL/FLYING] keep: Aegeon
+  Chandelure/Nidoking        [GHOST/GROUND] (none)         -> Spectraking
+  Metagross/Scizor           [STEEL]        (none)         -> Steelclaw
+  Salamence/Dragonite        [DRAGON/FLYING] (none)         -> Dracowing
+  Hydreigon/Goodra           [DARK/DRAGON]  (none)         -> Hydragon
+  Azumarill/Bisharp          [WATER/STEEL]  (none)         -> Aquametal
+  Volcarona/Charizard        [BUG/FLYING]   (none)         -> Igniswings
+  Hitmonlee/Aerodactyl       [FIGHTING/FLYING] (none)         -> Crushkyl
+  Gliscor/Toxapex            [GROUND/WATER] (none)         -> Murkdive
+
+== Box idx 20  "Box 20"  (23 renames / 29 mons) ==
+  Ferrothorn/Skarmory        [STEEL/FLYING] keep: Thornmail
+  Marowak/Mimikyu            [GROUND/FAIRY] keep: Bonecloak
+  Aegislash/Salamence        [STEEL/FLYING] (none)         -> Skyblade
+  Blissey/Toxapex            [NORMAL/WATER] keep: Pinkreef
+  Dragonite/Scizor           [DRAGON/STEEL] keep: Steelwyrm
+  Politoed/Jolteon           [WATER/ELECTRIC] keep: Jolitoed
+  Skarmory/Ferrothorn        [STEEL/GRASS]  (none)         -> Thornwing
+  Suicune/Milotic            [WATER]        (none)         -> Mysticune
+  Raikou/Zapdos              [ELECTRIC/FLYING] (none)         -> Voltstorm
+  Entei/Arcanine             [FIRE]         (none)         -> Infermane
+  Garchomp/Tyranitar         [DRAGON/DARK]  (none)         -> Darkmaw
+  Clefable/Sylveon           [FAIRY]        (none)         -> Sylfable
+  Espeon/Metagross           [PSYCHIC]      (none)         -> Mindmetal
+  Kyogre/Toxapex             [WATER]        (none)         -> Kyophex
+  Deoxys/Latios              [PSYCHIC]      (none)         -> Latiode
+  Reshiram/Clefable          [DRAGON/FAIRY] (none)         -> Reshible
+  Rayquaza/Garchomp          [DRAGON/GROUND] (none)         -> Quazarch
+  Dragonite/Arceus           [DRAGON/NORMAL] (none)         -> Arcedrake
+  Dusknoir/Slaking           [GHOST/NORMAL] (none)         -> Hauntslack
+  Dragonite/Volcarona        [DRAGON/FIRE]  (none)         -> Flarewing
+  Chandelure/Volcarona       [GHOST/FIRE]   (none)         -> Spectreflare
+  Togekiss/Chandelure        [FAIRY/FIRE]   (none)         -> Chandeveil
+  Gliscor/Regigigas          [GROUND/NORMAL] keep: Regititania
+  Reuniclus/Dusknoir         [PSYCHIC/GHOST] (none)         -> Phantomind
+  Slowbro/Cofagrigus         [WATER/GHOST]  (none)         -> Spectratide
+  Rhyperior/Steelix          [GROUND]       (none)         -> Terracore
+  Chandelure/Marowak         [GHOST/GROUND] (none)         -> Wraithbone
+  Aggron/Tyranitar           [STEEL/DARK]   (none)         -> Ironclad
+  Slaking/Snorlax            [NORMAL]       (none)         -> Colossnore
+
+== Box idx 21  "Sandbox"  (17 renames / 23 mons) ==
+  Chandelure/Greninja        [GHOST/DARK]   (none)         -> Shadowshroud
+  Marowak/Dragonite          [GROUND/FLYING] (none)         -> Terradrake
+  Spiritomb/Sableye          [DARK/GHOST]   (none)         -> Umbraglyph
+  Gengar/Pikachu             [GHOST/ELECTRIC] keep: Voltghast
+  Azumarill/Breloom          [WATER/FIGHTING] (none)         -> Aquamace
+  Marowak/Absol              [GROUND/DARK]  (none)         -> Darkquake
+  Greninja/Pikachu           [WATER/ELECTRIC] (none)         -> Aquabolt
+  Azumarill/Scizor           [WATER/STEEL]  (none)         -> Steelwave
+  Azumarill/Marowak          [WATER/GROUND] keep: Tidehammer
+  Azumarill/Haxorus          [WATER/DRAGON] (none)         -> Dracotide
+  Azumarill/Absol            [WATER/DARK]   (none)         -> Abyssmarill
+  Azumarill/Arceus           [WATER/NORMAL] (none)         -> Aquamyth
+  Registeel/Blaziken         [STEEL/FIGHTING] keep: Steelzerker
+  Marowak/Slaking            [GROUND/NORMAL] (none)         -> Groust
+  Lucario/Pikachu            [FIGHTING/ELECTRIC] keep: Voltario
+  Regigigas/Gliscor          [NORMAL/FLYING] keep: Regititania
+  Greninja/Slaking           [WATER/NORMAL] (none)         -> Lagoonking
+  Azumarill/Weavile          [WATER/ICE]    (none)         -> Frostarill
+  Gyarados/Marowak           [WATER/GROUND] (none)         -> Gyarowak
+  Marowak/Garchomp           [GROUND]       (none)         -> Chompwack
+  Registeel/Ninjask          [STEEL/FLYING] (none)         -> Steeljask
+  Azumarill/Mamoswine        [WATER/GROUND] (none)         -> Mudswine
+  Dragonite/Regigigas        [DRAGON/NORMAL] keep: Dragotitan
+
+== Box idx 22  "box 22"  (6 renames / 13 mons) ==
+  Kingdra/Pikachu            [WATER/ELECTRIC] keep: Zapdra
+  Garchomp/Weavile           [DRAGON/ICE]   (none)         -> Froschomp
+  Azumarill/Dusknoir         [WATER/GHOST]  (none)         -> Aquamire
+  Kyurem/Salamence           [DRAGON/FLYING] (none)         -> Kyurence
+  Darkrai/Hydreigon          [DARK/DRAGON]  keep: Nightmaw
+  Suicune/Empoleon           [WATER/STEEL]  keep: Frosttide
+  Slaking/Dragonite          [NORMAL/FLYING] keep: Kingwyrm
+  Politoed/Alakazam          [WATER/PSYCHIC] keep: Downpour
+  Alakazam/Ninetales         [PSYCHIC/FIRE] (none)         -> Pyrokazam
+  Raikou/Latios              [ELECTRIC/PSYCHIC] keep: Voltseer
+  Togekiss/Blaziken          [FAIRY/FIGHTING] (none)         -> Blazekiss
+  Registeel/Ferrothorn       [STEEL/GRASS]  keep: Ironbriar
+  Deoxys/Latios              [PSYCHIC]      Box15A         -> Deoxios
+
+== Box idx 23  "Sun"  (16 renames / 19 mons) ==
+  Ninetales/Whimsicott       [FIRE/FAIRY]   keep: Noida
+  Charizard/Hydreigon        [FIRE/DRAGON]  Sun            -> Hydragon
+  Venusaur/Chandelure        [GRASS/FIRE]   Sun            -> Chandlesaur
+  Blaziken/Aerodactyl        [FIRE/FLYING]  Sun            -> Aeroken
+  Dragonite/Slaking          [DRAGON/NORMAL] keep: Draking
+  Volcarona/Ninetales        [BUG/FIRE]     (none)         -> Volcanine
+  Slaking/Blaziken           [NORMAL/FIGHTING] (none)         -> Blazeking
+  Magcargo/Nidoqueen         [FIRE/GROUND]  (none)         -> Magmaqueen
+  Lucario/Arcanine           [FIGHTING/FIRE] (none)         -> Arcalu
+  Hydreigon/Magmortar        [DARK/FIRE]    (none)         -> Infernogon
+  Ampharos/Scrafty           [ELECTRIC/FIGHTING] (none)         -> Amphrafty
+  Bellossom/Ampharos         [GRASS/ELECTRIC] (none)         -> Bellospark
+  Celebi/Arcanine            [PSYCHIC/FIRE] (none)         -> Pyrebi
+  Donphan/Flygon             [GROUND/DRAGON] (none)         -> Phanogon
+  Tyranitar/Garchomp         [ROCK/GROUND]  (none)         -> Tyranchomp
+  Charizard/Nidoking         [FIRE/GROUND]  keep: Deinonychus
+  Cofagrigus/Slaking         [GHOST/NORMAL] (none)         -> Spectralsloth
+  Ariados/Crobat             [BUG/FLYING]   (none)         -> Ariabat
+  Dragonite/Garchomp         [DRAGON/GROUND] (none)         -> Chompdrake
+
+== Box idx 24  "Box 25"  (7 renames / 19 mons) ==
+  Quagsire/Slowbro           [WATER/PSYCHIC] Box15C         -> Quagbro
+  Marowak/Rhyperior          [GROUND/ROCK]  Box15C         -> Rhyrowak
+  Magnezone/Gardevoir        [STEEL/FAIRY]  keep: Momentum
+  Garchomp/Haxorus           [DRAGON]       keep: Momentum
+  Gengar/Rotom               [GHOST]        keep: Momentum
+  Lucario/Scizor             [FIGHTING/STEEL] keep: Momentum
+  Cofagrigus/Skarmory        [GHOST/FLYING] keep: Momentum
+  Weavile/Aerodactyl         [DARK/FLYING]  keep: Momentum
+  Gengar/Greninja            [GHOST/DARK]   keep: Overload
+  Lucario/Infernape          [FIGHTING]     keep: Overload
+  Hydreigon                  [DARK/DRAGON]  keep: Overload
+  Scizor/Lucario             [BUG/STEEL]    keep: Overload
+  Electivire/Aerodactyl      [ELECTRIC/FLYING] keep: Overload
+  Weavile/Mamoswine          [DARK/GROUND]  keep: Overload
+  Ferrothorn/Cofagrigus      [STEEL/GHOST]  Bunker         -> Ironcrypt
+  Blissey/Skarmory           [NORMAL/FLYING] Bunker         -> Aerolight
+  Bisharp/Scizor             [DARK/STEEL]   Bunker         -> Nightedge
+  Starmie/Tentacruel         [WATER/POISON] Bunker         -> Toxinwave
+  Suicune/Togekiss           [WATER/FLYING] Bunker         -> Aqualift
+
+== Box idx 25  "Box 26"  (25 renames / 27 mons) ==
+  Gliscor/Skarmory           [GROUND/FLYING] Defogscor      -> Glidetalon
+  Zapdos/Skarmory            [ELECTRIC/FLYING] Zapmory        -> Voltwing
+  Forretress/Scizor          [BUG/STEEL]    Spinress       -> Carapace
+  Sandslash/Scizor           [GROUND/STEEL] Sandzor        -> Terrasteel
+  Torkoal/Scizor             [FIRE/STEEL]   Torkozor       -> Pyroforge
+  Clefable/Blissey           [FAIRY/NORMAL] Guardrock      -> Fairyheart
+  Starmie/Registeel          [WATER/STEEL]  keep: Starsteel
+  Tentacruel/Forretress      [WATER/STEEL]  keep: Toxispin
+  Cradily/Ferrothorn         [ROCK/GRASS]   Cradrock       -> Thornreef
+  Ninjask/Bisharp            [BUG/STEEL]    (none)         -> Swiftblade
+  Aegislash/Blaziken         [STEEL/FIGHTING] (none)         -> Blazeguard
+  Raichu/Aerodactyl          [ELECTRIC/FLYING] (none)         -> Stormwing
+  Roserade/Typhlosion        [GRASS/FIRE]   (none)         -> Emberbloom
+  Celebi/Ninetales           [PSYCHIC/FIRE] (none)         -> Celesun
+  Talonflame/Luxray          [FIRE/ELECTRIC] (none)         -> Voltflare
+  Seaking/Magcargo           [WATER/ROCK]   (none)         -> Seastone
+  Absol/Salamence            [DARK/FLYING]  (none)         -> Gloombringer
+  Magnezone/Cofagrigus       [STEEL/GHOST]  (none)         -> Steelwraith
+  Houndoom/Gallade           [DARK/FIGHTING] (none)         -> Shadeblade
+  Skarmory/Dragonite         [STEEL/FLYING] (none)         -> Steelwing
+  Skarmory/Salamence         [STEEL/FLYING] (none)         -> Moxitalon
+  Goodra/Garchomp            [DRAGON/GROUND] (none)         -> Terradrake
+  Alakazam/Gengar            [PSYCHIC/POISON] (none)         -> Hexamind
+  Togekiss/Goodra            [FAIRY/DRAGON] (none)         -> Gleamdrake
+  Togekiss/Bibarel           [FAIRY/WATER]  (none)         -> Aqualore
+  Gengar/Ninetales           [GHOST/FIRE]   (none)         -> Emberwraith
+  Chandelure/Togekiss        [GHOST/FLYING] (none)         -> Phantomgale
+
+== Box idx 26  "Box 27"  (23 renames / 23 mons) ==
+  Chandelure/Gardevoir       [GHOST/FAIRY]  (none)         -> Spectralight
+  Weezing/Umbreon            [POISON/DARK]  (none)         -> Umbraze
+  Machamp/Metagross          [FIGHTING/PSYCHIC] (none)         -> Psychamp
+  Chandelure/Scolipede       [GHOST/POISON] (none)         -> Venomgeist
+  Volcarona/Greninja         [BUG/DARK]     (none)         -> Voltaqua
+  Gyarados/Blaziken          [WATER/FIGHTING] (none)         -> Blazefury
+  Dragonite/Bibarel          [DRAGON/WATER] (none)         -> Tidewing
+  Toxapex/Aegislash          [POISON/GHOST] (none)         -> Toxashade
+  Milotic/Trevenant          [WATER/GHOST]  (none)         -> Marishade
+  Palossand/Goodra           [GROUND/DRAGON] (none)         -> Goosludge
+  Exeggutor/Nidoking         [GRASS/GROUND] (none)         -> Verdantox
+  Dragonite/Blaziken         [DRAGON/FIGHTING] (none)         -> Blazeclaw
+  Lurantis/Salamence         [GRASS/FLYING] (none)         -> Verdance
+  Lurantis/Typhlosion        [GRASS/FIRE]   (none)         -> Floralash
+  Sceptile/Infernape         [GRASS/FIGHTING] (none)         -> Infervine
+  Arcanine/Slaking           [FIRE/NORMAL]  (none)         -> Pyroking
+  Volcarona/Yanmega          [BUG/FLYING]   (none)         -> Volcanyte
+  Venusaur/Golisopod         [GRASS/WATER]  (none)         -> Venupod
+  Metagross/Tyrantrum        [STEEL/DRAGON] Tyrannosaurus  -> Metaragon
+  Feraligatr/Tyranitar       [WATER/DARK]   Spinosaurus    -> Tyraligatr
+  Omastar/Regigigas          [ROCK/NORMAL]  (none)         -> Omnigigas
+  Salamence/Kabutops         [DRAGON/WATER] (none)         -> Salatops
+  Gyarados/Tyrantrum         [WATER/DRAGON] (none)         -> Gyarantrum
+
+== Box idx 27  "Box 28"  (9 renames / 9 mons) ==
+  Kingdra/Goodra             [WATER/DRAGON] (none)         -> Goodraqua
+  Sharpedo/Golisopod         [WATER]        (none)         -> Sharpopod
+  Dewgong/Empoleon           [WATER/STEEL]  (none)         -> Deleon
+  Lanturn/Zoroark            [WATER/DARK]   (none)         -> Zorolant
+  Aurorus/Lapras             [ROCK/ICE]     (none)         -> Laprorus
+  Glaceon/Lopunny            [ICE/NORMAL]   (none)         -> Glacepunny
+  Golurk/Mamoswine           [GROUND]       (none)         -> Mamolurk
+  Mamoswine/Starmie          [ICE/PSYCHIC]  (none)         -> Starmoswine
+  Jynx/Froslass              [ICE/GHOST]    (none)         -> Froslynx
+
+== Box idx 28  "Box 29"  (14 renames / 15 mons) ==
+  Mewtwo/Espeon              [PSYCHIC]      (none)         -> Espewtwo
+  Hawlucha/Garchomp          [FIGHTING/GROUND] (none)         -> Chawlomp
+  Scizor/Garchomp            [BUG/GROUND]   (none)         -> Scizomp
+  Togekiss/Volcarona         [FAIRY/FIRE]   Firefly        -> Seraflare
+  Hydreigon/Gengar           [DARK/POISON]  (none)         -> Gengeigon
+  Ferrothorn/Clefable        [STEEL/FAIRY]  (none)         -> Clefathorn
+  Gyarados/Electivire        [WATER/ELECTRIC] keep: Sharcrunch
+  Lycanroc/Hawlucha          [ROCK/FLYING]  (none)         -> Lucharoc
+  Milotic/Jolteon            [WATER/ELECTRIC] (none)         -> Voltotic
+  Togekiss/Magmortar         [FAIRY/FIRE]   (none)         -> Charmrise
+  Reuniclus/Sylveon          [PSYCHIC/FAIRY] (none)         -> Psyveil
+  Greninja/Garchomp          [WATER/GROUND] (none)         -> Hydroclaw
+  Dusknoir/Scizor            [GHOST/STEEL]  (none)         -> Phantoclaw
+  Primeape/Drifblim          [FIGHTING/FLYING] (none)         -> Zephyrage
+  Clefable/Aegislash         [FAIRY/GHOST]  (none)         -> Fayblade
+
+== Box idx 29  "Box 30"  (6 renames / 9 mons) ==
+  Milotic/Aurorus            [WATER/ICE]    (none)         -> Glacieris
+  Jirachi/Volcarona          [STEEL/FIRE]   Firefly        -> Solstice
+  Banette/Hydreigon          [GHOST/DRAGON] (none)         -> Spectragore
+  Starmie/Electivire         [WATER/ELECTRIC] (none)         -> Electide
+  Aegislash/Clefable         [STEEL/FAIRY]  keep: Seraphim
+  Gallade/Blaziken           [PSYCHIC/FIGHTING] (none)         -> Psychiken
+  Suicune/Ho-Oh              [WATER/FLYING] keep: Kingdrake
+  Milotic/Dragonite          [WATER/FLYING] keep: Aqueon
+  Machamp/Ambipom            [FIGHTING/NORMAL] (none)         -> Pugilist
+
+== Box idx 30  "BLISSSSS"  (6 renames / 14 mons) ==
+  Blissey/Greninja           [NORMAL/DARK]  keep: Ashe
+  Blissey/Celebi             [NORMAL/GRASS] keep: Sybil
+  Blissey/Wobbuffet          [NORMAL/PSYCHIC] (none)         -> Psychoshield
+  Blissey/Dusclops           [NORMAL/GHOST] (none)         -> Spectracle
+  Blissey/Dragonite          [NORMAL/FLYING] (none)         -> Airoona
+  Blissey/Blaziken           [NORMAL/FIGHTING] (none)         -> Brawler
+  Blissey/Garchomp           [NORMAL/GROUND] keep: Ashe
+  Blissey/Dusknoir           [NORMAL/GHOST] (none)         -> Phantomguard
+  Blissey/Aegislash          [NORMAL/GHOST] keep: Phalanx
+  Blissey/Volcarona          [NORMAL/FIRE]  keep: Corona
+  Blissey/Haxorus            [NORMAL/DRAGON] keep: Goseigon
+  Blissey/Espeon             [NORMAL/PSYCHIC] keep: Sybil
+  Blissey/Slaking            [NORMAL]       keep: Samsara
+  Blissey/Diancie            [NORMAL/FAIRY] (none)         -> Diacloak
+
+== Box idx 31  "AI Ubers"  (12 renames / 12 mons) ==
+  Marowak/Zekrom             [GROUND/ELECTRIC] (none)         -> Stormbone
+  Mewtwo/Pikachu             [PSYCHIC/ELECTRIC] (none)         -> Voltgenius
+  Azumarill/Groudon          [WATER/GROUND] (none)         -> Tidequake
+  Mewtwo/Greninja            [PSYCHIC/DARK] (none)         -> Umbragen
+  Pikachu/Deoxys             [ELECTRIC/PSYCHIC] (none)         -> Voltgeist
+  Marowak/Regigigas          [GROUND/NORMAL] (none)         -> Gaiatitan
+  Azumarill/Deoxys           [WATER/PSYCHIC] (none)         -> Hydromind
+  Kyogre/Greninja            [WATER/DARK]   (none)         -> Abyssurf
+  Rayquaza/Greninja          [DRAGON/DARK]  (none)         -> Umbradrake
+  Mew/Greninja               [PSYCHIC/DARK] (none)         -> Shadoweaver
+  Marowak/Deoxys             [GROUND/PSYCHIC] (none)         -> Geoform
+  Necrozma                   [PSYCHIC]      (none)         -> Prismord
+
+== Box idx 32  "Triples"  (10 renames / 10 mons) ==
+  Venustoizard               [FIREWATERGRASS] (none)         -> Trioblaze
+  Megaligasion               [FIREWATERGRASS] (none)         -> Guardflare
+  Torterneon                 [FIREWATERGRASS] (none)         -> Fistfern
+  Kyodonquaza                [WATERGROUNDFLYING] (none)         -> Airflood
+  Paldiatina                 [DRAGON/GHOSTSTEELWATER] (none)         -> Spectradrake
+  Zekyushiram                [DRAGON/ICEFIREELECTRIC] (none)         -> Blazefrost
+  Deosectwo                  [BUGSTEELPSYCHIC] (none)         -> Mindcarapace
+  Zapmolcuno                 [ICEFIREELECTRIC/FLYING] (none)         -> Tempestwing
+  Enraicune                  [FIREWATERELECTRIC] (none)         -> Voltrine
+  Celemewchi                 [PSYCHIC/GRASSSTEEL] (none)         -> Celemechi
+
+== Box idx 33  "Squads 3"  (23 renames / 30 mons) ==
+  Regiregi                   [ICEROCKSTEEL] (none)         -> Glaciregi
+  Kyurem/Groudon             [DRAGON/GROUND] (none)         -> Terrafrost
+  Reshiram/Aurorus           [DRAGON/ICE]   keep: Blizasaur
+  Lugia/Articuno             [PSYCHIC/FLYING] (none)         -> Arctiwind
+  Kyogre/Aurorus             [WATER/ICE]    (none)         -> Frostwave
+  Froslass/Hydreigon         [ICE/DRAGON]   (none)         -> Cryogion
+  Genesect/Deoxys            [BUG/PSYCHIC]  Exo            -> Deonect
+  Volcarona/Reshiram         [BUG/FIRE]     (none)         -> Volcablaze
+  Volcarona/Jirachi          [BUG/PSYCHIC]  keep: Oura
+  Shuckle/Regigigas          [BUG/NORMAL]   keep: Vrok
+  Gliscor/Golisopod          [GROUND/WATER] (none)         -> Terrapod
+  Meloetta/Genesect          [NORMAL/STEEL] (none)         -> Steelmuse
+  Lapras/Zekrom              [WATER/ELECTRIC] keep: Jormaquil
+  Kyogre/Raikou              [WATER/ELECTRIC] keep: Zerakia
+  Electivire/Infernape       [ELECTRIC/FIGHTING] (none)         -> Voltfist
+  Zapdos/Celebi              [ELECTRIC/GRASS] (none)         -> Zaplebi
+  Togekiss/Jolteon           [FAIRY/ELECTRIC] (none)         -> Joltkiss
+  Volcarona/Magnezone        [BUG/ELECTRIC] (none)         -> Sparkarona
+  Arceus/Ariados             [NORMAL/POISON] (none)         -> Venomark
+  Muk/Lugia                  [POISON/FLYING] (none)         -> Sludgial
+  Toxapex/Hydreigon          [POISON/DRAGON] (none)         -> Toxydra
+  Gengar/Zoroark             [GHOST/DARK]   (none)         -> Phantora
+  Clefable/Venusaur          [FAIRY/POISON] (none)         -> Venufable
+  Roserade/Gardevoir         [GRASS/FAIRY]  (none)         -> Rosavoire
+  Machamp/Regigigas          [FIGHTING/NORMAL] (none)         -> Gigapunch
+  Hawlucha/Gyarados          [FIGHTING/FLYING] (none)         -> Lucharaid
+  Zekrom/Blaziken            [DRAGON/FIGHTING] keep: Kylo
+  Blaziken/Kommo-o           [FIRE/FIGHTING] (none)         -> Infernamo
+  Lucario/Zoroark            [FIGHTING/DARK] keep: Zyro
+  Roserade/Gallade           [GRASS/FIGHTING] (none)         -> Floraknight
+
+== Box idx 34  "Squads  2"  (18 renames / 26 mons) ==
+  Darkrai/Lugia              [DARK/FLYING]  keep: Sorrow
+  Gliscor/Rayquaza           [GROUND/FLYING] (none)         -> Terraquaza
+  Kyogre/Articuno            [WATER/FLYING] keep: Typhoon
+  Sylveon/Dragonite          [FAIRY/FLYING] (none)         -> Glimmerwing
+  Dialga/Hydreigon           [STEEL/DRAGON] (none)         -> Chronohydra
+  Clefable/Lugia             [FAIRY/FLYING] keep: Aeloria
+  Kyogre/Mewtwo              [WATER/PSYCHIC] (none)         -> Aquamind
+  Reshiram/Mew               [DRAGON/PSYCHIC] (none)         -> Mythoblaze
+  Sylveon/Noivern            [FAIRY/DRAGON] (none)         -> Chantivy
+  Aegislash/Espeon           [STEEL/PSYCHIC] (none)         -> Aurablade
+  Deoxys/Ninetales           [PSYCHIC/FIRE] (none)         -> Solflare
+  Salamence/Groudon          [DRAGON/GROUND] (none)         -> Terromence
+  Reshiram/Volcarona         [DRAGON/FIRE]  (none)         -> Flareonix
+  Goodra/Espeon              [DRAGON/PSYCHIC] (none)         -> Mysticore
+  Latios/Celebi              [DRAGON/GRASS] (none)         -> Herbios
+  Salamence/Entei            [DRAGON/FIRE]  keep: Gargoyle
+  Jirachi/Ambipom            [STEEL/NORMAL] keep: Tikkari
+  Kecleon/Rayquaza           [NORMAL/FLYING] (none)         -> Skyshroud
+  Salamence/Slaking          [DRAGON/NORMAL] keep: Mephalis
+  Porygon-Z/Noivern          [NORMAL/DRAGON] keep: Boombox
+  Blissey/Lugia              [NORMAL/FLYING] Porin          -> Aethera
+  Giratina/Arceus            [GHOST/NORMAL] (none)         -> Spectrark
+  Meloetta/Darkrai           [NORMAL/DARK]  (none)         -> Nocturne
+  Shuckle/Klefki             [BUG/FAIRY]    (none)         -> Charmkey
+  Sableye/Smeargle           [DARK/NORMAL]  (none)         -> Dabblem
+  Darkrai/Mew                [DARK/PSYCHIC] keep: Akuma
+
+== Box idx 35  "Squads"  (19 renames / 27 mons) ==
+  Kyogre/Mew                 [WATER/PSYCHIC] Squads         -> Mertide
+  Aegislash/Lugia            [STEEL/FLYING] Squads         -> Aegisail
+  Dialga/Espeon              [STEEL/PSYCHIC] Squads         -> Mindforge
+  Groudon/Gliscor            [GROUND/FLYING] Squads         -> Cyclone
+  Ninetales/Celebi           [FIRE/GRASS]   Squads         -> Emberleaf
+  Marowak/Arceus             [GROUND/NORMAL] Box15A         -> Terraeus
+  Kyogre/Deoxys              [WATER/PSYCHIC] (none)         -> Abysson
+  Palkia/Flygon              [WATER/DRAGON] keep: Nebryss
+  Volcarona/Politoed         [BUG/WATER]    keep: Nimbus
+  Kingdra/Zekrom             [WATER/ELECTRIC] keep: Jormaquil
+  Vaporeon/Slaking           [WATER/NORMAL] keep: Thaladon
+  Dialga/Mew                 [STEEL/PSYCHIC] (none)         -> Mysteel
+  Ho-Oh/Garchomp             [FIRE/GROUND]  (none)         -> Pyrachomp
+  Gliscor/Zekrom             [GROUND/ELECTRIC] (none)         -> Voltquake
+  Lugia/Groudon              [PSYCHIC/GROUND] (none)         -> Earthmind
+  Tyranitar/Meganium         [ROCK/GRASS]   keep: Oasthra
+  Jirachi/Rayquaza           [STEEL/FLYING] (none)         -> Skyforge
+  Gengar/Bastiodon           [GHOST/STEEL]  keep: Siren
+  Darkrai/Shedinja           [DARK/GHOST]   keep: Kagesura
+  Mew/Whimsicott             [PSYCHIC/FAIRY] :)             -> Mewscot
+  Mimikyu/Forretress         [GHOST/STEEL]  .              -> Forryguise
+  Genesect/Mimikyu           [BUG/FAIRY]    Cheater        -> Gensekyu
+  Clefable/Bibarel           [FAIRY/WATER]  Clefino        -> Fablewave
+  Lurantis/Entei             [GRASS/FIRE]   keep: Igniflora
+  Ho-Oh/Tangrowth            [FIRE/GRASS]   (none)         -> Pyrotangle
+  Dialga/Ninetales           [STEEL/FIRE]   (none)         -> Furnace
+  Rayquaza/Groudon           [DRAGON/GROUND] (none)         -> Terradrake
+
+== Box idx 36  "Laboratory"  (8 renames / 8 mons) ==
+  Celebi/Bibarel             [PSYCHIC/WATER] Clefino        -> Celewarel
+  Shuckle/Starmie            [BUG/PSYCHIC]  (none)         -> Starshuck
+  Rotom/Whirlipede           [ELECTRIC/POISON] (none)         -> Voltivene
+  Mew/Mimikyu                [PSYCHIC/FAIRY] (none)         -> Mewkyu
+  Drifblim/Bibarel           [GHOST/WATER]  Clefino        -> Drifarel
+  Golisopod/Mimikyu          [BUG/FAIRY]    Cheater        -> Golisokyu
+  Blissey/Ditto              [NORMAL]       (none)         -> Blitto
+  Ditto/Persian              [NORMAL]       (none)         -> Persitto
+
+== Box idx 37  "Box 38"  (25 renames / 25 mons) ==
+  Milotic/Typhlosion         [WATER/FIRE]   (none)         -> Aqualash
+  Lucario/Espeon             [FIGHTING/PSYCHIC] (none)         -> Espioken
+  Gliscor/Dusknoir           [GROUND/GHOST] (none)         -> Phantoglide
+  Flygon/Salamence           [GROUND/FLYING] (none)         -> Salagon
+  Jirachi/Milotic            [STEEL/WATER]  (none)         -> Aquamirage
+  Mew/Starmie                [PSYCHIC]      (none)         -> Starche
+  Hawlucha/Slaking           [FIGHTING/NORMAL] (none)         -> Fistking
+  Lucario/Metagross          [FIGHTING/PSYCHIC] (none)         -> Metario
+  Zoroark/Charizard          [DARK/FLYING]  (none)         -> Nocturnflare
+  Swamptiliken               [FIREWATERGRASS] (none)         -> Inferngrove
+  Togekiss/Milotic           [FAIRY/WATER]  (none)         -> Serenewave
+  Azumarill/Electivire       [WATER/ELECTRIC] (none)         -> Aquavolt
+  Celebi/Ho-Oh               [PSYCHIC/FLYING] (none)         -> Regenspark
+  Nidoqueen/Banette          [POISON/GHOST] (none)         -> Spectravenom
+  Kyogre/Pikachu             [WATER/ELECTRIC] (none)         -> Thundersurge
+  Dialga/Lucario             [STEEL]        (none)         -> Ironfist
+  Snorlax/Garchomp           [NORMAL/GROUND] (none)         -> Slumberjaw
+  Volcarona/Genesect         [BUG/STEEL]    (none)         -> Mechaflare
+  Sylveon/Togekiss           [FAIRY/FLYING] (none)         -> Pixibreeze
+  Raichu/Gengar              [ELECTRIC/POISON] (none)         -> Voltgeist
+  Jirachi/Celebi             [STEEL/GRASS]  (none)         -> Verdance
+  Chandelure/Weavile         [GHOST/ICE]    (none)         -> Frostlume
+  Sylveon/Genesect           [FAIRY/STEEL]  (none)         -> Fairiron
+  Hydreigon/Gardevoir        [DARK/FAIRY]   (none)         -> Nocturene
+  Rayquaza/Deoxys            [DRAGON/PSYCHIC] (none)         -> Astralstorm
+
+== Box idx 38  "Box 39"  (20 renames / 22 mons) ==
+  Metagross/Dhelmise         [STEEL/GRASS]  (none)         -> Anchorsteel
+  Kyogre/Reshiram            [WATER/FIRE]   (none)         -> Blazewave
+  Dialga/Necrozma            [STEEL/DRAGON] (none)         -> Chronoshade
+  Hydreigon/Greninja         [DARK]         (none)         -> Umbrashade
+  Sylveon/Mew                [FAIRY/PSYCHIC] (none)         -> Mystibloom
+  Metagross/Marowak          [STEEL/GROUND] (none)         -> Ironquake
+  Ampharos/Goodra            [ELECTRIC/DRAGON] (none)         -> Voltadrake
+  Gallade/Metagross          [PSYCHIC]      (none)         -> Mindforge
+  Mewtwo/Darkrai             [PSYCHIC/DARK] (none)         -> Mindshade
+  Marowak/Blaziken           [GROUND/FIGHTING] (none)         -> Blazowak
+  Rayquaza/Entei             [DRAGON/FIRE]  (none)         -> Dracoflare
+  Palkia/Volcarona           [WATER/FIRE]   (none)         -> Volcaris
+  Porygon-Z/Greninja         [NORMAL/DARK]  (none)         -> Cryptocode
+  Alakazam/Pikachu           [PSYCHIC/ELECTRIC] keep: Zapkazam
+  Giratina/Darkrai           [GHOST/DARK]   keep: Vorus
+  Lucario/Mew                [FIGHTING/PSYCHIC] (none)         -> Lucire
+  Arceus/Mew                 [NORMAL/PSYCHIC] (none)         -> Arctheon
+  Tyranitar/Dragonite        [ROCK/FLYING]  Atari          -> Tyranite
+  Kyogre/Gardevoir           [WATER/FAIRY]  (none)         -> Aquaura
+  Zoroark/Jirachi            [DARK/PSYCHIC] (none)         -> Nocturne
+  Togekiss/Gardevoir         [FAIRY]        (none)         -> Seraphkiss
+  Giratina/Espeon            [GHOST/PSYCHIC] (none)         -> Ghospion
+
+== Box idx 39  "Box 40"  (17 renames / 20 mons) ==
+  Dragonite/Groudon          [DRAGON/GROUND] (none)         -> Terradrake
+  Groudon/Rayquaza           [GROUND/FLYING] (none)         -> Quazard
+  Arceus/Espeon              [NORMAL/PSYCHIC] keep: Eos
+  Lugia/Regigigas            [PSYCHIC/NORMAL] (none)         -> Gigalithon
+  Kyogre/Celebi              [WATER/GRASS]  keep: Aquora
+  Azumarill/Regigigas        [WATER/NORMAL] (none)         -> Gigamarill
+  Reshiram/Ninetales         [DRAGON/FIRE]  (none)         -> Emberdrake
+  Sylveon/Arceus             [FAIRY/NORMAL] Squads         -> Sylvaeon
+  Darkrai/Reshiram           [DARK/FIRE]    (none)         -> Nightflare
+  Marowak/Regigigas          [GROUND/NORMAL] (none)         -> Marogigas
+  Clefable/Arceus            [FAIRY/NORMAL] (none)         -> Celestefey
+  Kyogre/Palkia              [WATER/DRAGON] (none)         -> Aqualgia
+  Chandelure/Arceus          [GHOST/NORMAL] (none)         -> Spectralis
+  Blissey/Blastoise          [NORMAL/WATER] (none)         -> Blissplash
+  Jirachi/Dragonite          [STEEL/FLYING] (none)         -> Astronite
+  Sylveon/Slaking            [FAIRY/NORMAL] (none)         -> Pixidle
+  Absol/Shedinja             [DARK/GHOST]   keep: Eterna
+  Azumarill/Slaking          [WATER/NORMAL] (none)         -> Ripcurrent
+  Ho-Oh/Haxorus              [FIRE/DRAGON]  (none)         -> Inferaxus
+  Roserade/Ninetales         [GRASS/FIRE]   (none)         -> Floraflame
+

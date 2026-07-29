@@ -1,0 +1,2170 @@
+{
+  "pokemon": [
+    {
+      "mode": "edit",
+      "box": 17,
+      "slot": 5,
+      "nickname": "Gigatide"
+    },
+    {
+      "mode": "edit",
+      "box": 17,
+      "slot": 6,
+      "nickname": "Swampwrath"
+    },
+    {
+      "mode": "edit",
+      "box": 17,
+      "slot": 7,
+      "nickname": "Azucrag"
+    },
+    {
+      "mode": "edit",
+      "box": 17,
+      "slot": 8,
+      "nickname": "Krabust"
+    },
+    {
+      "mode": "edit",
+      "box": 17,
+      "slot": 9,
+      "nickname": "Volcatoise"
+    },
+    {
+      "mode": "edit",
+      "box": 17,
+      "slot": 10,
+      "nickname": "Dragokiss"
+    },
+    {
+      "mode": "edit",
+      "box": 17,
+      "slot": 13,
+      "nickname": "Ombralure"
+    },
+    {
+      "mode": "edit",
+      "box": 17,
+      "slot": 17,
+      "nickname": "Ninsharpe"
+    },
+    {
+      "mode": "edit",
+      "box": 17,
+      "slot": 18,
+      "nickname": "Raicune"
+    },
+    {
+      "mode": "edit",
+      "box": 17,
+      "slot": 20,
+      "nickname": "Swamprus"
+    },
+    {
+      "mode": "edit",
+      "box": 17,
+      "slot": 23,
+      "nickname": "Feralak"
+    },
+    {
+      "mode": "edit",
+      "box": 17,
+      "slot": 25,
+      "nickname": "Glissey"
+    },
+    {
+      "mode": "edit",
+      "box": 17,
+      "slot": 26,
+      "nickname": "Toedsteel"
+    },
+    {
+      "mode": "edit",
+      "box": 17,
+      "slot": 27,
+      "nickname": "Hydrozone"
+    },
+    {
+      "mode": "edit",
+      "box": 17,
+      "slot": 29,
+      "nickname": "Metagatr"
+    },
+    {
+      "mode": "edit",
+      "box": 18,
+      "slot": 5,
+      "nickname": "Voltking"
+    },
+    {
+      "mode": "edit",
+      "box": 18,
+      "slot": 6,
+      "nickname": "Ravager"
+    },
+    {
+      "mode": "edit",
+      "box": 18,
+      "slot": 7,
+      "nickname": "Rampageon"
+    },
+    {
+      "mode": "edit",
+      "box": 18,
+      "slot": 8,
+      "nickname": "Aeroquake"
+    },
+    {
+      "mode": "edit",
+      "box": 18,
+      "slot": 9,
+      "nickname": "Tideclaw"
+    },
+    {
+      "mode": "edit",
+      "box": 18,
+      "slot": 11,
+      "nickname": "Terradrake"
+    },
+    {
+      "mode": "edit",
+      "box": 18,
+      "slot": 13,
+      "nickname": "Bataclysm"
+    },
+    {
+      "mode": "edit",
+      "box": 18,
+      "slot": 14,
+      "nickname": "Voltalon"
+    },
+    {
+      "mode": "edit",
+      "box": 18,
+      "slot": 15,
+      "nickname": "Tyradrake"
+    },
+    {
+      "mode": "edit",
+      "box": 18,
+      "slot": 16,
+      "nickname": "Burrowmoth"
+    },
+    {
+      "mode": "edit",
+      "box": 18,
+      "slot": 17,
+      "nickname": "Geyserchomp"
+    },
+    {
+      "mode": "edit",
+      "box": 18,
+      "slot": 18,
+      "nickname": "Aerohelm"
+    },
+    {
+      "mode": "edit",
+      "box": 18,
+      "slot": 19,
+      "nickname": "Coralguard"
+    },
+    {
+      "mode": "edit",
+      "box": 18,
+      "slot": 20,
+      "nickname": "Regirock"
+    },
+    {
+      "mode": "edit",
+      "box": 18,
+      "slot": 21,
+      "nickname": "Sandwing"
+    },
+    {
+      "mode": "edit",
+      "box": 18,
+      "slot": 22,
+      "nickname": "Voltrazor"
+    },
+    {
+      "mode": "edit",
+      "box": 18,
+      "slot": 24,
+      "nickname": "Metarax"
+    },
+    {
+      "mode": "edit",
+      "box": 18,
+      "slot": 26,
+      "nickname": "Slaktar"
+    },
+    {
+      "mode": "edit",
+      "box": 18,
+      "slot": 29,
+      "nickname": "Aqualash"
+    },
+    {
+      "mode": "edit",
+      "box": 19,
+      "slot": 1,
+      "nickname": "Aquasteel"
+    },
+    {
+      "mode": "edit",
+      "box": 19,
+      "slot": 2,
+      "nickname": "Rockbliss"
+    },
+    {
+      "mode": "edit",
+      "box": 19,
+      "slot": 3,
+      "nickname": "Tidepod"
+    },
+    {
+      "mode": "edit",
+      "box": 19,
+      "slot": 4,
+      "nickname": "Gliscorn"
+    },
+    {
+      "mode": "edit",
+      "box": 19,
+      "slot": 5,
+      "nickname": "Wraithninja"
+    },
+    {
+      "mode": "edit",
+      "box": 19,
+      "slot": 6,
+      "nickname": "Bugiken"
+    },
+    {
+      "mode": "edit",
+      "box": 19,
+      "slot": 8,
+      "nickname": "Graniteaf"
+    },
+    {
+      "mode": "edit",
+      "box": 19,
+      "slot": 12,
+      "nickname": "Infernersh"
+    },
+    {
+      "mode": "edit",
+      "box": 19,
+      "slot": 13,
+      "nickname": "Illuzam"
+    },
+    {
+      "mode": "edit",
+      "box": 19,
+      "slot": 14,
+      "nickname": "Phantomkick"
+    },
+    {
+      "mode": "edit",
+      "box": 19,
+      "slot": 15,
+      "nickname": "Stoneiron"
+    },
+    {
+      "mode": "edit",
+      "box": 19,
+      "slot": 16,
+      "nickname": "Blazenvern"
+    },
+    {
+      "mode": "edit",
+      "box": 19,
+      "slot": 17,
+      "nickname": "Aerokamo"
+    },
+    {
+      "mode": "edit",
+      "box": 19,
+      "slot": 18,
+      "nickname": "Fairywings"
+    },
+    {
+      "mode": "edit",
+      "box": 19,
+      "slot": 19,
+      "nickname": "Spectrionix"
+    },
+    {
+      "mode": "edit",
+      "box": 19,
+      "slot": 21,
+      "nickname": "Spectraking"
+    },
+    {
+      "mode": "edit",
+      "box": 19,
+      "slot": 22,
+      "nickname": "Steelclaw"
+    },
+    {
+      "mode": "edit",
+      "box": 19,
+      "slot": 23,
+      "nickname": "Dracowing"
+    },
+    {
+      "mode": "edit",
+      "box": 19,
+      "slot": 24,
+      "nickname": "Hydragon"
+    },
+    {
+      "mode": "edit",
+      "box": 19,
+      "slot": 25,
+      "nickname": "Aquametal"
+    },
+    {
+      "mode": "edit",
+      "box": 19,
+      "slot": 26,
+      "nickname": "Igniswings"
+    },
+    {
+      "mode": "edit",
+      "box": 19,
+      "slot": 28,
+      "nickname": "Crushkyl"
+    },
+    {
+      "mode": "edit",
+      "box": 19,
+      "slot": 29,
+      "nickname": "Murkdive"
+    },
+    {
+      "mode": "edit",
+      "box": 20,
+      "slot": 2,
+      "nickname": "Skyblade"
+    },
+    {
+      "mode": "edit",
+      "box": 20,
+      "slot": 6,
+      "nickname": "Thornwing"
+    },
+    {
+      "mode": "edit",
+      "box": 20,
+      "slot": 7,
+      "nickname": "Mysticune"
+    },
+    {
+      "mode": "edit",
+      "box": 20,
+      "slot": 8,
+      "nickname": "Voltstorm"
+    },
+    {
+      "mode": "edit",
+      "box": 20,
+      "slot": 9,
+      "nickname": "Infermane"
+    },
+    {
+      "mode": "edit",
+      "box": 20,
+      "slot": 10,
+      "nickname": "Darkmaw"
+    },
+    {
+      "mode": "edit",
+      "box": 20,
+      "slot": 11,
+      "nickname": "Sylfable"
+    },
+    {
+      "mode": "edit",
+      "box": 20,
+      "slot": 12,
+      "nickname": "Mindmetal"
+    },
+    {
+      "mode": "edit",
+      "box": 20,
+      "slot": 13,
+      "nickname": "Kyophex"
+    },
+    {
+      "mode": "edit",
+      "box": 20,
+      "slot": 14,
+      "nickname": "Latiode"
+    },
+    {
+      "mode": "edit",
+      "box": 20,
+      "slot": 15,
+      "nickname": "Reshible"
+    },
+    {
+      "mode": "edit",
+      "box": 20,
+      "slot": 16,
+      "nickname": "Quazarch"
+    },
+    {
+      "mode": "edit",
+      "box": 20,
+      "slot": 17,
+      "nickname": "Arcedrake"
+    },
+    {
+      "mode": "edit",
+      "box": 20,
+      "slot": 18,
+      "nickname": "Hauntslack"
+    },
+    {
+      "mode": "edit",
+      "box": 20,
+      "slot": 19,
+      "nickname": "Flarewing"
+    },
+    {
+      "mode": "edit",
+      "box": 20,
+      "slot": 20,
+      "nickname": "Spectreflare"
+    },
+    {
+      "mode": "edit",
+      "box": 20,
+      "slot": 21,
+      "nickname": "Chandeveil"
+    },
+    {
+      "mode": "edit",
+      "box": 20,
+      "slot": 24,
+      "nickname": "Phantomind"
+    },
+    {
+      "mode": "edit",
+      "box": 20,
+      "slot": 25,
+      "nickname": "Spectratide"
+    },
+    {
+      "mode": "edit",
+      "box": 20,
+      "slot": 26,
+      "nickname": "Terracore"
+    },
+    {
+      "mode": "edit",
+      "box": 20,
+      "slot": 27,
+      "nickname": "Wraithbone"
+    },
+    {
+      "mode": "edit",
+      "box": 20,
+      "slot": 28,
+      "nickname": "Ironclad"
+    },
+    {
+      "mode": "edit",
+      "box": 20,
+      "slot": 29,
+      "nickname": "Colossnore"
+    },
+    {
+      "mode": "edit",
+      "box": 21,
+      "slot": 0,
+      "nickname": "Shadowshroud"
+    },
+    {
+      "mode": "edit",
+      "box": 21,
+      "slot": 1,
+      "nickname": "Maronite"
+    },
+    {
+      "mode": "edit",
+      "box": 21,
+      "slot": 2,
+      "nickname": "Umbraglyph"
+    },
+    {
+      "mode": "edit",
+      "box": 21,
+      "slot": 4,
+      "nickname": "Aquamace"
+    },
+    {
+      "mode": "edit",
+      "box": 21,
+      "slot": 5,
+      "nickname": "Darkquake"
+    },
+    {
+      "mode": "edit",
+      "box": 21,
+      "slot": 6,
+      "nickname": "Aquabolt"
+    },
+    {
+      "mode": "edit",
+      "box": 21,
+      "slot": 7,
+      "nickname": "Steelwave"
+    },
+    {
+      "mode": "edit",
+      "box": 21,
+      "slot": 9,
+      "nickname": "Dracotide"
+    },
+    {
+      "mode": "edit",
+      "box": 21,
+      "slot": 11,
+      "nickname": "Abyssmarill"
+    },
+    {
+      "mode": "edit",
+      "box": 21,
+      "slot": 12,
+      "nickname": "Aquamyth"
+    },
+    {
+      "mode": "edit",
+      "box": 21,
+      "slot": 14,
+      "nickname": "Groust"
+    },
+    {
+      "mode": "edit",
+      "box": 21,
+      "slot": 18,
+      "nickname": "Lagoonking"
+    },
+    {
+      "mode": "edit",
+      "box": 21,
+      "slot": 19,
+      "nickname": "Frostarill"
+    },
+    {
+      "mode": "edit",
+      "box": 21,
+      "slot": 20,
+      "nickname": "Gyarowak"
+    },
+    {
+      "mode": "edit",
+      "box": 21,
+      "slot": 21,
+      "nickname": "Chompwack"
+    },
+    {
+      "mode": "edit",
+      "box": 21,
+      "slot": 24,
+      "nickname": "Steeljask"
+    },
+    {
+      "mode": "edit",
+      "box": 21,
+      "slot": 25,
+      "nickname": "Mudswine"
+    },
+    {
+      "mode": "edit",
+      "box": 22,
+      "slot": 2,
+      "nickname": "Froschomp"
+    },
+    {
+      "mode": "edit",
+      "box": 22,
+      "slot": 3,
+      "nickname": "Aquamire"
+    },
+    {
+      "mode": "edit",
+      "box": 22,
+      "slot": 4,
+      "nickname": "Kyurence"
+    },
+    {
+      "mode": "edit",
+      "box": 22,
+      "slot": 13,
+      "nickname": "Pyrokazam"
+    },
+    {
+      "mode": "edit",
+      "box": 22,
+      "slot": 16,
+      "nickname": "Blazekiss"
+    },
+    {
+      "mode": "edit",
+      "box": 22,
+      "slot": 26,
+      "nickname": "Deoxios"
+    },
+    {
+      "mode": "edit",
+      "box": 23,
+      "slot": 1,
+      "nickname": "Charhydra"
+    },
+    {
+      "mode": "edit",
+      "box": 23,
+      "slot": 2,
+      "nickname": "Chandlesaur"
+    },
+    {
+      "mode": "edit",
+      "box": 23,
+      "slot": 3,
+      "nickname": "Aeroken"
+    },
+    {
+      "mode": "edit",
+      "box": 23,
+      "slot": 9,
+      "nickname": "Volcanine"
+    },
+    {
+      "mode": "edit",
+      "box": 23,
+      "slot": 10,
+      "nickname": "Blazeking"
+    },
+    {
+      "mode": "edit",
+      "box": 23,
+      "slot": 12,
+      "nickname": "Magmaqueen"
+    },
+    {
+      "mode": "edit",
+      "box": 23,
+      "slot": 13,
+      "nickname": "Arcalu"
+    },
+    {
+      "mode": "edit",
+      "box": 23,
+      "slot": 14,
+      "nickname": "Infernogon"
+    },
+    {
+      "mode": "edit",
+      "box": 23,
+      "slot": 15,
+      "nickname": "Amphrafty"
+    },
+    {
+      "mode": "edit",
+      "box": 23,
+      "slot": 16,
+      "nickname": "Bellospark"
+    },
+    {
+      "mode": "edit",
+      "box": 23,
+      "slot": 17,
+      "nickname": "Pyrebi"
+    },
+    {
+      "mode": "edit",
+      "box": 23,
+      "slot": 18,
+      "nickname": "Phanogon"
+    },
+    {
+      "mode": "edit",
+      "box": 23,
+      "slot": 19,
+      "nickname": "Tyranchomp"
+    },
+    {
+      "mode": "edit",
+      "box": 23,
+      "slot": 21,
+      "nickname": "Spectralsloth"
+    },
+    {
+      "mode": "edit",
+      "box": 23,
+      "slot": 22,
+      "nickname": "Ariabat"
+    },
+    {
+      "mode": "edit",
+      "box": 23,
+      "slot": 23,
+      "nickname": "Chompdrake"
+    },
+    {
+      "mode": "edit",
+      "box": 24,
+      "slot": 8,
+      "nickname": "Quagbro"
+    },
+    {
+      "mode": "edit",
+      "box": 24,
+      "slot": 10,
+      "nickname": "Rhyrowak"
+    },
+    {
+      "mode": "edit",
+      "box": 24,
+      "slot": 24,
+      "nickname": "Ironcrypt"
+    },
+    {
+      "mode": "edit",
+      "box": 24,
+      "slot": 26,
+      "nickname": "Aerolight"
+    },
+    {
+      "mode": "edit",
+      "box": 24,
+      "slot": 27,
+      "nickname": "Nightedge"
+    },
+    {
+      "mode": "edit",
+      "box": 24,
+      "slot": 28,
+      "nickname": "Toxinwave"
+    },
+    {
+      "mode": "edit",
+      "box": 24,
+      "slot": 29,
+      "nickname": "Aqualift"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 0,
+      "nickname": "Glidetalon"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 1,
+      "nickname": "Voltwing"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 3,
+      "nickname": "Carapace"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 4,
+      "nickname": "Terrasteel"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 5,
+      "nickname": "Pyroforge"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 6,
+      "nickname": "Fairyheart"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 9,
+      "nickname": "Thornreef"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 10,
+      "nickname": "Swiftblade"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 11,
+      "nickname": "Blazeguard"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 12,
+      "nickname": "Stormwing"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 13,
+      "nickname": "Emberbloom"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 14,
+      "nickname": "Celesun"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 15,
+      "nickname": "Voltflare"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 16,
+      "nickname": "Seastone"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 18,
+      "nickname": "Gloombringer"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 19,
+      "nickname": "Steelwraith"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 20,
+      "nickname": "Shadeblade"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 21,
+      "nickname": "Steelwing"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 22,
+      "nickname": "Moxitalon"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 24,
+      "nickname": "Goodrachomp"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 25,
+      "nickname": "Hexamind"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 26,
+      "nickname": "Gleamdrake"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 27,
+      "nickname": "Aqualore"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 28,
+      "nickname": "Emberwraith"
+    },
+    {
+      "mode": "edit",
+      "box": 25,
+      "slot": 29,
+      "nickname": "Phantomgale"
+    },
+    {
+      "mode": "edit",
+      "box": 26,
+      "slot": 0,
+      "nickname": "Spectralight"
+    },
+    {
+      "mode": "edit",
+      "box": 26,
+      "slot": 1,
+      "nickname": "Umbraze"
+    },
+    {
+      "mode": "edit",
+      "box": 26,
+      "slot": 2,
+      "nickname": "Psychamp"
+    },
+    {
+      "mode": "edit",
+      "box": 26,
+      "slot": 3,
+      "nickname": "Venomgeist"
+    },
+    {
+      "mode": "edit",
+      "box": 26,
+      "slot": 6,
+      "nickname": "Voltaqua"
+    },
+    {
+      "mode": "edit",
+      "box": 26,
+      "slot": 7,
+      "nickname": "Blazefury"
+    },
+    {
+      "mode": "edit",
+      "box": 26,
+      "slot": 8,
+      "nickname": "Tidewing"
+    },
+    {
+      "mode": "edit",
+      "box": 26,
+      "slot": 9,
+      "nickname": "Toxashade"
+    },
+    {
+      "mode": "edit",
+      "box": 26,
+      "slot": 10,
+      "nickname": "Marishade"
+    },
+    {
+      "mode": "edit",
+      "box": 26,
+      "slot": 14,
+      "nickname": "Goosludge"
+    },
+    {
+      "mode": "edit",
+      "box": 26,
+      "slot": 15,
+      "nickname": "Verdantox"
+    },
+    {
+      "mode": "edit",
+      "box": 26,
+      "slot": 16,
+      "nickname": "Blazeclaw"
+    },
+    {
+      "mode": "edit",
+      "box": 26,
+      "slot": 18,
+      "nickname": "Verdance"
+    },
+    {
+      "mode": "edit",
+      "box": 26,
+      "slot": 19,
+      "nickname": "Floralash"
+    },
+    {
+      "mode": "edit",
+      "box": 26,
+      "slot": 20,
+      "nickname": "Infervine"
+    },
+    {
+      "mode": "edit",
+      "box": 26,
+      "slot": 21,
+      "nickname": "Pyroking"
+    },
+    {
+      "mode": "edit",
+      "box": 26,
+      "slot": 22,
+      "nickname": "Volcanyte"
+    },
+    {
+      "mode": "edit",
+      "box": 26,
+      "slot": 23,
+      "nickname": "Venupod"
+    },
+    {
+      "mode": "edit",
+      "box": 26,
+      "slot": 24,
+      "nickname": "Metaragon"
+    },
+    {
+      "mode": "edit",
+      "box": 26,
+      "slot": 25,
+      "nickname": "Tyraligatr"
+    },
+    {
+      "mode": "edit",
+      "box": 26,
+      "slot": 26,
+      "nickname": "Omnigigas"
+    },
+    {
+      "mode": "edit",
+      "box": 26,
+      "slot": 28,
+      "nickname": "Salatops"
+    },
+    {
+      "mode": "edit",
+      "box": 26,
+      "slot": 29,
+      "nickname": "Gyarantrum"
+    },
+    {
+      "mode": "edit",
+      "box": 27,
+      "slot": 0,
+      "nickname": "Goodraqua"
+    },
+    {
+      "mode": "edit",
+      "box": 27,
+      "slot": 1,
+      "nickname": "Sharpopod"
+    },
+    {
+      "mode": "edit",
+      "box": 27,
+      "slot": 2,
+      "nickname": "Deleon"
+    },
+    {
+      "mode": "edit",
+      "box": 27,
+      "slot": 3,
+      "nickname": "Zorolant"
+    },
+    {
+      "mode": "edit",
+      "box": 27,
+      "slot": 6,
+      "nickname": "Laprorus"
+    },
+    {
+      "mode": "edit",
+      "box": 27,
+      "slot": 7,
+      "nickname": "Glacepunny"
+    },
+    {
+      "mode": "edit",
+      "box": 27,
+      "slot": 8,
+      "nickname": "Mamolurk"
+    },
+    {
+      "mode": "edit",
+      "box": 27,
+      "slot": 9,
+      "nickname": "Starmoswine"
+    },
+    {
+      "mode": "edit",
+      "box": 27,
+      "slot": 10,
+      "nickname": "Froslynx"
+    },
+    {
+      "mode": "edit",
+      "box": 28,
+      "slot": 2,
+      "nickname": "Espewtwo"
+    },
+    {
+      "mode": "edit",
+      "box": 28,
+      "slot": 4,
+      "nickname": "Chawlomp"
+    },
+    {
+      "mode": "edit",
+      "box": 28,
+      "slot": 7,
+      "nickname": "Scizomp"
+    },
+    {
+      "mode": "edit",
+      "box": 28,
+      "slot": 8,
+      "nickname": "Seraflare"
+    },
+    {
+      "mode": "edit",
+      "box": 28,
+      "slot": 9,
+      "nickname": "Gengeigon"
+    },
+    {
+      "mode": "edit",
+      "box": 28,
+      "slot": 12,
+      "nickname": "Clefathorn"
+    },
+    {
+      "mode": "edit",
+      "box": 28,
+      "slot": 14,
+      "nickname": "Lucharoc"
+    },
+    {
+      "mode": "edit",
+      "box": 28,
+      "slot": 15,
+      "nickname": "Voltotic"
+    },
+    {
+      "mode": "edit",
+      "box": 28,
+      "slot": 16,
+      "nickname": "Charmrise"
+    },
+    {
+      "mode": "edit",
+      "box": 28,
+      "slot": 23,
+      "nickname": "Psyveil"
+    },
+    {
+      "mode": "edit",
+      "box": 28,
+      "slot": 25,
+      "nickname": "Hydroclaw"
+    },
+    {
+      "mode": "edit",
+      "box": 28,
+      "slot": 26,
+      "nickname": "Phantoclaw"
+    },
+    {
+      "mode": "edit",
+      "box": 28,
+      "slot": 27,
+      "nickname": "Zephyrage"
+    },
+    {
+      "mode": "edit",
+      "box": 28,
+      "slot": 29,
+      "nickname": "Fayblade"
+    },
+    {
+      "mode": "edit",
+      "box": 29,
+      "slot": 2,
+      "nickname": "Glacieris"
+    },
+    {
+      "mode": "edit",
+      "box": 29,
+      "slot": 7,
+      "nickname": "Solstice"
+    },
+    {
+      "mode": "edit",
+      "box": 29,
+      "slot": 9,
+      "nickname": "Spectragore"
+    },
+    {
+      "mode": "edit",
+      "box": 29,
+      "slot": 17,
+      "nickname": "Electide"
+    },
+    {
+      "mode": "edit",
+      "box": 29,
+      "slot": 20,
+      "nickname": "Psychiken"
+    },
+    {
+      "mode": "edit",
+      "box": 29,
+      "slot": 27,
+      "nickname": "Pugilist"
+    },
+    {
+      "mode": "edit",
+      "box": 30,
+      "slot": 3,
+      "nickname": "Psychoshield"
+    },
+    {
+      "mode": "edit",
+      "box": 30,
+      "slot": 4,
+      "nickname": "Spectracle"
+    },
+    {
+      "mode": "edit",
+      "box": 30,
+      "slot": 5,
+      "nickname": "Airoona"
+    },
+    {
+      "mode": "edit",
+      "box": 30,
+      "slot": 7,
+      "nickname": "Brawler"
+    },
+    {
+      "mode": "edit",
+      "box": 30,
+      "slot": 9,
+      "nickname": "Phantomguard"
+    },
+    {
+      "mode": "edit",
+      "box": 30,
+      "slot": 16,
+      "nickname": "Diacloak"
+    },
+    {
+      "mode": "edit",
+      "box": 31,
+      "slot": 0,
+      "nickname": "Stormbone"
+    },
+    {
+      "mode": "edit",
+      "box": 31,
+      "slot": 1,
+      "nickname": "Voltgenius"
+    },
+    {
+      "mode": "edit",
+      "box": 31,
+      "slot": 3,
+      "nickname": "Tidequake"
+    },
+    {
+      "mode": "edit",
+      "box": 31,
+      "slot": 4,
+      "nickname": "Umbragen"
+    },
+    {
+      "mode": "edit",
+      "box": 31,
+      "slot": 5,
+      "nickname": "Voltgeist"
+    },
+    {
+      "mode": "edit",
+      "box": 31,
+      "slot": 6,
+      "nickname": "Gaiatitan"
+    },
+    {
+      "mode": "edit",
+      "box": 31,
+      "slot": 7,
+      "nickname": "Hydromind"
+    },
+    {
+      "mode": "edit",
+      "box": 31,
+      "slot": 8,
+      "nickname": "Abyssurf"
+    },
+    {
+      "mode": "edit",
+      "box": 31,
+      "slot": 9,
+      "nickname": "Umbradrake"
+    },
+    {
+      "mode": "edit",
+      "box": 31,
+      "slot": 10,
+      "nickname": "Shadoweaver"
+    },
+    {
+      "mode": "edit",
+      "box": 31,
+      "slot": 11,
+      "nickname": "Geoform"
+    },
+    {
+      "mode": "edit",
+      "box": 31,
+      "slot": 20,
+      "nickname": "Prismord"
+    },
+    {
+      "mode": "edit",
+      "box": 32,
+      "slot": 0,
+      "nickname": "Trioblaze"
+    },
+    {
+      "mode": "edit",
+      "box": 32,
+      "slot": 1,
+      "nickname": "Guardflare"
+    },
+    {
+      "mode": "edit",
+      "box": 32,
+      "slot": 2,
+      "nickname": "Fistfern"
+    },
+    {
+      "mode": "edit",
+      "box": 32,
+      "slot": 4,
+      "nickname": "Airflood"
+    },
+    {
+      "mode": "edit",
+      "box": 32,
+      "slot": 7,
+      "nickname": "Spectradrake"
+    },
+    {
+      "mode": "edit",
+      "box": 32,
+      "slot": 8,
+      "nickname": "Blazefrost"
+    },
+    {
+      "mode": "edit",
+      "box": 32,
+      "slot": 11,
+      "nickname": "Mindcarapace"
+    },
+    {
+      "mode": "edit",
+      "box": 32,
+      "slot": 12,
+      "nickname": "Tempestwing"
+    },
+    {
+      "mode": "edit",
+      "box": 32,
+      "slot": 13,
+      "nickname": "Voltrine"
+    },
+    {
+      "mode": "edit",
+      "box": 32,
+      "slot": 17,
+      "nickname": "Celemechi"
+    },
+    {
+      "mode": "edit",
+      "box": 33,
+      "slot": 0,
+      "nickname": "Glaciregi"
+    },
+    {
+      "mode": "edit",
+      "box": 33,
+      "slot": 1,
+      "nickname": "Terrafrost"
+    },
+    {
+      "mode": "edit",
+      "box": 33,
+      "slot": 3,
+      "nickname": "Arctiwind"
+    },
+    {
+      "mode": "edit",
+      "box": 33,
+      "slot": 4,
+      "nickname": "Frostwave"
+    },
+    {
+      "mode": "edit",
+      "box": 33,
+      "slot": 5,
+      "nickname": "Cryogion"
+    },
+    {
+      "mode": "edit",
+      "box": 33,
+      "slot": 6,
+      "nickname": "Deonect"
+    },
+    {
+      "mode": "edit",
+      "box": 33,
+      "slot": 7,
+      "nickname": "Volcablaze"
+    },
+    {
+      "mode": "edit",
+      "box": 33,
+      "slot": 10,
+      "nickname": "Terrapod"
+    },
+    {
+      "mode": "edit",
+      "box": 33,
+      "slot": 11,
+      "nickname": "Steelmuse"
+    },
+    {
+      "mode": "edit",
+      "box": 33,
+      "slot": 14,
+      "nickname": "Voltfist"
+    },
+    {
+      "mode": "edit",
+      "box": 33,
+      "slot": 15,
+      "nickname": "Zaplebi"
+    },
+    {
+      "mode": "edit",
+      "box": 33,
+      "slot": 16,
+      "nickname": "Joltkiss"
+    },
+    {
+      "mode": "edit",
+      "box": 33,
+      "slot": 17,
+      "nickname": "Sparkarona"
+    },
+    {
+      "mode": "edit",
+      "box": 33,
+      "slot": 18,
+      "nickname": "Venomark"
+    },
+    {
+      "mode": "edit",
+      "box": 33,
+      "slot": 19,
+      "nickname": "Sludgial"
+    },
+    {
+      "mode": "edit",
+      "box": 33,
+      "slot": 20,
+      "nickname": "Toxydra"
+    },
+    {
+      "mode": "edit",
+      "box": 33,
+      "slot": 21,
+      "nickname": "Phantora"
+    },
+    {
+      "mode": "edit",
+      "box": 33,
+      "slot": 22,
+      "nickname": "Venufable"
+    },
+    {
+      "mode": "edit",
+      "box": 33,
+      "slot": 23,
+      "nickname": "Rosavoire"
+    },
+    {
+      "mode": "edit",
+      "box": 33,
+      "slot": 24,
+      "nickname": "Gigapunch"
+    },
+    {
+      "mode": "edit",
+      "box": 33,
+      "slot": 25,
+      "nickname": "Lucharaid"
+    },
+    {
+      "mode": "edit",
+      "box": 33,
+      "slot": 27,
+      "nickname": "Infernamo"
+    },
+    {
+      "mode": "edit",
+      "box": 33,
+      "slot": 29,
+      "nickname": "Floraknight"
+    },
+    {
+      "mode": "edit",
+      "box": 34,
+      "slot": 1,
+      "nickname": "Terraquaza"
+    },
+    {
+      "mode": "edit",
+      "box": 34,
+      "slot": 3,
+      "nickname": "Glimmerwing"
+    },
+    {
+      "mode": "edit",
+      "box": 34,
+      "slot": 4,
+      "nickname": "Chronohydra"
+    },
+    {
+      "mode": "edit",
+      "box": 34,
+      "slot": 7,
+      "nickname": "Aquamind"
+    },
+    {
+      "mode": "edit",
+      "box": 34,
+      "slot": 8,
+      "nickname": "Mythoblaze"
+    },
+    {
+      "mode": "edit",
+      "box": 34,
+      "slot": 9,
+      "nickname": "Chantivy"
+    },
+    {
+      "mode": "edit",
+      "box": 34,
+      "slot": 10,
+      "nickname": "Aurablade"
+    },
+    {
+      "mode": "edit",
+      "box": 34,
+      "slot": 11,
+      "nickname": "Solflare"
+    },
+    {
+      "mode": "edit",
+      "box": 34,
+      "slot": 13,
+      "nickname": "Terromence"
+    },
+    {
+      "mode": "edit",
+      "box": 34,
+      "slot": 14,
+      "nickname": "Flareonix"
+    },
+    {
+      "mode": "edit",
+      "box": 34,
+      "slot": 15,
+      "nickname": "Mysticore"
+    },
+    {
+      "mode": "edit",
+      "box": 34,
+      "slot": 16,
+      "nickname": "Herbios"
+    },
+    {
+      "mode": "edit",
+      "box": 34,
+      "slot": 20,
+      "nickname": "Skyshroud"
+    },
+    {
+      "mode": "edit",
+      "box": 34,
+      "slot": 23,
+      "nickname": "Aethera"
+    },
+    {
+      "mode": "edit",
+      "box": 34,
+      "slot": 24,
+      "nickname": "Spectrark"
+    },
+    {
+      "mode": "edit",
+      "box": 34,
+      "slot": 25,
+      "nickname": "Nocturne"
+    },
+    {
+      "mode": "edit",
+      "box": 34,
+      "slot": 26,
+      "nickname": "Charmkey"
+    },
+    {
+      "mode": "edit",
+      "box": 34,
+      "slot": 27,
+      "nickname": "Dabblem"
+    },
+    {
+      "mode": "edit",
+      "box": 35,
+      "slot": 0,
+      "nickname": "Mertide"
+    },
+    {
+      "mode": "edit",
+      "box": 35,
+      "slot": 1,
+      "nickname": "Aegisail"
+    },
+    {
+      "mode": "edit",
+      "box": 35,
+      "slot": 2,
+      "nickname": "Mindforge"
+    },
+    {
+      "mode": "edit",
+      "box": 35,
+      "slot": 3,
+      "nickname": "Cyclone"
+    },
+    {
+      "mode": "edit",
+      "box": 35,
+      "slot": 4,
+      "nickname": "Emberleaf"
+    },
+    {
+      "mode": "edit",
+      "box": 35,
+      "slot": 5,
+      "nickname": "Terraeus"
+    },
+    {
+      "mode": "edit",
+      "box": 35,
+      "slot": 6,
+      "nickname": "Abysson"
+    },
+    {
+      "mode": "edit",
+      "box": 35,
+      "slot": 12,
+      "nickname": "Mysteel"
+    },
+    {
+      "mode": "edit",
+      "box": 35,
+      "slot": 13,
+      "nickname": "Pyrachomp"
+    },
+    {
+      "mode": "edit",
+      "box": 35,
+      "slot": 14,
+      "nickname": "Voltquake"
+    },
+    {
+      "mode": "edit",
+      "box": 35,
+      "slot": 15,
+      "nickname": "Earthmind"
+    },
+    {
+      "mode": "edit",
+      "box": 35,
+      "slot": 17,
+      "nickname": "Skyforge"
+    },
+    {
+      "mode": "edit",
+      "box": 35,
+      "slot": 20,
+      "nickname": "Mewscot"
+    },
+    {
+      "mode": "edit",
+      "box": 35,
+      "slot": 21,
+      "nickname": "Forryguise"
+    },
+    {
+      "mode": "edit",
+      "box": 35,
+      "slot": 22,
+      "nickname": "Gensekyu"
+    },
+    {
+      "mode": "edit",
+      "box": 35,
+      "slot": 23,
+      "nickname": "Fablewave"
+    },
+    {
+      "mode": "edit",
+      "box": 35,
+      "slot": 27,
+      "nickname": "Pyrotangle"
+    },
+    {
+      "mode": "edit",
+      "box": 35,
+      "slot": 28,
+      "nickname": "Furnace"
+    },
+    {
+      "mode": "edit",
+      "box": 35,
+      "slot": 29,
+      "nickname": "Raygron"
+    },
+    {
+      "mode": "edit",
+      "box": 36,
+      "slot": 0,
+      "nickname": "Celewarel"
+    },
+    {
+      "mode": "edit",
+      "box": 36,
+      "slot": 2,
+      "nickname": "Starshuck"
+    },
+    {
+      "mode": "edit",
+      "box": 36,
+      "slot": 4,
+      "nickname": "Voltivene"
+    },
+    {
+      "mode": "edit",
+      "box": 36,
+      "slot": 6,
+      "nickname": "Mewkyu"
+    },
+    {
+      "mode": "edit",
+      "box": 36,
+      "slot": 8,
+      "nickname": "Drifarel"
+    },
+    {
+      "mode": "edit",
+      "box": 36,
+      "slot": 13,
+      "nickname": "Golisokyu"
+    },
+    {
+      "mode": "edit",
+      "box": 36,
+      "slot": 15,
+      "nickname": "Blitto"
+    },
+    {
+      "mode": "edit",
+      "box": 36,
+      "slot": 22,
+      "nickname": "Persitto"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 0,
+      "nickname": "Milophyre"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 1,
+      "nickname": "Espioken"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 2,
+      "nickname": "Phantoglide"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 3,
+      "nickname": "Salagon"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 4,
+      "nickname": "Aquamirage"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 6,
+      "nickname": "Starche"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 7,
+      "nickname": "Fistking"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 9,
+      "nickname": "Metario"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 10,
+      "nickname": "Nocturnflare"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 11,
+      "nickname": "Inferngrove"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 12,
+      "nickname": "Serenewave"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 14,
+      "nickname": "Aquavolt"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 15,
+      "nickname": "Regenspark"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 16,
+      "nickname": "Spectravenom"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 17,
+      "nickname": "Thundersurge"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 18,
+      "nickname": "Ironfist"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 19,
+      "nickname": "Slumberjaw"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 20,
+      "nickname": "Mechaflare"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 21,
+      "nickname": "Pixibreeze"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 22,
+      "nickname": "Raichenom"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 23,
+      "nickname": "Jiracleaf"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 24,
+      "nickname": "Frostlume"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 25,
+      "nickname": "Fairiron"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 27,
+      "nickname": "Nocturene"
+    },
+    {
+      "mode": "edit",
+      "box": 37,
+      "slot": 29,
+      "nickname": "Astralstorm"
+    },
+    {
+      "mode": "edit",
+      "box": 38,
+      "slot": 0,
+      "nickname": "Anchorsteel"
+    },
+    {
+      "mode": "edit",
+      "box": 38,
+      "slot": 1,
+      "nickname": "Blazewave"
+    },
+    {
+      "mode": "edit",
+      "box": 38,
+      "slot": 2,
+      "nickname": "Chronoshade"
+    },
+    {
+      "mode": "edit",
+      "box": 38,
+      "slot": 3,
+      "nickname": "Umbrashade"
+    },
+    {
+      "mode": "edit",
+      "box": 38,
+      "slot": 5,
+      "nickname": "Mystibloom"
+    },
+    {
+      "mode": "edit",
+      "box": 38,
+      "slot": 6,
+      "nickname": "Ironquake"
+    },
+    {
+      "mode": "edit",
+      "box": 38,
+      "slot": 7,
+      "nickname": "Voltadrake"
+    },
+    {
+      "mode": "edit",
+      "box": 38,
+      "slot": 8,
+      "nickname": "Gallagross"
+    },
+    {
+      "mode": "edit",
+      "box": 38,
+      "slot": 9,
+      "nickname": "Mindshade"
+    },
+    {
+      "mode": "edit",
+      "box": 38,
+      "slot": 10,
+      "nickname": "Blazowak"
+    },
+    {
+      "mode": "edit",
+      "box": 38,
+      "slot": 11,
+      "nickname": "Dracoflare"
+    },
+    {
+      "mode": "edit",
+      "box": 38,
+      "slot": 13,
+      "nickname": "Volcaris"
+    },
+    {
+      "mode": "edit",
+      "box": 38,
+      "slot": 14,
+      "nickname": "Cryptocode"
+    },
+    {
+      "mode": "edit",
+      "box": 38,
+      "slot": 18,
+      "nickname": "Lucire"
+    },
+    {
+      "mode": "edit",
+      "box": 38,
+      "slot": 19,
+      "nickname": "Arctheon"
+    },
+    {
+      "mode": "edit",
+      "box": 38,
+      "slot": 20,
+      "nickname": "Tyranite"
+    },
+    {
+      "mode": "edit",
+      "box": 38,
+      "slot": 22,
+      "nickname": "Aquaura"
+    },
+    {
+      "mode": "edit",
+      "box": 38,
+      "slot": 26,
+      "nickname": "Zorachi"
+    },
+    {
+      "mode": "edit",
+      "box": 38,
+      "slot": 28,
+      "nickname": "Seraphkiss"
+    },
+    {
+      "mode": "edit",
+      "box": 38,
+      "slot": 29,
+      "nickname": "Ghospion"
+    },
+    {
+      "mode": "edit",
+      "box": 39,
+      "slot": 0,
+      "nickname": "Dragroudon"
+    },
+    {
+      "mode": "edit",
+      "box": 39,
+      "slot": 1,
+      "nickname": "Quazard"
+    },
+    {
+      "mode": "edit",
+      "box": 39,
+      "slot": 3,
+      "nickname": "Gigalithon"
+    },
+    {
+      "mode": "edit",
+      "box": 39,
+      "slot": 5,
+      "nickname": "Gigamarill"
+    },
+    {
+      "mode": "edit",
+      "box": 39,
+      "slot": 6,
+      "nickname": "Emberdrake"
+    },
+    {
+      "mode": "edit",
+      "box": 39,
+      "slot": 7,
+      "nickname": "Sylvaeon"
+    },
+    {
+      "mode": "edit",
+      "box": 39,
+      "slot": 8,
+      "nickname": "Nightflare"
+    },
+    {
+      "mode": "edit",
+      "box": 39,
+      "slot": 9,
+      "nickname": "Marogigas"
+    },
+    {
+      "mode": "edit",
+      "box": 39,
+      "slot": 10,
+      "nickname": "Celestefey"
+    },
+    {
+      "mode": "edit",
+      "box": 39,
+      "slot": 11,
+      "nickname": "Aqualgia"
+    },
+    {
+      "mode": "edit",
+      "box": 39,
+      "slot": 13,
+      "nickname": "Spectralis"
+    },
+    {
+      "mode": "edit",
+      "box": 39,
+      "slot": 14,
+      "nickname": "Blissplash"
+    },
+    {
+      "mode": "edit",
+      "box": 39,
+      "slot": 15,
+      "nickname": "Astronite"
+    },
+    {
+      "mode": "edit",
+      "box": 39,
+      "slot": 16,
+      "nickname": "Pixidle"
+    },
+    {
+      "mode": "edit",
+      "box": 39,
+      "slot": 24,
+      "nickname": "Ripcurrent"
+    },
+    {
+      "mode": "edit",
+      "box": 39,
+      "slot": 27,
+      "nickname": "Inferaxus"
+    },
+    {
+      "mode": "edit",
+      "box": 39,
+      "slot": 28,
+      "nickname": "Floraflame"
+    }
+  ]
+}
