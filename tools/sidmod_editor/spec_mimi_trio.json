@@ -1,0 +1,46 @@
+{
+  "pokemon": [
+    {
+      "mode": "add",
+      "head": "MIMIKYU",
+      "body": "GENGAR",
+      "level": 100,
+      "ability": "DISGUISE",
+      "item": "LIFEORB",
+      "nature": "ADAMANT",
+      "moves": ["SWORDSDANCE", "SPECTRALTHIEF", "POISONJAB", "SHADOWSNEAK"],
+      "evs": {"ATTACK": 252, "HP": 4, "SPEED": 252},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL",
+      "box": 31
+    },
+    {
+      "mode": "add",
+      "head": "MIMIKYU",
+      "body": "VOLCARONA",
+      "level": 100,
+      "ability": "DISGUISE",
+      "item": "LIFEORB",
+      "nature": "TIMID",
+      "moves": ["QUIVERDANCE", "FIERYDANCE", "SHADOWBALL", "HURRICANE"],
+      "evs": {"SPECIAL_ATTACK": 252, "HP": 4, "SPEED": 252},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL",
+      "box": 31
+    },
+    {
+      "mode": "add",
+      "head": "DRAGONITE",
+      "body": "MIMIKYU",
+      "level": 100,
+      "ability": "DISGUISE",
+      "item": "LUMBERRY",
+      "nature": "ADAMANT",
+      "moves": ["DRAGONDANCE", "DRAGONCLAW", "PLAYROUGH", "EARTHQUAKE"],
+      "evs": {"ATTACK": 252, "HP": 4, "SPEED": 252},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL",
+      "box": 31
+    }
+  ]
+}

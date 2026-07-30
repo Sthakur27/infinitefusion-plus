@@ -1,0 +1,29 @@
+{
+  "pokemon": [
+    { "mode": "edit", "box": 18, "slot": 25, "moves": ["DRAGONDANCE", "EARTHQUAKE", "ROOST", "EXTREMESPEED"] },
+    {
+      "mode": "add", "head": "MAROWAK", "body": "ABSOL", "level": 100,
+      "ability": "SUPERLUCK", "item": "THICKCLUB", "nature": "ADAMANT",
+      "moves": ["SWORDSDANCE", "EARTHQUAKE", "SUCKERPUNCH", "STONEEDGE"],
+      "evs": { "ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL", "box": 21
+    },
+    {
+      "mode": "add", "head": "AZUMARILL", "body": "ABSOL", "level": 100,
+      "ability": "HUGEPOWER", "item": "LIFEORB", "nature": "ADAMANT",
+      "moves": ["SWORDSDANCE", "AQUAJET", "SUCKERPUNCH", "PLAYROUGH"],
+      "evs": { "ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL", "box": 21
+    },
+    {
+      "mode": "add", "head": "ARCEUS", "body": "AZUMARILL", "level": 100,
+      "ability": "HUGEPOWER", "item": "LIFEORB", "nature": "ADAMANT",
+      "moves": ["SWORDSDANCE", "EXTREMESPEED", "AQUAJET", "PLAYROUGH"],
+      "evs": { "ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL", "box": 21
+    }
+  ]
+}

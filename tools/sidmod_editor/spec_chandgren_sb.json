@@ -1,0 +1,5 @@
+{
+  "pokemon": [
+    { "mode": "edit", "box": 21, "slot": 0, "moves": ["HYDROPUMP", "FIREBLAST", "SHADOWBALL", "ICEBEAM"] }
+  ]
+}

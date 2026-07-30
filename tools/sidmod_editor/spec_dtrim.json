@@ -1,0 +1,189 @@
+{
+ "pokemon": [
+  {
+   "mode": "edit",
+   "box": 3,
+   "slot": 20,
+   "evs": {
+    "SPECIAL_ATTACK": 252,
+    "SPEED": 252,
+    "HP": 4
+   }
+  },
+  {
+   "mode": "edit",
+   "box": 13,
+   "slot": 24,
+   "evs": {
+    "HP": 252,
+    "SPECIAL_DEFENSE": 252,
+    "DEFENSE": 4
+   }
+  },
+  {
+   "mode": "edit",
+   "box": 13,
+   "slot": 29,
+   "evs": {
+    "ATTACK": 252,
+    "SPEED": 252,
+    "HP": 4
+   }
+  },
+  {
+   "mode": "edit",
+   "box": 14,
+   "slot": 13,
+   "evs": {
+    "ATTACK": 252,
+    "SPEED": 252,
+    "HP": 4
+   }
+  },
+  {
+   "mode": "edit",
+   "box": 34,
+   "slot": 8,
+   "evs": {
+    "SPECIAL_ATTACK": 252,
+    "SPEED": 252,
+    "HP": 4
+   }
+  },
+  {
+   "mode": "edit",
+   "box": 34,
+   "slot": 16,
+   "evs": {
+    "SPECIAL_ATTACK": 252,
+    "SPEED": 252,
+    "HP": 4
+   }
+  },
+  {
+   "mode": "edit",
+   "box": 38,
+   "slot": 19,
+   "evs": {
+    "SPECIAL_ATTACK": 252,
+    "SPEED": 252,
+    "HP": 4
+   }
+  },
+  {
+   "mode": "delete",
+   "box": 35,
+   "slot": 10
+  },
+  {
+   "mode": "delete",
+   "box": 18,
+   "slot": 3
+  },
+  {
+   "mode": "delete",
+   "box": 21,
+   "slot": 27
+  },
+  {
+   "mode": "delete",
+   "box": 21,
+   "slot": 28
+  },
+  {
+   "mode": "delete",
+   "box": 34,
+   "slot": 12
+  },
+  {
+   "mode": "delete",
+   "box": 23,
+   "slot": 5
+  },
+  {
+   "mode": "delete",
+   "box": 30,
+   "slot": 17
+  },
+  {
+   "mode": "delete",
+   "box": 19,
+   "slot": 27
+  },
+  {
+   "mode": "delete",
+   "box": 30,
+   "slot": 0
+  },
+  {
+   "mode": "delete",
+   "box": 22,
+   "slot": 29
+  },
+  {
+   "mode": "delete",
+   "box": 38,
+   "slot": 15
+  },
+  {
+   "mode": "delete",
+   "box": 22,
+   "slot": 25
+  },
+  {
+   "mode": "delete",
+   "box": 24,
+   "slot": 6
+  },
+  {
+   "mode": "delete",
+   "box": 21,
+   "slot": 12
+  },
+  {
+   "mode": "delete",
+   "box": 34,
+   "slot": 18
+  },
+  {
+   "mode": "delete",
+   "box": 21,
+   "slot": 25
+  },
+  {
+   "mode": "delete",
+   "box": 35,
+   "slot": 25
+  },
+  {
+   "mode": "delete",
+   "box": 25,
+   "slot": 23
+  },
+  {
+   "mode": "delete",
+   "box": 30,
+   "slot": 10
+  },
+  {
+   "mode": "delete",
+   "box": 25,
+   "slot": 2
+  },
+  {
+   "mode": "delete",
+   "box": 35,
+   "slot": 26
+  },
+  {
+   "mode": "delete",
+   "box": 28,
+   "slot": 22
+  },
+  {
+   "mode": "delete",
+   "box": 34,
+   "slot": 29
+  }
+ ]
+}

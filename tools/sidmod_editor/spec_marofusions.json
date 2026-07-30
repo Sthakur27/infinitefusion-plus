@@ -1,0 +1,32 @@
+{
+  "pokemon": [
+    {
+      "mode": "add",
+      "head": "MAROWAK",
+      "body": "DRAGONITE",
+      "level": 100,
+      "ability": "MULTISCALE",
+      "item": "THICKCLUB",
+      "nature": "ADAMANT",
+      "moves": ["DRAGONDANCE", "EARTHQUAKE", "ROOST", "STONEEDGE"],
+      "evs": { "ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL",
+      "box": 21
+    },
+    {
+      "mode": "add",
+      "head": "MAROWAK",
+      "body": "SALAMENCE",
+      "level": 100,
+      "ability": "MOXIE",
+      "item": "THICKCLUB",
+      "nature": "JOLLY",
+      "moves": ["DRAGONDANCE", "EARTHQUAKE", "STONEEDGE", "DRAGONCLAW"],
+      "evs": { "ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL",
+      "box": 21
+    }
+  ]
+}

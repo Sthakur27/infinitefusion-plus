@@ -1,0 +1,32 @@
+{
+  "pokemon": [
+    {
+      "mode": "add",
+      "head": "MIMIKYU",
+      "body": "CROBAT",
+      "level": 100,
+      "ability": "DISGUISE",
+      "item": "LEFTOVERS",
+      "nature": "JOLLY",
+      "moves": ["UTURN", "ROOST", "DEFOG", "BRAVEBIRD"],
+      "evs": {"HP": 252, "DEFENSE": 4, "SPEED": 252},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL",
+      "box": 31
+    },
+    {
+      "mode": "add",
+      "head": "MIMIKYU",
+      "body": "CROBAT",
+      "level": 100,
+      "ability": "DISGUISE",
+      "item": "LIFEORB",
+      "nature": "JOLLY",
+      "moves": ["SWORDSDANCE", "SHADOWSNEAK", "BRAVEBIRD", "PLAYROUGH"],
+      "evs": {"ATTACK": 252, "HP": 4, "SPEED": 252},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL",
+      "box": 31
+    }
+  ]
+}

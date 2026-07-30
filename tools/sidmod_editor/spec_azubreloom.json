@@ -1,0 +1,18 @@
+{
+  "pokemon": [
+    {
+      "mode": "add",
+      "head": "AZUMARILL",
+      "body": "BRELOOM",
+      "level": 100,
+      "ability": "HUGEPOWER",
+      "item": "LIFEORB",
+      "nature": "ADAMANT",
+      "moves": ["MACHPUNCH", "AQUAJET", "SWORDSDANCE", "ICEPUNCH"],
+      "evs": { "ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL",
+      "box": 21
+    }
+  ]
+}

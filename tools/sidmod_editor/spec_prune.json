@@ -1,0 +1,224 @@
+{
+ "pokemon": [
+  {
+   "mode": "delete",
+   "box": 16,
+   "slot": 29
+  },
+  {
+   "mode": "delete",
+   "box": 5,
+   "slot": 11
+  },
+  {
+   "mode": "delete",
+   "box": 7,
+   "slot": 23
+  },
+  {
+   "mode": "delete",
+   "box": 9,
+   "slot": 18
+  },
+  {
+   "mode": "delete",
+   "box": 23,
+   "slot": 7
+  },
+  {
+   "mode": "delete",
+   "box": 23,
+   "slot": 6
+  },
+  {
+   "mode": "delete",
+   "box": 21,
+   "slot": 18
+  },
+  {
+   "mode": "delete",
+   "box": 24,
+   "slot": 25
+  },
+  {
+   "mode": "delete",
+   "box": 20,
+   "slot": 5
+  },
+  {
+   "mode": "delete",
+   "box": 22,
+   "slot": 24
+  },
+  {
+   "mode": "delete",
+   "box": 24,
+   "slot": 7
+  },
+  {
+   "mode": "delete",
+   "box": 24,
+   "slot": 9
+  },
+  {
+   "mode": "delete",
+   "box": 24,
+   "slot": 11
+  },
+  {
+   "mode": "delete",
+   "box": 23,
+   "slot": 4
+  },
+  {
+   "mode": "delete",
+   "box": 22,
+   "slot": 0
+  },
+  {
+   "mode": "delete",
+   "box": 22,
+   "slot": 6
+  },
+  {
+   "mode": "delete",
+   "box": 24,
+   "slot": 0
+  },
+  {
+   "mode": "delete",
+   "box": 35,
+   "slot": 0
+  },
+  {
+   "mode": "delete",
+   "box": 22,
+   "slot": 1
+  },
+  {
+   "mode": "delete",
+   "box": 22,
+   "slot": 11
+  },
+  {
+   "mode": "delete",
+   "box": 22,
+   "slot": 27
+  },
+  {
+   "mode": "delete",
+   "box": 24,
+   "slot": 1
+  },
+  {
+   "mode": "delete",
+   "box": 35,
+   "slot": 1
+  },
+  {
+   "mode": "delete",
+   "box": 22,
+   "slot": 2
+  },
+  {
+   "mode": "delete",
+   "box": 24,
+   "slot": 2
+  },
+  {
+   "mode": "delete",
+   "box": 22,
+   "slot": 3
+  },
+  {
+   "mode": "delete",
+   "box": 22,
+   "slot": 9
+  },
+  {
+   "mode": "delete",
+   "box": 22,
+   "slot": 15
+  },
+  {
+   "mode": "delete",
+   "box": 24,
+   "slot": 3
+  },
+  {
+   "mode": "delete",
+   "box": 35,
+   "slot": 3
+  },
+  {
+   "mode": "delete",
+   "box": 24,
+   "slot": 4
+  },
+  {
+   "mode": "delete",
+   "box": 22,
+   "slot": 5
+  },
+  {
+   "mode": "delete",
+   "box": 24,
+   "slot": 5
+  },
+  {
+   "mode": "delete",
+   "box": 35,
+   "slot": 5
+  },
+  {
+   "mode": "delete",
+   "box": 22,
+   "slot": 12
+  },
+  {
+   "mode": "delete",
+   "box": 22,
+   "slot": 13
+  },
+  {
+   "mode": "delete",
+   "box": 22,
+   "slot": 16
+  },
+  {
+   "mode": "delete",
+   "box": 35,
+   "slot": 2
+  },
+  {
+   "mode": "delete",
+   "box": 35,
+   "slot": 4
+  },
+  {
+   "mode": "delete",
+   "box": 32,
+   "slot": 3
+  },
+  {
+   "mode": "delete",
+   "box": 32,
+   "slot": 6
+  },
+  {
+   "mode": "delete",
+   "box": 34,
+   "slot": 5
+  },
+  {
+   "mode": "delete",
+   "box": 38,
+   "slot": 12
+  },
+  {
+   "mode": "rename_box",
+   "box": 22,
+   "name": "box 22"
+  }
+ ]
+}

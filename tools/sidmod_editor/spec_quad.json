@@ -1,0 +1,46 @@
+{
+  "pokemon": [
+    {
+      "mode": "add",
+      "head": "AZUMARILL",
+      "body": "REGIGIGAS",
+      "level": 100,
+      "ability": "HUGEPOWER",
+      "item": "LEFTOVERS",
+      "nature": "ADAMANT",
+      "moves": ["WATERFALL", "RETURN", "BRICKBREAK", "BULKUP"],
+      "evs": { "HP": 252, "ATTACK": 252, "SPECIAL_DEFENSE": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL",
+      "box": 21
+    },
+    {
+      "mode": "add",
+      "head": "MAROWAK",
+      "body": "SLAKING",
+      "level": 100,
+      "ability": "ROCKHEAD",
+      "item": "THICKCLUB",
+      "nature": "ADAMANT",
+      "moves": ["EARTHQUAKE", "DOUBLEEDGE", "BRICKBREAK", "SWORDSDANCE"],
+      "evs": { "ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL",
+      "box": 21
+    },
+    {
+      "mode": "add",
+      "head": "MAROWAK",
+      "body": "REGIGIGAS",
+      "level": 100,
+      "ability": "ROCKHEAD",
+      "item": "THICKCLUB",
+      "nature": "ADAMANT",
+      "moves": ["EARTHQUAKE", "DOUBLEEDGE", "BRICKBREAK", "SWORDSDANCE"],
+      "evs": { "ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL",
+      "box": 21
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "pokemon": [
+    {
+      "mode": "edit",
+      "box": 39,
+      "slot": 24,
+      "level": 100,
+      "nature": "ADAMANT",
+      "ability": "HUGEPOWER",
+      "item": "LEFTOVERS",
+      "moves": ["WATERFALL", "RETURN", "BRICKBREAK", "BULKUP"],
+      "evs": { "HP": 252, "ATTACK": 252, "SPECIAL_DEFENSE": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 }
+    }
+  ]
+}

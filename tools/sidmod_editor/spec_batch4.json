@@ -1,0 +1,22 @@
+{
+  "pokemon": [
+    { "mode": "edit", "box": 21, "slot": 20, "moves": ["DRAGONDANCE", "EARTHQUAKE", "STONEEDGE", "CRUNCH"] },
+    { "mode": "edit", "box": 39, "slot": 7, "moves": ["EARTHQUAKE", "DOUBLEEDGE", "SUCKERPUNCH", "SWORDSDANCE"] },
+    {
+      "mode": "add", "head": "GYARADOS", "body": "MAROWAK", "level": 100,
+      "ability": "MOXIE", "item": "THICKCLUB", "nature": "ADAMANT",
+      "moves": ["DRAGONDANCE", "WATERFALL", "EARTHQUAKE", "ICEFANG"],
+      "evs": { "ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL", "box": 21
+    },
+    {
+      "mode": "add", "head": "MAROWAK", "body": "GARCHOMP", "level": 100,
+      "ability": "ROUGHSKIN", "item": "THICKCLUB", "nature": "ADAMANT",
+      "moves": ["SWORDSDANCE", "EARTHQUAKE", "DRAGONCLAW", "STONEEDGE"],
+      "evs": { "ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL", "box": 21
+    }
+  ]
+}

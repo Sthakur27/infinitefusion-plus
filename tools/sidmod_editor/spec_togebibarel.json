@@ -1,0 +1,18 @@
+{
+  "pokemon": [
+    {
+      "mode": "add",
+      "head": "TOGEKISS",
+      "body": "BIBAREL",
+      "level": 100,
+      "ability": "SIMPLE",
+      "item": "WHITEHERB",
+      "nature": "MODEST",
+      "moves": ["SHELLSMASH", "MOONBLAST", "SURF", "AIRSLASH"],
+      "evs": { "SPECIAL_ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL",
+      "box": 21
+    }
+  ]
+}

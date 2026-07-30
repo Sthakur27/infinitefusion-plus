@@ -1,0 +1,46 @@
+{
+  "pokemon": [
+    {
+      "mode": "move",
+      "from_box": 21,
+      "from_slot": 7,
+      "box": 38,
+      "slot": 4
+    },
+    {
+      "mode": "move",
+      "from_box": 21,
+      "from_slot": 9,
+      "box": 38,
+      "slot": 6
+    },
+    {
+      "mode": "move",
+      "from_box": 21,
+      "from_slot": 3,
+      "box": 38,
+      "slot": 10
+    },
+    {
+      "mode": "move",
+      "from_box": 21,
+      "from_slot": 21,
+      "box": 39,
+      "slot": 5
+    },
+    {
+      "mode": "move",
+      "from_box": 21,
+      "from_slot": 23,
+      "box": 39,
+      "slot": 7
+    },
+    {
+      "mode": "move",
+      "from_box": 21,
+      "from_slot": 24,
+      "box": 39,
+      "slot": 9
+    }
+  ]
+}

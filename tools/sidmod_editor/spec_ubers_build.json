@@ -1,0 +1,309 @@
+{
+ "pokemon": [
+  {
+   "mode": "add",
+   "head": "MAROWAK",
+   "body": "ZEKROM",
+   "level": 100,
+   "ability": "TERAVOLT",
+   "item": "THICKCLUB",
+   "nature": "ADAMANT",
+   "moves": [
+    "EARTHQUAKE",
+    "BOLTSTRIKE",
+    "STEALTHROCK",
+    "SWORDSDANCE"
+   ],
+   "evs": {
+    "ATTACK": 252,
+    "HP": 252,
+    "SPECIAL_DEFENSE": 4
+   },
+   "ivs": {
+    "HP": 31,
+    "ATTACK": 31,
+    "DEFENSE": 31,
+    "SPECIAL_ATTACK": 31,
+    "SPECIAL_DEFENSE": 31,
+    "SPEED": 31
+   },
+   "ball": "ULTRABALL",
+   "box": 31
+  },
+  {
+   "mode": "add",
+   "head": "MEWTWO",
+   "body": "PIKACHU",
+   "level": 100,
+   "ability": "LIGHTNINGROD",
+   "item": "LIGHTBALL",
+   "nature": "TIMID",
+   "moves": [
+    "NASTYPLOT",
+    "PSYSTRIKE",
+    "THUNDERBOLT",
+    "ICEBEAM"
+   ],
+   "evs": {
+    "SPECIAL_ATTACK": 252,
+    "SPEED": 252,
+    "HP": 4
+   },
+   "ivs": {
+    "HP": 31,
+    "ATTACK": 31,
+    "DEFENSE": 31,
+    "SPECIAL_ATTACK": 31,
+    "SPECIAL_DEFENSE": 31,
+    "SPEED": 31
+   },
+   "ball": "ULTRABALL",
+   "box": 31
+  },
+  {
+   "mode": "add",
+   "head": "AZUMARILL",
+   "body": "GROUDON",
+   "level": 100,
+   "ability": "HUGEPOWER",
+   "item": "LEFTOVERS",
+   "nature": "ADAMANT",
+   "moves": [
+    "SWORDSDANCE",
+    "EARTHQUAKE",
+    "LIQUIDATION",
+    "AQUAJET"
+   ],
+   "evs": {
+    "HP": 252,
+    "ATTACK": 252,
+    "DEFENSE": 4
+   },
+   "ivs": {
+    "HP": 31,
+    "ATTACK": 31,
+    "DEFENSE": 31,
+    "SPECIAL_ATTACK": 31,
+    "SPECIAL_DEFENSE": 31,
+    "SPEED": 31
+   },
+   "ball": "ULTRABALL",
+   "box": 31
+  },
+  {
+   "mode": "add",
+   "head": "MEWTWO",
+   "body": "GRENINJA",
+   "level": 100,
+   "ability": "PROTEAN",
+   "item": "LIFEORB",
+   "nature": "TIMID",
+   "moves": [
+    "PSYCHIC",
+    "ICEBEAM",
+    "AURASPHERE",
+    "THUNDERBOLT"
+   ],
+   "evs": {
+    "SPECIAL_ATTACK": 252,
+    "SPEED": 252,
+    "HP": 4
+   },
+   "ivs": {
+    "HP": 31,
+    "ATTACK": 31,
+    "DEFENSE": 31,
+    "SPECIAL_ATTACK": 31,
+    "SPECIAL_DEFENSE": 31,
+    "SPEED": 31
+   },
+   "ball": "ULTRABALL",
+   "box": 31
+  },
+  {
+   "mode": "add",
+   "head": "PIKACHU",
+   "body": "DEOXYS",
+   "level": 100,
+   "ability": "LIGHTNINGROD",
+   "item": "LIGHTBALL",
+   "nature": "NAIVE",
+   "moves": [
+    "EXTREMESPEED",
+    "PSYCHOBOOST",
+    "THUNDERBOLT",
+    "ICEBEAM"
+   ],
+   "evs": {
+    "SPECIAL_ATTACK": 252,
+    "SPEED": 252,
+    "ATTACK": 4
+   },
+   "ivs": {
+    "HP": 31,
+    "ATTACK": 31,
+    "DEFENSE": 31,
+    "SPECIAL_ATTACK": 31,
+    "SPECIAL_DEFENSE": 31,
+    "SPEED": 31
+   },
+   "ball": "ULTRABALL",
+   "box": 31
+  },
+  {
+   "mode": "add",
+   "head": "MAROWAK",
+   "body": "REGIGIGAS",
+   "level": 100,
+   "ability": "MOLDBREAKER",
+   "item": "THICKCLUB",
+   "nature": "ADAMANT",
+   "moves": [
+    "EARTHQUAKE",
+    "KNOCKOFF",
+    "DRAINPUNCH",
+    "FIREPUNCH"
+   ],
+   "evs": {
+    "ATTACK": 252,
+    "HP": 252,
+    "SPECIAL_DEFENSE": 4
+   },
+   "ivs": {
+    "HP": 31,
+    "ATTACK": 31,
+    "DEFENSE": 31,
+    "SPECIAL_ATTACK": 31,
+    "SPECIAL_DEFENSE": 31,
+    "SPEED": 31
+   },
+   "ball": "ULTRABALL",
+   "box": 31
+  },
+  {
+   "mode": "add",
+   "head": "AZUMARILL",
+   "body": "DEOXYS",
+   "level": 100,
+   "ability": "HUGEPOWER",
+   "item": "LIFEORB",
+   "nature": "JOLLY",
+   "moves": [
+    "LIQUIDATION",
+    "ZENHEADBUTT",
+    "SUPERPOWER",
+    "AQUAJET"
+   ],
+   "evs": {
+    "ATTACK": 252,
+    "SPEED": 252,
+    "HP": 4
+   },
+   "ivs": {
+    "HP": 31,
+    "ATTACK": 31,
+    "DEFENSE": 31,
+    "SPECIAL_ATTACK": 31,
+    "SPECIAL_DEFENSE": 31,
+    "SPEED": 31
+   },
+   "ball": "ULTRABALL",
+   "box": 31
+  },
+  {
+   "mode": "add",
+   "head": "KYOGRE",
+   "body": "GRENINJA",
+   "level": 100,
+   "ability": "PROTEAN",
+   "item": "LIFEORB",
+   "nature": "MODEST",
+   "moves": [
+    "ORIGINPULSE",
+    "ICEBEAM",
+    "THUNDERBOLT",
+    "DARKPULSE"
+   ],
+   "evs": {
+    "SPECIAL_ATTACK": 252,
+    "SPEED": 252,
+    "HP": 4
+   },
+   "ivs": {
+    "HP": 31,
+    "ATTACK": 31,
+    "DEFENSE": 31,
+    "SPECIAL_ATTACK": 31,
+    "SPECIAL_DEFENSE": 31,
+    "SPEED": 31
+   },
+   "ball": "ULTRABALL",
+   "box": 31
+  },
+  {
+   "mode": "add",
+   "head": "GRENINJA",
+   "body": "RAYQUAZA",
+   "level": 100,
+   "ability": "PROTEAN",
+   "item": "LIFEORB",
+   "nature": "ADAMANT",
+   "moves": [
+    "DRAGONDANCE",
+    "DRAGONASCENT",
+    "EARTHQUAKE",
+    "EXTREMESPEED"
+   ],
+   "evs": {
+    "ATTACK": 252,
+    "SPEED": 252,
+    "HP": 4
+   },
+   "ivs": {
+    "HP": 31,
+    "ATTACK": 31,
+    "DEFENSE": 31,
+    "SPECIAL_ATTACK": 31,
+    "SPECIAL_DEFENSE": 31,
+    "SPEED": 31
+   },
+   "ball": "ULTRABALL",
+   "box": 31
+  },
+  {
+   "mode": "add",
+   "head": "MEW",
+   "body": "GRENINJA",
+   "level": 100,
+   "ability": "PROTEAN",
+   "item": "LIFEORB",
+   "nature": "MODEST",
+   "moves": [
+    "QUIVERDANCE",
+    "SURF",
+    "ICEBEAM",
+    "DARKPULSE"
+   ],
+   "evs": {
+    "SPECIAL_ATTACK": 252,
+    "SPEED": 252,
+    "HP": 4
+   },
+   "ivs": {
+    "HP": 31,
+    "ATTACK": 31,
+    "DEFENSE": 31,
+    "SPECIAL_ATTACK": 31,
+    "SPECIAL_DEFENSE": 31,
+    "SPEED": 31
+   },
+   "ball": "ULTRABALL",
+   "box": 31
+  },
+  {
+   "mode": "rename_box",
+   "box": 31,
+   "name": "AI Ubers"
+  }
+ ]
+}
