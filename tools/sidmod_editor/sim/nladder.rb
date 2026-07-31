@@ -24,6 +24,7 @@ require_relative 'nbattle'
 require_relative 'nlead'
 require_relative 'narchetype'
 require_relative 'nniche'
+require_relative 'tiers'
 require 'fileutils'
 require 'etc'
 
@@ -196,6 +197,9 @@ CLAUSE_ABILITIES = %i[WONDERGUARD MOODY SHADOWTAG ARENATRAP]
 CLAUSE_MOVES     = %i[SPORE BATONPASS SWAGGER FISSURE SHEERCOLD HORNDRILL GUILLOTINE]
 def compute_bans
   clauses     = (ENV['CLAUSES'] != 'off')
+  # TIER_DEF=ou|uu|ubers pulls an EXPLICIT banlist from tiers.json (canonical fusion ids).
+  # Preferred over the rule-based env bans below for a closed, enumerable pool.
+  tier_def    = ENV['TIER_DEF']
   ban_species = (ENV['BAN_SPECIES'] || '').split(',').map { |s| s.strip.upcase.to_sym }.reject { |s| s.empty? }
   ban_ability = (ENV['BAN_ABILITY'] || '').split(',').map { |s| s.strip.upcase.to_sym }.reject { |s| s.empty? }
   ban_item    = (ENV['BAN_ITEM'] || '').split(',').map { |s| s.strip.upcase.to_sym }.reject { |s| s.empty? }
@@ -203,6 +207,12 @@ def compute_bans
   abilities   = ban_ability + (clauses ? CLAUSE_ABILITIES : [])
   moves       = clauses ? CLAUSE_MOVES : []
   reasons = {}
+  if tier_def
+    tpool = (tier_def == 'ubers') ? NativeSim.all_pool : NativeSim.pool(tier: :ou)
+    Tiers.banned_keys(tier_def, tpool).each { |k, id| reasons[k] = "tier:#{tier_def}(#{id})" }
+    bad = Tiers.validate
+    raise "tiers.json invalid:\n  #{bad.join("\n  ")}" unless bad.empty?
+  end
   NativeSim.all_pool.each do |e|
     ab = (e[:ref].ability&.id rescue nil)
     bases = (e[:bases] || []).map { |b| b.to_s.upcase.to_sym }
