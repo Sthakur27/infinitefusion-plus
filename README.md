@@ -268,6 +268,7 @@ Engine/gameplay patches additionally live in [`sidmod.txt`](sidmod.txt). Recent 
 | 2026-07-30 | **Tier system** — explicit per-fusion banlists keyed on the canonical fusion id (`sim/tiers.json`) |
 | 2026-07-30 | **OU benchmark** — stall #1 / hyperoffense last (meta inverted); **UU** derived from ≥15% usage |
 | 2026-07-30 | Tiers reworked to **judgment-based assignment**; **37 nickname collisions** deduped (0 remain) |
+| 2026-07-30 | **UU ladder** — healthy hazard-stack meta; 5 mons promoted UU→OU for breaking UU (Smogon-style, one tier at a time) |
 
 ## Contributing
 

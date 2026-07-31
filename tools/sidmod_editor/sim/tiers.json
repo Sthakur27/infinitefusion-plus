@@ -47,7 +47,7 @@
       ]
     },
     "ou": {
-      "desc": "Measured OU-defining: used on >=15% of teams in the ladder_tou benchmark (run with the Ubers members above excluded, so this is a clean OU signal). Banned from UU only.",
+      "desc": "Banned from UU only. Two sources: (a) >=15% usage in the ladder_tou OU benchmark, (b) promoted for BREAKING UU on ladder_uu — a doubling mechanic on a top-10 UU team. Promotion is one tier at a time (Smogon-style): breaking UU makes a mon OU, not Ubers; Ubers requires breaking OU.",
       "members": [
         "RAICHU/SCIZOR",
         "BLISSEY/DUSKNOIR",
@@ -58,11 +58,16 @@
         "LUDICOLO/SCEPTILE",
         "LURANTIS/ENTEI",
         "VAPOREON/SLAKING",
-        "SLAKING/SANDSLASH"
+        "SLAKING/SANDSLASH",
+        "AZUMARILL/ELECTIVIRE",
+        "MAROWAK/DRAGONITE",
+        "AZUMARILL/WEAVILE",
+        "AZUMARILL/HAXORUS",
+        "AZUMARILL/BISHARP"
       ]
     },
     "uu": {
-      "desc": "Everything else (default). Legal in every tier. Includes mons that hold a 'broken' toy but never converted it — e.g. Volcachu, Terraeus — and the whole untested long tail.",
+      "desc": "Everything else (default). Legal in every tier. Deliberately still includes mons that HOLD a doubling mechanic but never converted it — Volcarona/Pikachu (Light Ball, finished #100/100), Marowak/Arceus (Thick Club, #47), Golisopod/Mimikyu (Disguise, but a defensive Rocky Helmet pivot, not a setup abuser). Owning a strong toy is not a tiering offence; demonstrated dominance is.",
       "members": []
     }
   }

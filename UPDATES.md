@@ -251,3 +251,47 @@ Spec: `spec_dedupe_names.json`.
 **Convention:** in conversation, mons are now referred to by their fusion parents (e.g.
 "Raichu/Scizor (Voltrazor)"), not nickname alone — nicknames aren't memorable enough to identify
 a mon from.
+
+---
+
+## 2026-07-30 · UU ladder + first iterative tier pass (Smogon methodology)
+
+**`TIER_DEF` validated end-to-end** — `ladder_uu` init reported
+`banned 40 — tier:ubers:10 tier:ou:10 move-clause:9 ability:SHADOWTAG:9 ability:WONDERGUARD:2`.
+
+**The UU meta is healthy.** Top team is hazard stack — Raichu/Aerodactyl (Stormwing) +
+Tentacruel/Forretress (Toxispin) + Skarmory/Ferrothorn (Thornwing) + Blissey/Toxapex (Pinkreef).
+Niches spread rain 30 / balance 20 / hyperoffense 19 / priority 17 / hazardstack 6. Bar 1725.
+UU's defining mons by usage: Politoed/Forretress (Toedsteel, Drizzle) 30%, Blissey/Dusclops
+(Spectracle, Eviolite) 27%, Goodra/Toxapex (Vireef) 24%, Zoroark/Alakazam (Illuzam) 23%.
+
+**Gap found — and it is the iterative half of tiering I had skipped.** Because Ubers was assigned
+only from *measured* dominance (10 fusions), ~15 other fusions carrying the same doubling
+mechanics were UU-legal. They had never been measured because the earlier *rule* banned them; the
+moment they were legal they went straight to the top:
+
+| Fusion | Mechanic | UU usage | Best team |
+|---|---|---|---|
+| Azumarill/Electivire (Aquavolt) | Huge Power | 20% | **#1** |
+| Marowak/Dragonite (Maronite) | Multiscale **+** Thick Club | 15% | #5 |
+| Azumarill/Weavile (Frostarill) | Huge Power | 7% | #5 |
+| Azumarill/Haxorus (Dracotide) | Huge Power | 7% | #6 |
+| Azumarill/Bisharp (Aquametal) | Huge Power | 4% | #7 |
+
+**Promoted those 5 to OU — not Ubers.** Smogon-style, a mon rises **one tier at a time**: breaking
+UU makes it an OU mon; Ubers requires breaking *OU*, which has not been tested. Pools are now
+Ubers 478 / OU 351 / **UU 336**.
+
+Deliberately **left in UU**, because owning a strong toy is not a tiering offence — only
+demonstrated dominance is: Volcarona/Pikachu (Light Ball, finished #100/100),
+Marowak/Arceus (Thick Club, #47), and Golisopod/Mimikyu (Golisokyu — Disguise, but a defensive
+Rocky Helmet / Pain Split pivot rather than a setup abuser; 3 teams).
+
+**Session builds in UU: 8 placed** (vs 4 in OU). Best by a wide margin is **Gengar/Zoroark
+(Genark) at #57 on 4 teams** — the rebuild is genuinely performing. Then Marowak/Crobat (Marobat)
+#91, Mimikyu/Volcarona (Mimirona) and Milotic/Alakazam (Milokazam) #94, Mimikyu/Absol (Mimisol)
+#95, Crobat/Aerodactyl (Crodactyl) #98, Volcarona/Bibarel (Volcabarel) #99. The whole Blissey trio
+failed to place, consistent with the earlier damage calc: ~100 physical Def is fatal in any tier.
+
+Follow-up running: `ladder_ou2` (does the promoted Huge Power crowd break OU → Ubers case?) and
+`ladder_uu2` (did the promotions stabilise UU?).
