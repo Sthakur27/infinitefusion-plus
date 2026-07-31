@@ -87,9 +87,20 @@
       ]
     },
     "uu": {
-      "desc": "OU minus OU's own top performers (usage-based). PLACEHOLDER - to be filled from the ladder_tou benchmark usage data.",
+      "desc": "OU minus OU's own top performers: every fusion used on >=15% of teams in the ladder_tou OU benchmark (100 teams, 20 batches). Note the ladder's usage cap is 30%, so the top entry is saturated and would rank higher uncapped.",
       "inherits": "ou",
-      "bans": []
+      "bans": [
+        "RAICHU/SCIZOR",
+        "BLISSEY/DUSKNOIR",
+        "TYRANITAR/ARTICUNO",
+        "SUICUNE/TOGEKISS",
+        "VOLCARONA/POLITOED",
+        "BLISSEY/GLISCOR",
+        "LUDICOLO/SCEPTILE",
+        "LURANTIS/ENTEI",
+        "VAPOREON/SLAKING",
+        "SLAKING/SANDSLASH"
+      ]
     }
   }
 }

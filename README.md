@@ -266,6 +266,7 @@ Engine/gameplay patches additionally live in [`sidmod.txt`](sidmod.txt). Recent 
 | 2026-07-30 | In-game **ban-set modes** in Random Battle (play the research conditions) |
 | 2026-07-30 | Rebuilds (Alagar, Genark) + Polichomp, Milokazam, Blissey UU trio |
 | 2026-07-30 | **Tier system** — explicit per-fusion banlists keyed on the canonical fusion id (`sim/tiers.json`) |
+| 2026-07-30 | **OU benchmark** — stall #1 / hyperoffense last (meta inverted); **UU** derived from ≥15% usage |
 
 ## Contributing
 

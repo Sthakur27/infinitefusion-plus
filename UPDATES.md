@@ -169,3 +169,40 @@ and makes tier a *build* property — re-spec a mon's ability and it changes tie
 
 **Tooling:** `sim/tiers.json`, `sim/tiers.rb` (`ruby sim/tiers.rb <snapshot_tag>` validates and
 prints per-tier pool sizes).
+
+---
+
+## 2026-07-30 · OU tier benchmark + UU banlist derived
+
+Ran the OU tier (mechanic bans) over a fresh snapshot including all 28 new fusions:
+`ladder_tou`, 100 teams, 20 batches. 94 mons banned (74 mechanic + 20 clause).
+
+**The tier design worked — the meta inverted.** Under the OU banlist the #1 team is **stall**
+(Tidepod / Voltrazor / Spectracle / Thornwing / Venomtide / Fistking) running Stealth Rock,
+Spikes, Leech Seed, Toxic and Will-O-Wisp, while **hyperoffense collapsed to 7 teams with the
+worst mean Elo of any niche (1565)**. Niches are far more even than baseline
+(balance 22, rain 21, sand 20, priority 10). Hazards — conspicuously absent from every team in
+the original C0 research and the loudest sign of AI-shaped degeneracy — now appear on the best
+team. Bar 1729, top 1861.
+
+**How the 28 new fusions did (honestly): poorly.** 9 were *banned, not beaten* (they use
+Disguise / Multiscale / Thick Club / Light Ball, so they are Ubers by our own definition:
+Mimibat ×2, Mimigar, Mimirona, Mimisol, Dragokyu, Abnite, Marobat, Volcachu). Of the 19
+eligible, only 4 made the ladder at all, all near the bottom: **Genark #92**, **Alagar #93**,
+**Blisgar #97** (2 teams), **Toron #100**. The two *rebuilds* both placing is mild validation
+that fixing their junk movesets helped; everything else lost outright to the established cast.
+
+**UU defined** from this run's usage: ban every fusion used on **≥15% of OU teams** (10 mons) —
+Voltrazor (Raichu/Scizor, 30%), Phantomguard (Blissey/Dusknoir, 26%), Cragwing
+(Tyranitar/Articuno, 22%), Aqualift (Suicune/Togekiss, 21%), Nimbus (Volcarona/Politoed, 21%),
+Glissey (Blissey/Gliscor, 20%), Monsoon (Ludicolo/Sceptile, 19%), Igniflora (Lurantis/Entei,
+18%), Thaladon (Vaporeon/Slaking, 17%), Sandking (Slaking/Sandslash, 16%).
+That removes the best pivot, both premier walls, **both weather setters**, the best rain
+sweeper and the Contrary breaker → 297 legal. Caveat: the ladder's usage cap is 30%, so the top
+entry is saturated and would rank higher uncapped.
+
+**Name-brittleness confirmed the hard way.** Among mons *actually used on this ladder* there are
+**four distinct fusions all named "Overload"** (Electivire/Aerodactyl, Lucario/Infernape,
+Weavile/Mamoswine, Scizor/Lucario) and two named "Riptide". A nickname-keyed banlist would have
+banned four mons where one was intended — the canonical-id approach (`B<body>H<head>`) is not
+optional.
