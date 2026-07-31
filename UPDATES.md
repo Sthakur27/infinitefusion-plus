@@ -206,3 +206,48 @@ entry is saturated and would rank higher uncapped.
 Weavile/Mamoswine, Scizor/Lucario) and two named "Riptide". A nickname-keyed banlist would have
 banned four mons where one was intended — the canonical-id approach (`B<body>H<head>`) is not
 optional.
+
+---
+
+## 2026-07-30 · Tiers reworked to ASSIGNMENT (not rule-derived) + nickname dedupe
+
+**Tier model replaced.** The previous OU banlist was seeded *from* a mechanic rule (Huge Power /
+Thick Club / Light Ball / Disguise / Multiscale), so it was rule-derivation wearing a banlist
+costume — and it mis-tiered badly: **Volcarona/Pikachu (Volcachu) was exiled to Ubers for holding
+a Light Ball while finishing dead last, #100/100, on a measured ladder.** Holding a strong toy is
+not the same as being strong.
+
+Now every fusion has one **home tier assigned by judgment**, and a tier's legal pool is its own
+members plus everything below (standard Smogon nesting): `ubers` = everything, `ou` = ou + uu
+members, `uu` = uu members only. Unlisted fusions default to `uu`, so they are legal everywhere.
+Listing under `ubers` bans from OU and UU; listing under `ou` bans from UU only.
+
+Assignments are evidence-backed from the ladders, and deliberately small:
+- **Ubers (10)** — proven top-usage/top-team anchors: Azumarill/Garchomp, Azumarill/Absol,
+  Azumarill/Marowak, Azumarill/Arceus, Marowak/Mimikyu, Dragonite/Regigigas, Dragonite/Slaking,
+  Slaking/Dragonite, Dragonite/Scizor, Lucario/Pikachu.
+- **OU (10)** — ≥15% usage in the `ladder_tou` OU benchmark: Raichu/Scizor, Blissey/Dusknoir,
+  Tyranitar/Articuno, Suicune/Togekiss, Volcarona/Politoed, Blissey/Gliscor, Ludicolo/Sceptile,
+  Lurantis/Entei, Vaporeon/Slaking, Slaking/Sandslash.
+- **UU** — everything else (the long tail, plus mons that hold a "broken" toy but never converted
+  it: Volcarona/Pikachu, Marowak/Arceus, the defensive Disguise builds).
+
+Pools: **Ubers 478 / OU 351 / UU 341** legal. `nladder.rb` uses `TIER_DEF=ou|uu|ubers`.
+Tooling: `sim/tiers.json` (assignments), `sim/tiers.rb` (validate + print pool sizes).
+
+**Nickname dedupe — 37 renames, 0 collisions remain.** 14 nicknames were shared by 36 distinct
+fusions; `Overload` and `Momentum` were each **six different mons**. This was actively corrupting
+analysis — "Cragwing" was reported as a top ladder mon when two fusions had that name
+(Tyranitar/Articuno and Tyranitar/Zapdos), and it is the concrete reason nicknames are rejected as
+tier identity. New names include Tyranitar/Articuno → **Frostcrag**, Tyranitar/Zapdos →
+**Stormcrag**, Vaporeon/Dragonite → **Mistwing**, Milotic/Dragonite → **Tidegrace**,
+Gengar/Greninja → **Hexblade**, Electivire/Aerodactyl → **Stormtalon**.
+
+The generator validates before writing: it confirms each target slot holds the expected
+head/body fusion and that no new name collides with a mon not being renamed. It refused the first
+run over a species-id typo (`HO_OH` vs the engine's `HOOH`).
+Spec: `spec_dedupe_names.json`.
+
+**Convention:** in conversation, mons are now referred to by their fusion parents (e.g.
+"Raichu/Scizor (Voltrazor)"), not nickname alone — nicknames aren't memorable enough to identify
+a mon from.

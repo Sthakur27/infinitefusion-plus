@@ -208,10 +208,11 @@ def compute_bans
   moves       = clauses ? CLAUSE_MOVES : []
   reasons = {}
   if tier_def
-    tpool = (tier_def == 'ubers') ? NativeSim.all_pool : NativeSim.pool(tier: :ou)
-    Tiers.banned_keys(tier_def, tpool).each { |k, id| reasons[k] = "tier:#{tier_def}(#{id})" }
     bad = Tiers.validate
     raise "tiers.json invalid:\n  #{bad.join("\n  ")}" unless bad.empty?
+    tpool = (tier_def == 'ubers') ? NativeSim.all_pool : NativeSim.pool(tier: :ou)
+    # exclude anything whose HOME tier sits above the tier being played
+    Tiers.excluded_keys(tier_def, tpool).each { |k, home| reasons[k] = "tier:#{home}" }
   end
   NativeSim.all_pool.each do |e|
     ab = (e[:ref].ability&.id rescue nil)
