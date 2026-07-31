@@ -39,6 +39,35 @@ module SidmodRandomOpp
   end
   MODE_SEL = %i[chaos smart smart2 chaos smart smart2 apex]
 
+  # sidmod: RESEARCH BAN SETS - an optional filter layered on top of the tier/mode,
+  # mirroring the offline ladder's ban conditions (tools/sidmod_editor/sim/nladder.rb)
+  # that showed banning the dominant "multiplier" fusions (Marowak/Azumarill/Pikachu)
+  # is what actually diversifies the metagame. Applied to the candidate pool in
+  # build_team_named. Spore is ALWAYS excluded (BANNED_MOVES); these add the standard
+  # competitive clauses + the two dominant-group species bans. Wonder Guard is
+  # deliberately NOT clause-banned in-game (per Sid's earlier call to leave it playable).
+  CLAUSE_ABILITIES = %i[MOODY SHADOWTAG ARENATRAP]
+  CLAUSE_MOVES     = %i[BATONPASS SWAGGER FISSURE SHEERCOLD HORNDRILL GUILLOTINE]
+  GROUP_A_SPECIES  = %i[MAROWAK AZUMARILL PIKACHU]
+  GROUP_B_SPECIES  = %i[DRAGONITE SLAKING REGIGIGAS]
+  BAN_SETS = {
+    none:     { species: [],                                clauses: false },
+    clauses:  { species: [],                                clauses: true  },
+    ban_a:    { species: GROUP_A_SPECIES,                   clauses: true  },
+    ban_b:    { species: GROUP_B_SPECIES,                   clauses: true  },
+    ban_both: { species: GROUP_A_SPECIES + GROUP_B_SPECIES, clauses: true  },
+  }
+  BAN_SET_LABELS = begin
+    [_INTL("No clauses"), _INTL("Standard clauses"),
+     _INTL("Ban multipliers (Marowak/Azu/Pika)"),
+     _INTL("Ban setup+stat (Dnite/Slaking/Regi)"),
+     _INTL("Ban both groups")]
+  rescue
+    ["No clauses", "Standard clauses", "Ban multipliers (Marowak/Azu/Pika)",
+     "Ban setup+stat (Dnite/Slaking/Regi)", "Ban both groups"]
+  end
+  BAN_SET_SEL = %i[none clauses ban_a ban_b ban_both]
+
   # TIER FILTER. OU excludes any fusion whose head OR body is a legendary that ISN'T one of these
   # sub-600 "OU-legal" legendaries (the birds/beasts/golems + Regigigas special-case). Ubers = no filter.
   # The legendary set itself is the game's own LEGENDARIES_LIST (randomizer.rb) at runtime; the fallback
@@ -471,11 +500,26 @@ module SidmodRandomOpp
   end
 
   # -> [[pokemon x6], archetype_used_or_nil] | nil
-  def build_team_named(sel, tier, seed, arch = nil, avoid = nil)
+  # sidmod: apply a research ban set (standard clauses + dominant-group species bans)
+  # to the candidate pool. :none is a no-op (Spore/OU filters still apply upstream).
+  def apply_ban_set(cands, bans)
+    set = BAN_SETS[bans] || BAN_SETS[:none]
+    if set[:clauses]
+      cands = cands.reject do |c|
+        CLAUSE_ABILITIES.include?(c[:ability]) || ((c[:moves] || []) & CLAUSE_MOVES).any?
+      end
+    end
+    species = set[:species]
+    cands = cands.reject { |c| ((c[:bases] || []) & species).any? } unless species.empty?
+    cands
+  end
+
+  def build_team_named(sel, tier, seed, arch = nil, avoid = nil, bans = :none)
     rng   = Random.new(seed)
     cands = battle_pool.map { |pk| candidate(pk) }
     cands = cands.reject { |c| ((c[:moves] || []) & BANNED_MOVES).any? }   # Spore clause (all modes)
     cands = cands.select { |c| ou_legal?(c) } if tier == :ou
+    cands = apply_ban_set(cands, bans)                                     # sidmod research bans
     return nil if cands.length < 6
     chosen = nil
     used   = nil
@@ -607,18 +651,18 @@ module SidmodRandomOpp
 
   # `my_arch` is the plan for the player's lent team; `arch` is the opponent's. YOUR
   # side is built FIRST so the opponent's random roll knows which plan to avoid.
-  def start_battle(sel, tier, arch = nil, who = :real, spectate = false, my_arch = nil)
+  def start_battle(sel, tier, arch = nil, who = :real, spectate = false, my_arch = nil, bans = :none)
     mine = nil
     mine_used = nil
     if who == :gen
-      r2 = build_team_named(sel, tier, rand(1_000_000), my_arch)
+      r2 = build_team_named(sel, tier, rand(1_000_000), my_arch, nil, bans)
       unless r2
         cant_build(sel, tier, my_arch, _INTL("your side"))
         return
       end
       mine, mine_used = r2
     end
-    result = build_team_named(sel, tier, rand(1_000_000), arch, mine_used)
+    result = build_team_named(sel, tier, rand(1_000_000), arch, mine_used, bans)
     unless result
       cant_build(sel, tier, arch, _INTL("the opponent"))
       return
@@ -801,6 +845,9 @@ module SidmodRandomOpp
     sel = MODE_SEL[idx]
     return run_apex(who, spectate) if sel == :apex   # fixed rosters - no tier step
     tier = (idx <= 2) ? :ou : :ubers
+    bidx = pbShowCommands(nil, BAN_SET_LABELS, -1)   # sidmod: research ban-set step
+    return if bidx < 0
+    bans = BAN_SET_SEL[bidx]
     arch = nil
     my_arch = nil
     if sel == :smart2
@@ -808,7 +855,7 @@ module SidmodRandomOpp
       return if picked.nil?
       my_arch, arch = picked
     end
-    start_battle(sel, tier, arch, who, spectate, my_arch)
+    start_battle(sel, tier, arch, who, spectate, my_arch, bans)
   end
 end
 

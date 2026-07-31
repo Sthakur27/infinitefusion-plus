@@ -2056,3 +2056,27 @@ PC box organization convention (Sid's collection) - reference note, NOT a code c
   usage: when distributing built L100+item mons, target the competitive boxes by
     archetype (weather -> Rain/Sand/Sun; tier -> OU/UU/Ubers; Sandbox = scratch/WIP).
     the offline editor addresses boxes 0-indexed, so competitive = box index >= 17.
+
+##############################################
+research ban-set modes in Random Battle - reproduce the offline ladder's ban conditions in-game
+Data/Scripts/055_sidmod/RandomOpponent.rb
+  BAN_SETS / BAN_SET_LABELS / BAN_SET_SEL (new consts ~after MODE_SEL): five ban sets -
+    none / clauses / ban_a / ban_b / ban_both. Mirrors tools/sidmod_editor/sim/nladder.rb.
+  apply_ban_set(cands, bans) (new, ~before build_team_named): when clauses on, rejects clause
+    abilities (Moody/ShadowTag/ArenaTrap) + clause moves (BatonPass/Swagger/OHKO: Fissure/
+    SheerCold/HornDrill/Guillotine); then rejects the group species (Marowak/Azumarill/Pikachu
+    and/or Dragonite/Slaking/Regigigas). bases + ability read straight off candidate() (symbols).
+  build_team_named ~line 474: added `bans = :none` param + `cands = apply_ban_set(cands, bans)`
+    after the Spore/OU filters. Backward compatible - the sim harness build_team() passes no bans.
+  start_battle ~line 610: added `bans = :none` param, threaded to BOTH build_team_named calls.
+  run ~line 795: added a ban-set menu step (pbShowCommands BAN_SET_LABELS) after tier is set,
+    before the archetype pick; passes the chosen set to start_battle. Apex skips it (fixed rosters).
+  WONDER GUARD is deliberately NOT clause-banned in-game (kept playable per Sid's earlier call),
+    unlike the offline sim which bans it for testing - so in-game clauses remove 16 mons vs sim's 20.
+  why: the ladder study (ladder_c0..c3) found banning the "multiplier" group (Marowak/Azumarill/
+    Pikachu) is what diversifies the meta (hyperoffense 27->12, niche evenness 0.883->0.899);
+    banning the setup/stat group alone just crowns rain (evenness drops to 0.793). These modes
+    let that be explored in-game.
+  verified: ruby -c Syntax OK; apply_ban_set headless on rsnap pool -> none356/clauses340/banA306/
+    banB289/both261 legal. NOT yet seen on a real screen (the extra menu step is unverified in-game).
+  revert: remove the BAN_* consts + apply_ban_set, drop the `bans` params and the run menu step.

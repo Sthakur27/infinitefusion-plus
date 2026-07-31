@@ -1,0 +1,28 @@
+{
+  "pokemon": [
+    {
+      "mode": "add", "head": "MIMIKYU", "body": "ABSOL", "level": 100,
+      "ability": "DISGUISE", "item": "LIFEORB", "nature": "ADAMANT",
+      "moves": ["SWORDSDANCE", "SUCKERPUNCH", "SHADOWSNEAK", "PLAYROUGH"],
+      "evs": {"ATTACK": 252, "SPEED": 252, "HP": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL", "box": 27
+    },
+    {
+      "mode": "add", "head": "ABSOL", "body": "DRAGONITE", "level": 100,
+      "ability": "MULTISCALE", "item": "LIFEORB", "nature": "ADAMANT",
+      "moves": ["SWORDSDANCE", "SUCKERPUNCH", "EXTREMESPEED", "EARTHQUAKE"],
+      "evs": {"ATTACK": 252, "SPEED": 252, "HP": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL", "box": 27
+    },
+    {
+      "mode": "add", "head": "ABSOL", "body": "SLAKING", "level": 100,
+      "ability": "SUPERLUCK", "item": "LIFEORB", "nature": "ADAMANT",
+      "moves": ["SWORDSDANCE", "SUCKERPUNCH", "RETURN", "EARTHQUAKE"],
+      "evs": {"ATTACK": 252, "SPEED": 252, "HP": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL", "box": 27
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "pokemon": [
+    {
+      "mode": "add", "head": "TOGEKISS", "body": "ENTEI", "level": 100,
+      "ability": "SERENEGRACE", "item": "LEFTOVERS", "nature": "TIMID",
+      "moves": ["SACREDFIRE", "AIRSLASH", "NASTYPLOT", "ROOST"],
+      "evs": {"SPECIAL_ATTACK": 252, "SPEED": 252, "HP": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL", "box": 27
+    },
+    {
+      "mode": "add", "head": "BLISSEY", "body": "ENTEI", "level": 100,
+      "ability": "SERENEGRACE", "item": "LEFTOVERS", "nature": "CALM",
+      "moves": ["SACREDFIRE", "FLAMETHROWER", "CALMMIND", "SOFTBOILED"],
+      "evs": {"HP": 252, "SPECIAL_DEFENSE": 252, "SPECIAL_ATTACK": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL", "box": 27
+    },
+    {
+      "mode": "add", "head": "AERODACTYL", "body": "MACHAMP", "level": 100,
+      "ability": "NOGUARD", "item": "LIFEORB", "nature": "ADAMANT",
+      "moves": ["DYNAMICPUNCH", "STONEEDGE", "IRONTAIL", "EARTHQUAKE"],
+      "evs": {"ATTACK": 252, "SPEED": 252, "DEFENSE": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL", "box": 27
+    },
+    {
+      "mode": "add", "head": "MACHAMP", "body": "CROBAT", "level": 100,
+      "ability": "NOGUARD", "item": "LIFEORB", "nature": "JOLLY",
+      "moves": ["DYNAMICPUNCH", "BRAVEBIRD", "UTURN", "STONEEDGE"],
+      "evs": {"ATTACK": 252, "SPEED": 252, "HP": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL", "box": 27
+    },
+    {
+      "mode": "add", "head": "CROBAT", "body": "AERODACTYL", "level": 100,
+      "ability": "ROCKHEAD", "item": "LEFTOVERS", "nature": "JOLLY",
+      "moves": ["BRAVEBIRD", "CROSSPOISON", "UTURN", "ROOST"],
+      "evs": {"ATTACK": 252, "SPEED": 252, "HP": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL", "box": 27
+    }
+  ]
+}

@@ -183,6 +183,40 @@ def bar_of(st)
   elos[[(elos.length * pct / 100.0).floor, elos.length - 1].min]
 end
 
+# ---- bans / clauses --------------------------------------------------------
+# Unified ban computation for research runs. Standard competitive clauses (uncompetitive
+# abilities + moves) apply unless CLAUSES=off; experimental bans layer on via env:
+#   BAN_SPECIES=MAROWAK,AZUMARILL   ban any fusion containing these base species
+#   BAN_ABILITY=HUGEPOWER,...        ban mons whose (built) ability is listed
+#   BAN_ITEM=THICKCLUB,...           ban mons holding these items
+#   BAN=b12s3,...                    ban explicit pool keys
+# Applied ONLY in the ladder (not the shared RandomOpponent pool), so in-game random
+# battles are unaffected. Returns { key => reason }.
+CLAUSE_ABILITIES = %i[WONDERGUARD MOODY SHADOWTAG ARENATRAP]
+CLAUSE_MOVES     = %i[SPORE BATONPASS SWAGGER FISSURE SHEERCOLD HORNDRILL GUILLOTINE]
+def compute_bans
+  clauses     = (ENV['CLAUSES'] != 'off')
+  ban_species = (ENV['BAN_SPECIES'] || '').split(',').map { |s| s.strip.upcase.to_sym }.reject { |s| s.empty? }
+  ban_ability = (ENV['BAN_ABILITY'] || '').split(',').map { |s| s.strip.upcase.to_sym }.reject { |s| s.empty? }
+  ban_item    = (ENV['BAN_ITEM'] || '').split(',').map { |s| s.strip.upcase.to_sym }.reject { |s| s.empty? }
+  ban_keys    = (ENV['BAN'] || '').split(',').map(&:strip).reject(&:empty?)
+  abilities   = ban_ability + (clauses ? CLAUSE_ABILITIES : [])
+  moves       = clauses ? CLAUSE_MOVES : []
+  reasons = {}
+  NativeSim.all_pool.each do |e|
+    ab = (e[:ref].ability&.id rescue nil)
+    bases = (e[:bases] || []).map { |b| b.to_s.upcase.to_sym }
+    r = nil
+    r ||= 'key'                   if ban_keys.include?(e[:key])
+    r ||= 'species'               if (bases & ban_species).any?
+    r ||= "ability:#{ab}"         if abilities.include?(ab)
+    r ||= "item:#{e[:item]}"      if ban_item.include?(e[:item])
+    r ||= 'move-clause'           if ((e[:moves] || []) & moves).any?
+    reasons[e[:key]] = r if r
+  end
+  reasons
+end
+
 # --------------------------------------------------------------------- init ---
 def init!(rtag, tag, size, seed_opps, nw)
   tier = (ENV['TIER'] || 'ou').to_sym
@@ -203,15 +237,16 @@ def init!(rtag, tag, size, seed_opps, nw)
   NStore.write_pool(tag, NativeSim.all_pool)
   lead_stats = Lead.stats_from_games(Dir[File.join(File.dirname(dir_for(tag)), '**', 'games.tsv')])
   legal_keys = pool.map { |e| e[:key] }
-  # BAN=WONDERGUARD (default) keeps AI-blind-spot cheese out of the ladder entirely,
-  # per Sid's call to exclude it during testing rather than ban it in-game.
-  banned = (ENV['BAN'] || 'WONDERGUARD').split(',').reject(&:empty?)
-  if banned.delete('WONDERGUARD')
-    banned.concat(NativeSim.all_pool.select { |e| (e[:ref].ability&.id rescue nil) == :WONDERGUARD }
-                                    .map { |e| e[:key] })
-  end
+  ban_reasons = compute_bans
+  banned = ban_reasons.keys
   legal_keys -= banned
-  puts "  banned from ladder: #{banned.map { |k| meta[k] ? meta[k][:name] : k }.join(', ')}" unless banned.empty?
+  unless banned.empty?
+    by_reason = ban_reasons.values.tally.sort_by { |_r, n| -n }.map { |r, n| "#{r}:#{n}" }.join(' ')
+    puts "  banned #{banned.size} from ladder — #{by_reason}"
+    st_bans = { 'clauses' => (ENV['CLAUSES'] != 'off'), 'ban_species' => ENV['BAN_SPECIES'],
+                'ban_ability' => ENV['BAN_ABILITY'], 'ban_item' => ENV['BAN_ITEM'], 'count' => banned.size }
+    @ban_meta = st_bans
+  end
   gen = Gen.new(meta, rat, legal_keys)
   rng = Random.new(777)
 
@@ -242,7 +277,8 @@ def init!(rtag, tag, size, seed_opps, nw)
 
   st = { 'tag' => tag, 'rating_tag' => rtag, 'tier' => tier.to_s, 'size' => size,
          'bar_percentile' => 50, 'batch' => 0, 'tested' => 0, 'promoted' => 0,
-         'teams' => teams, 'history' => [], 'created' => Time.now.to_s }
+         'teams' => teams, 'history' => [], 'created' => Time.now.to_s,
+         'banned_keys' => banned, 'ban_meta' => @ban_meta }
   save_state(tag, st)
   puts "ladder #{tag}: #{teams.length} seed teams (tier #{tier})"
   puts "  sources: " + teams.group_by { |t| t['source'].split(':').first }.map { |k, v| "#{k} #{v.length}" }.join(', ')
@@ -286,11 +322,8 @@ def run!(tag, batches, per_batch, nw)
   meta = meta_for(NativeSim.all_pool)
   rat  = ratings_for(st['rating_tag'])
   pool = NativeSim.pool(tier: tier).map { |e| e[:key] }
-  banned = (ENV['BAN'] || 'WONDERGUARD').split(',').reject(&:empty?)
-  if banned.delete('WONDERGUARD')
-    banned.concat(NativeSim.all_pool.select { |e| (e[:ref].ability&.id rescue nil) == :WONDERGUARD }
-                                    .map { |e| e[:key] })
-  end
+  # use the ladder's init-time ban set (snapshot-stable keys) so run bans == init bans
+  banned = st['banned_keys'] || compute_bans.keys
   pool -= banned
   gen  = Gen.new(meta, rat, pool)
   lead_stats = Lead.stats_from_games(Dir[File.join(File.dirname(dir_for(tag)), '**', 'games.tsv')])
