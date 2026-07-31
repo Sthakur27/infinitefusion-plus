@@ -40,6 +40,23 @@ which wins on load order. The classic case is `pbBoxCommands`, defined in **both
 `052_InfiniteFusion/Menus/PC/Multiselect/MultiSelect_PokemonStorageScreen.rb` — patch both. If a
 change appears to do nothing, grep for a second definition before assuming the edit was wrong.
 
+## Log every step (do this without being asked)
+
+Every meaningful step gets written down as part of doing it — not at the end of a session, and
+not only when asked. A "step" is: mons built or rebuilt, tooling added or changed, a research
+run completed, a tier/banlist change, a convention decided.
+
+1. **Append a dated entry to `UPDATES.md`** (repo root): what changed, *why*, and how to
+   reproduce or revert. Include the spec/tool filenames. Note known issues and caveats — a
+   finding with a soft caveat is worth more than one that looks cleaner than it is.
+2. **Add a one-line row to the README's Changelog table** if it's user-visible.
+3. **Engine/gameplay patches also go in `sidmod.txt`** per the `sidmod` skill — that stays the
+   source of truth for in-game mods and their revert steps. `UPDATES.md` is the wider log
+   (collection, offline toolchain, research).
+
+Keep entries brief but load-bearing: the numbers that justified a decision, the mechanic that
+explained a result, the thing that would otherwise be re-derived next session.
+
 ## Mod work
 
 For any gameplay/QoL/debug mod: load the **`sidmod` skill** and read **`sidmod.txt`** (repo root)

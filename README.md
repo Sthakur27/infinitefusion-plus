@@ -251,6 +251,22 @@ CLAUDE.md                       project rules (save safety, verification, load-o
 Generated and downloaded content is deliberately not committed: custom sprite packs, battle
 animations, the installer payload, and the sim's benchmark output. See `.gitignore`.
 
+## Changelog
+
+Every step — mons built, tooling added, research run, tier change — is logged in
+**[`UPDATES.md`](UPDATES.md)** with the reasoning and how to reproduce or revert it.
+Engine/gameplay patches additionally live in [`sidmod.txt`](sidmod.txt). Recent milestones:
+
+| Date | Step |
+|---|---|
+| 2026-07-29 | **Move legality audit** — all 456 L100 mons checked against `pbGetLegalMoves`; 62 illegal moves replaced (orientation-aware) |
+| 2026-07-29 | Build batches — No Guard Zap Cannon / Dynamic Punch, Simple Quiver Dance, Mimikyu Disguise crew, Rock Head recoil crew |
+| 2026-07-30 | Serene Grace Sacred Fire (100% burn) batch + Absol Swords Dance trio |
+| 2026-07-30 | **Metagame research** — 6 ladders across ban conditions & tiers → [`META_RESEARCH_REPORT.md`](tools/sidmod_editor/sim/META_RESEARCH_REPORT.md), [`META_FORMATS_DETAIL.md`](tools/sidmod_editor/sim/META_FORMATS_DETAIL.md) |
+| 2026-07-30 | In-game **ban-set modes** in Random Battle (play the research conditions) |
+| 2026-07-30 | Rebuilds (Alagar, Genark) + Polichomp, Milokazam, Blissey UU trio |
+| 2026-07-30 | **Tier system** — explicit per-fusion banlists keyed on the canonical fusion id (`sim/tiers.json`) |
+
 ## Contributing
 
 This is a personal fork; changes here are not intended to go upstream. If you want to contribute to
