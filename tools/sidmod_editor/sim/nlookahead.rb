@@ -70,9 +70,12 @@ module NLookahead
 
   SWITCH_COST = 45.0    # a switch gives the foe a free turn; only worth it for a real swing
 
+  UNRANKED = -9_999.0   # finite sentinel: never let an Infinity into the score comparison,
+                        # because best_v.round raises FloatDomainError on +/-Infinity
+
   # Matchup quality of a bench mon vs the current foe (before the switch cost).
   def switch_value(bench_entry)
-    return -Float::INFINITY unless bench_entry
+    return UNRANKED unless bench_entry
     off  = bench_entry["off"].to_f     # its best move eff vs foe (0..4)
     take = bench_entry["take"].to_f    # how it takes foe STAB (0..4)
     (off >= 2 && take <= 1) ? 40.0 - 25.0 * take : (off - 1) * 12.0 - take * 25.0
@@ -92,7 +95,7 @@ module NLookahead
         (fm && fm.id && fm.id != :NONE) ? (SimAgent.est_damage(battle, foe, me, fm) rescue 0) : 0
       }.compact.max || 0)
 
-      best = nil; best_v = -Float::INFINITY; best_lbl = nil; best_dmg_v = -Float::INFINITY
+      best = nil; best_v = UNRANKED; best_lbl = nil; best_dmg_v = UNRANKED
       SimAgent.legal_moves(battle, i).each do |mi|
         m = me.moves[mi]
         info = (st["moves"].find { |x| x["idx"] == mi } || {})
@@ -123,7 +126,10 @@ module NLookahead
         end
       end
 
-      $SIM_LAST_REASON = "LA #{best_lbl} v=#{best_v.round}"
+      # `best` stays nil only when nothing scored (no usable move, no viable switch) -> defer to
+      # the fallback policy. Format defensively: .round raises FloatDomainError on Inf/NaN.
+      shown = (best_v.finite? ? best_v.round : 'n/a')
+      $SIM_LAST_REASON = best ? "LA #{best_lbl} v=#{shown}" : '(LA: no scored action)'
       best || SimAgent.random_policy(battle, i, st)
     end
   end
