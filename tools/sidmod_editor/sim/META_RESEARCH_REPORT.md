@@ -205,3 +205,97 @@ ruby tools/sidmod_editor/sim/nlookahead.rb 60
 ```
 
 Tooling: `nladder.rb` (search + bans), `ladder_metrics.rb` (RQ2 metrics), `nlookahead.rb` (lookahead policy), `rq1_ai_compare.rb` (AI comparison), `dmgcalc_priority.rb` / `dmgcalc_boosted.rb` (damage), `ab_item_test.rb` (item A/B). In-game: the Random Battle **ban-set menu** in `Data/Scripts/055_sidmod/RandomOpponent.rb`.
+
+---
+
+## Appendix A — Mon Dossier
+
+Every fusion nickname used anywhere in this report, decoded. Fusion order is **Head / Body** (the head supplies HP/SpA/SpD and the primary type; the body supplies Atk/Def/Spe and the secondary type). Sourced directly from the pool snapshot.
+
+| Name | Fusion (Head / Body) | Type | Ability · Item | Moveset |
+|---|---|---|---|---|
+| **Abyssmarill** | Azumarill / Absol | WATER/DARK | Huge Power · Life Orb | Swords Dance, Aqua Jet, Sucker Punch, Play Rough |
+| **Aerohelm** | Tyrantrum / Aerodactyl | ROCK/FLYING | Rock Head · Leftovers | Hone Claws, Head Smash, Sky Drop, Earthquake |
+| **Aqualift** | Suicune / Togekiss | WATER/FLYING | Serene Grace · Leftovers | Calm Mind, Scald, Air Slash, Roost |
+| **Aquamyth** | Azumarill / Arceus | WATER/NORMAL | Huge Power · Life Orb | Swords Dance, Extreme Speed, Aqua Jet, Play Rough |
+| **Aquaura** | Kyogre / Gardevoir | WATER/FAIRY | Drizzle · Leftovers | Surf, Moonblast, Thunder, Calm Mind |
+| **Blazeking** | Slaking / Blaziken | NORMAL/FIGHTING | Speed Boost · Life Orb | Swords Dance, Protect, Hammer Arm, Flare Blitz |
+| **Bonecloak** | Marowak / Mimikyu | GROUND/FAIRY | Disguise · Thick Club | Swords Dance, Bonemerang, Play Rough, Shadow Sneak |
+| **Boombox** | Porygonz / Noivern | NORMAL/DRAGON | Adaptability · Silk Scarf | Boomburst, Nasty Plot, Dragon Pulse, Flamethrower |
+| **Chantivy** | Sylveon / Noivern | FAIRY/DRAGON | Pixilate · Choice Specs | Boomburst, Draco Meteor, Flamethrower, U-turn |
+| **Charhydra** | Charizard / Hydreigon | FIRE/DRAGON | Solar Power · Choice Specs | Flamethrower, Fire Blast, Draco Meteor, U-turn |
+| **Chawlomp** | Hawlucha / Garchomp | FIGHTING/GROUND | Unburden · Focus Sash | Dragon Dance, Earthquake, Outrage, Superpower |
+| **Cragwing** | Tyranitar / Zapdos | ROCK/FLYING | Sand Stream · Leftovers | Stealth Rock, Stone Edge, U-turn, Flamethrower |
+| **Cryptocode** | Porygonz / Greninja | NORMAL/DARK | Protean · Life Orb | Nasty Plot, Dark Pulse, Ice Beam, Thunderbolt |
+| **Dragotitan** | Dragonite / Regigigas | DRAGON/NORMAL | Multiscale · Leftovers | Ice Punch, Extreme Speed, Dragon Dance, Earthquake |
+| **Draking** | Dragonite / Slaking | DRAGON/NORMAL | Multiscale · Life Orb | Dragon Dance, Dragon Claw, Earthquake, Return |
+| **Electide** | Starmie / Electivire | WATER/ELECTRIC | Motor Drive · Choice Specs | Hydro Pump, Thunderbolt, Ice Beam, Volt Switch |
+| **Feralak** | Feraligatr / Slaking | WATER/NORMAL | Sheer Force · Life Orb | Dragon Dance, Liquidation, Ice Punch, Crunch |
+| **Fistking** | Hawlucha / Slaking | FIGHTING/NORMAL | Mold Breaker · Life Orb | Swords Dance, High Jump Kick, Return, Shadow Claw |
+| **Floraflame** | Roserade / Ninetales | GRASS/FIRE | Drought · Leftovers | Flamethrower, Giga Drain, Nasty Plot, Solar Beam |
+| **Gallagross** | Gallade / Metagross | PSYCHIC/STEEL | Clear Body · Life Orb | Swords Dance, Meteor Mash, Close Combat, Bullet Punch |
+| **Gargoyle** | Salamence / Entei | DRAGON/FIRE | Moxie · Leftovers | Sacred Fire, Dragon Dance, Dragon Claw, V-create |
+| **Gensekyu** | Genesect / Mimikyu | BUG/FAIRY | Disguise · Leftovers | U-turn, Simple Beam, Play Rough, Infestation |
+| **Geyserchomp** | Azumarill / Garchomp | WATER/GROUND | Huge Power · Choice Scarf | Earthquake, Waterfall, Dragon Dance, Aqua Jet |
+| **Glimmerwing** | Sylveon / Dragonite | FAIRY/FLYING | Pixilate · Leftovers | Extreme Speed, Earthquake, Fire Punch, Dragon Claw |
+| **Glissey** | Blissey / Gliscor | NORMAL/FLYING | Poison Heal · Toxic Orb | Soft-Boiled, Toxic, Stealth Rock, Knock Off |
+| **Golisokyu** | Golisopod / Mimikyu | BUG/FAIRY | Disguise · Rocky Helmet | First Impression, Pain Split, Protect, Play Rough |
+| **Graniteaf** | Tyranitar / Leafeon | ROCK/GRASS | Sand Stream · Leftovers | Stealth Rock, Crunch, Stone Edge, Leaf Blade |
+| **Igniflora** | Lurantis / Entei | GRASS/FIRE | Contrary · Leftovers | V-create, Superpower, Rest, Leech Life |
+| **Illuzam** | Zoroark / Alakazam | DARK/PSYCHIC | Magic Guard · Life Orb | Nasty Plot, Dark Pulse, Psychic, Focus Blast |
+| **Infermane** | Entei / Arcanine | FIRE | Intimidate · Life Orb | Sacred Fire, Extreme Speed, Wild Charge, Crunch |
+| **Infernamo** | Blaziken / Kommoo | FIRE/FIGHTING | Speed Boost · Life Orb | Swords Dance, Close Combat, Flare Blitz, Earthquake |
+| **Infernersh** | Sandslash / Infernape | GROUND/FIGHTING | Sand Rush · Life Orb | Rapid Spin, Flare Blitz, Close Combat, Earthquake |
+| **Infervine** | Sceptile / Infernape | GRASS/FIGHTING | Iron Fist · Leftovers | Drain Punch, Fire Punch, Leaf Blade, Dragon Dance |
+| **Ironbriar** | Registeel / Ferrothorn | STEEL/GRASS | Iron Barbs · Leftovers | Stealth Rock, Spikes, Leech Seed, Power Whip |
+| **Ironchomp** | Metagross / Garchomp | STEEL/GROUND | Clear Body · Choice Scarf | Earthquake, Iron Head, Outrage, Stone Edge |
+| **Ironcrypt** | Ferrothorn / Cofagrigus | STEEL/GHOST | Iron Barbs · Leftovers | Spikes, Leech Seed, Power Whip, Will-O-Wisp |
+| **Joltkiss** | Togekiss / Jolteon | FAIRY/ELECTRIC | Serene Grace · Life Orb | Moonblast, Thunderbolt, Air Slash, Nasty Plot |
+| **Kingwyrm** | Slaking / Dragonite | NORMAL/FLYING | Multiscale · Life Orb | Extreme Speed, Earthquake, Bulk Up, Stone Edge |
+| **Krabust** | Kabutops / Kingler | ROCK/WATER | Swift Swim · Life Orb | Swords Dance, Waterfall, Stone Edge, Aqua Jet |
+| **Krasus** | Gengar / Omastar | GHOST/WATER | Levitate · Life Orb | Shell Smash, Shadow Ball, Hydro Pump, Ice Beam |
+| **Lagoonking** | Greninja / Slaking | WATER/NORMAL | Protean · Life Orb | Sucker Punch, Earthquake, Waterfall, Ice Punch |
+| **Maromence** | Marowak / Salamence | GROUND/FLYING | Moxie · Thick Club | Dragon Dance, Earthquake, Brick Break, Crunch |
+| **Mecharon** | Registeel / Hydreigon | STEEL/DRAGON | Levitate · Leftovers | Flamethrower, Thunderbolt, Thunder Wave, U-turn |
+| **Metarax** | Metagross / Haxorus | STEEL/DRAGON | Mold Breaker · Lum Berry | Dragon Claw, Dragon Dance, Iron Head, Earthquake |
+| **Momentum** | Weavile / Aerodactyl | DARK/FLYING | Rock Head · Choice Scarf | Knock Off, Ice Punch, Stone Edge, Low Kick |
+| **Monsoon** | Ludicolo / Sceptile | WATER/GRASS | Swift Swim · Life Orb | Surf, Giga Drain, Ice Beam, Focus Blast |
+| **Moxitalon** | Skarmory / Salamence | STEEL/FLYING | Moxie · Life Orb | Dragon Dance, Brave Bird, Earthquake, Roost |
+| **Mysticore** | Goodra / Espeon | DRAGON/PSYCHIC | Magic Bounce · Leftovers | Calm Mind, Dragon Pulse, Psyshock, Flamethrower |
+| **Mysticune** | Suicune / Milotic | WATER | Pressure · Leftovers | Calm Mind, Scald, Ice Beam, Recover |
+| **Nightmaw** | Darkrai / Hydreigon | DARK/DRAGON | Levitate · Life Orb | Nasty Plot, Dark Pulse, Draco Meteor, Focus Blast |
+| **Nimbus** | Volcarona / Politoed | BUG/WATER | Drizzle · Leftovers | Surf, Hurricane, Quiver Dance, Ice Beam |
+| **Noida** | Ninetales / Whimsicott | FIRE/FAIRY | Drought · Life Orb | Nasty Plot, Fire Blast, Moonblast, Solar Beam |
+| **Ombralure** | Chandelure / Omastar | GHOST/WATER | Swift Swim · Life Orb | Shadow Ball, Calm Mind, Hydro Pump, Energy Ball |
+| **Overload** | Weavile / Mamoswine | DARK/GROUND | Thick Fat · Life Orb | Swords Dance, Icicle Crash, Earthquake, Ice Shard |
+| **Persitto** | Ditto / Persian | NORMAL | Imposter · Choice Scarf | Fake Out, Transform |
+| **Phantoclaw** | Dusknoir / Scizor | GHOST/STEEL | Technician · Leftovers | Swords Dance, Bullet Punch, Shadow Sneak, Roost |
+| **Phantoglide** | Gliscor / Dusknoir | GROUND/GHOST | Poison Heal · Toxic Orb | Swords Dance, Earthquake, Knock Off, Roost |
+| **Phantomguard** | Blissey / Dusknoir | NORMAL/GHOST | Natural Cure · Leftovers | Soft-Boiled, Will-O-Wisp, Toxic, Shadow Ball |
+| **Pinkreef** | Blissey / Toxapex | NORMAL/WATER | Regenerator · Leftovers | Scald, Soft-Boiled, Toxic, Haze |
+| **Ravager** | Rhyperior / Salamence | GROUND/FLYING | Moxie · Choice Band | Earthquake, Stone Edge, Megahorn, Ice Punch |
+| **Riptide** | Gyarados / Garchomp | WATER/GROUND | Moxie · Life Orb | Dragon Dance, Waterfall, Earthquake, Ice Fang |
+| **Salagon** | Flygon / Salamence | GROUND/FLYING | Moxie · Life Orb | Dragon Dance, Earthquake, Dragon Claw, Fire Punch |
+| **Shadowshroud** | Chandelure / Greninja | GHOST/DARK | Protean · Life Orb | Hydro Pump, Fire Blast, Shadow Ball, Ice Beam |
+| **Sparkarona** | Volcarona / Magnezone | BUG/ELECTRIC | Flame Body · Leftovers | Quiver Dance, Heat Wave, Parabolic Charge, Bug Buzz |
+| **Spectracle** | Blissey / Dusclops | NORMAL/GHOST | Natural Cure · Eviolite | Soft-Boiled, Night Shade, Heal Bell, Will-O-Wisp |
+| **Spinosaurus** | Feraligatr / Garchomp | WATER/GROUND | Sheer Force · Life Orb | Waterfall, Crunch, Dragon Dance, Earthquake |
+| **Steelwyrm** | Dragonite / Scizor | DRAGON/STEEL | Multiscale · Leftovers | Dragon Dance, Dragon Claw, Earthquake, Roost |
+| **Stormwing** | Raichu / Aerodactyl | ELECTRIC/FLYING | Rock Head · Life Orb | Earthquake, Volt Tackle, Stealth Rock, Volt Switch |
+| **Swampwrath** | Poliwrath / Swampert | WATER/GROUND | Swift Swim · Life Orb | Waterfall, Earthquake, Superpower, Ice Punch |
+| **Terraeus** | Marowak / Arceus | GROUND/NORMAL | Battle Armor · Thick Club | Swords Dance, Extreme Speed, Earthquake, Stone Edge |
+| **Tidehammer** | Azumarill / Marowak | WATER/GROUND | Huge Power · Thick Club | Swords Dance, Aqua Jet, Earthquake, Knock Off |
+| **Tidepod** | Tyranitar / Golisopod | ROCK/WATER | Sand Stream · Leftovers | Stealth Rock, Sucker Punch, Stone Edge, Liquidation |
+| **Togecune** | Togekiss / Suicune | FAIRY/WATER | Serene Grace · Leftovers | Calm Mind, Moonblast, Scald, Roost |
+| **Umbragen** | Mewtwo / Greninja | PSYCHIC/DARK | Protean · Life Orb | Psychic, Ice Beam, Aura Sphere, Thunderbolt |
+| **Venomtide** | Gliscor / Suicune | GROUND/WATER | Poison Heal · Toxic Orb | Earthquake, Toxic, Roost, Knock Off |
+| **Venupod** | Venusaur / Golisopod | GRASS/WATER | Overgrow · Life Orb | First Impression, Liquidation, Power Whip, Swords Dance |
+| **Vireef** | Goodra / Toxapex | DRAGON/WATER | Hydration · Leftovers | Scald, Dragon Tail, Toxic Spikes, Rest |
+| **Voltaqua** | Volcarona / Greninja | BUG/DARK | Protean · Life Orb | Fiery Dance, Ice Beam, Quiver Dance, Dark Pulse |
+| **Voltario** | Lucario / Pikachu | FIGHTING/ELECTRIC | Justified · Light Ball | Extreme Speed, Vacuum Wave, Thunderbolt, Aura Sphere |
+| **Voltfist** | Electivire / Infernape | ELECTRIC/FIGHTING | Iron Fist · Life Orb | Thunder Punch, Fire Punch, Mach Punch, Ice Punch |
+| **Voltflare** | Talonflame / Luxray | FIRE/ELECTRIC | Intimidate · Life Orb | Brave Bird, Wild Charge, Flare Blitz, Roost |
+| **Voltking** | Jolteon / Nidoking | ELECTRIC/GROUND | Sheer Force · Life Orb | Earth Power, Thunderbolt, Flamethrower, Volt Switch |
+| **Voltotic** | Milotic / Jolteon | WATER/ELECTRIC | Volt Absorb · Leftovers | Scald, Thunderbolt, Ice Beam, Recover |
+| **Voltrazor** | Raichu / Scizor | ELECTRIC/STEEL | Technician · Choice Scarf | Knock Off, Double Iron Bash, Volt Switch, Volt Tackle |
+| **Voltwing** | Zapdos / Skarmory | ELECTRIC/FLYING | Pressure · Leftovers | Defog, Roost, Volt Switch, Thunderbolt |
