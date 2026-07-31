@@ -1,0 +1,31 @@
+{
+  "pokemon": [
+    {
+      "mode": "replace", "box": 25, "slot": 25,
+      "head": "ALAKAZAM", "body": "GENGAR", "level": 100,
+      "ability": "MAGICGUARD", "item": "LIFEORB", "nature": "TIMID",
+      "moves": ["NASTYPLOT", "PSYCHIC", "SHADOWBALL", "FOCUSBLAST"],
+      "evs": {"SPECIAL_ATTACK": 252, "SPEED": 252, "HP": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL"
+    },
+    {
+      "mode": "replace", "box": 33, "slot": 21,
+      "head": "GENGAR", "body": "ZOROARK", "level": 100,
+      "ability": "LEVITATE", "item": "LIFEORB", "nature": "TIMID",
+      "moves": ["NASTYPLOT", "SHADOWBALL", "DARKPULSE", "FOCUSBLAST"],
+      "evs": {"SPECIAL_ATTACK": 252, "SPEED": 252, "HP": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL"
+    },
+    {
+      "mode": "add", "box": 36,
+      "head": "POLIWRATH", "body": "GARCHOMP", "level": 100,
+      "ability": "SWIFTSWIM", "item": "LIFEORB", "nature": "ADAMANT",
+      "moves": ["SWORDSDANCE", "WATERFALL", "EARTHQUAKE", "ICEPUNCH"],
+      "evs": {"ATTACK": 252, "SPEED": 252, "HP": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL"
+    }
+  ]
+}

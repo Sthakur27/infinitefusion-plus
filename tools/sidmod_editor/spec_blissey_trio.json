@@ -1,0 +1,31 @@
+{
+  "pokemon": [
+    {
+      "mode": "add", "box": 36,
+      "head": "BLISSEY", "body": "ALAKAZAM", "level": 100,
+      "ability": "MAGICGUARD", "item": "LIFEORB", "nature": "BOLD",
+      "moves": ["CALMMIND", "PSYSHOCK", "SOFTBOILED", "ICEBEAM"],
+      "evs": {"HP": 252, "DEFENSE": 252, "SPECIAL_ATTACK": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL"
+    },
+    {
+      "mode": "add", "box": 36,
+      "head": "BLISSEY", "body": "GENGAR", "level": 100,
+      "ability": "LEVITATE", "item": "LEFTOVERS", "nature": "BOLD",
+      "moves": ["CALMMIND", "SLUDGEBOMB", "SOFTBOILED", "WILLOWISP"],
+      "evs": {"HP": 252, "DEFENSE": 252, "SPECIAL_ATTACK": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL"
+    },
+    {
+      "mode": "add", "box": 36,
+      "head": "BLISSEY", "body": "NOIVERN", "level": 100,
+      "ability": "NATURALCURE", "item": "LEFTOVERS", "nature": "BOLD",
+      "moves": ["CALMMIND", "BOOMBURST", "FLAMETHROWER", "SOFTBOILED"],
+      "evs": {"HP": 252, "DEFENSE": 252, "SPECIAL_ATTACK": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL"
+    }
+  ]
+}
