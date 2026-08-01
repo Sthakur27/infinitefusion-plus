@@ -1,0 +1,30 @@
+{
+  "pokemon": [
+    {
+      "mode": "edit",
+      "box": 17,
+      "slot": 4,
+      "level": 100,
+      "ability": "DRIZZLE",
+      "item": "LEFTOVERS",
+      "nature": "TIMID",
+      "moves": ["CALMMIND", "SURF", "AEROBLAST", "THUNDER"],
+      "evs": { "SPECIAL_ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 }
+    },
+    {
+      "mode": "add",
+      "head": "RAYQUAZA",
+      "body": "LUGIA",
+      "level": 100,
+      "ability": "MULTISCALE",
+      "item": "LUMBERRY",
+      "nature": "JOLLY",
+      "moves": ["DRAGONDANCE", "DRAGONCLAW", "EARTHQUAKE", "EXTREMESPEED"],
+      "evs": { "ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL",
+      "box": 24
+    }
+  ]
+}

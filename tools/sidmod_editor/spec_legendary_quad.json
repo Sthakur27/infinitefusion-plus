@@ -1,0 +1,40 @@
+{
+  "pokemon": [
+    {
+      "mode": "add", "box": 36,
+      "head": "RESHIRAM", "body": "MEWTWO", "level": 100,
+      "ability": "TURBOBLAZE", "item": "LIFEORB", "nature": "MODEST",
+      "moves": ["CALMMIND", "BLUEFLARE", "PSYSTRIKE", "ROOST"],
+      "evs": {"SPECIAL_ATTACK": 252, "SPEED": 252, "HP": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL"
+    },
+    {
+      "mode": "add", "box": 36,
+      "head": "LUGIA", "body": "DEOXYS", "level": 100,
+      "ability": "MULTISCALE", "item": "LEFTOVERS", "nature": "TIMID",
+      "moves": ["CALMMIND", "PSYCHIC", "AEROBLAST", "RECOVER"],
+      "evs": {"HP": 252, "SPECIAL_ATTACK": 4, "SPEED": 252},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL"
+    },
+    {
+      "mode": "add", "box": 36,
+      "head": "RAYQUAZA", "body": "MEWTWO", "level": 100,
+      "ability": "AIRLOCK", "item": "LIFEORB", "nature": "TIMID",
+      "moves": ["CALMMIND", "PSYSTRIKE", "DRAGONPULSE", "RECOVER"],
+      "evs": {"SPECIAL_ATTACK": 252, "SPEED": 252, "HP": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL"
+    },
+    {
+      "mode": "add", "box": 36,
+      "head": "AZUMARILL", "body": "LUGIA", "level": 100,
+      "ability": "HUGEPOWER", "item": "LEFTOVERS", "nature": "ADAMANT",
+      "moves": ["DRAGONDANCE", "WATERFALL", "AQUAJET", "ROOST"],
+      "evs": {"HP": 252, "ATTACK": 252, "SPEED": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL"
+    }
+  ]
+}

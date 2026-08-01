@@ -56,6 +56,31 @@ Turn under-built PC mons into competitive **Lv100 + item** mons (which also enro
 
 Reference run (this session): 53 mons coached → **all 309 scope mons** (fusion boxes 18-25 idx17-24, Squads idx33-35, vanilla UU/OU/Uber idx37-39) are now L100+item. Pool the Random Battle feature sees = every L100+item PC mon (was ~396, incl. pre-existing collection boxes).
 
+#### Conservative whole-PC upgrader
+
+`competitive_upgrade_pc.ps1` wraps the API coach with a deterministic eligibility gate. It scans
+all PC boxes but selects only non-egg Pokémon whose every fusion component has no further engine
+evolution. It protects completed builds (L100 + item + at least 500 EVs). Invested but unfinished
+Pokémon remain candidates—the intended use case is finishing promising sets such as Skartops.
+Triple fusions are excluded because the safe offline editor cannot recalculate their stats. The
+coach may return `sprite_only` only for a fundamentally noncompetitive combination; these are
+omitted from the edit spec and written to `sprite_only_report.json` for human review.
+
+```powershell
+# Read-only: no API calls and no save writes. Review candidate_audit.json.
+powershell -File tools\sidmod_editor\competitive_upgrade_pc.ps1 -Mode Scan -Tag my_scan
+
+# API calls; emits coach_report.json + coach_spec.json, but does not touch the save.
+powershell -File tools\sidmod_editor\competitive_upgrade_pc.ps1 -Mode Coach -Tag my_upgrade
+
+# After reviewing that tag: backs up every File A-H, dry-runs, verifies, then applies File A.
+powershell -File tools\sidmod_editor\competitive_upgrade_pc.ps1 -Mode Apply -Tag my_upgrade
+```
+
+The API key remains in gitignored `sim/.apikey` and is never printed. A failed or illegal model set
+is retried three times, then omitted rather than guessed. The generated spec forces Lv100, 31 IVs,
+validated item/ability/moves, and no more than 508 EVs.
+
 ---
 ### 1c. Sync the live save into the repository showcase
 

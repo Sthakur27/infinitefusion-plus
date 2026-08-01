@@ -1,0 +1,32 @@
+{
+  "pokemon": [
+    {
+      "mode": "add",
+      "head": "LUGIA",
+      "body": "ZEKROM",
+      "level": 100,
+      "ability": "MULTISCALE",
+      "item": "LUMBERRY",
+      "nature": "JOLLY",
+      "moves": ["DRAGONDANCE", "PLASMAFISTS", "ZENHEADBUTT", "EARTHQUAKE"],
+      "evs": { "ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL",
+      "box": 25
+    },
+    {
+      "mode": "add",
+      "head": "VOLCARONA",
+      "body": "LUGIA",
+      "level": 100,
+      "ability": "MULTISCALE",
+      "item": "LEFTOVERS",
+      "nature": "TIMID",
+      "moves": ["QUIVERDANCE", "BUGBUZZ", "AEROBLAST", "ROOST"],
+      "evs": { "SPECIAL_ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL",
+      "box": 25
+    }
+  ]
+}

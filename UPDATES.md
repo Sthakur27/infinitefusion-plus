@@ -448,3 +448,90 @@ Semantic diff of `File A.rxdata` → live `File A.rxdata`. Pokémon are matched 
 - Revert the repository copy with Git; this tool never writes the live save.
 
 <!-- save-sync:6085c9602a2ad6e21d5d1d534b0690997c2f7002530b1377ac913b001d3ef724 -->
+
+---
+
+## 2026-08-01 · Conservative whole-PC competitive upgrader
+
+Added `tools/sidmod_editor/competitive_upgrade_pc.ps1` and extended
+`sim/ncoach_api.rb` with whole-PC `scan`/`coach` modes. Candidate selection is deterministic:
+eggs and non-final species are excluded, while completed L100+item+full-EV builds are protected.
+Invested but unfinished sets remain candidates—Skartops is the canonical desired upgrade. Triple
+fusions are excluded because the offline editor cannot safely recalculate them. Claude can mark a
+fundamentally noncompetitive combination `sprite_only`; those decisions are emitted in a separate
+review report and omitted from the spec. Every proposed move, ability, item, nature, and EV spread
+is validated locally.
+
+The default scan is read-only and makes no API calls. Coach emits an auditable report and edit
+spec without touching the save. Apply requires an explicitly named reviewed run, takes a full
+File A-H rollback backup, runs the standard dry-run/collateral verifier, then writes through
+`apply.ps1`. A six-batch review refined the policy: skip 9 unsafe triple fusions, but retain
+promising invested builds for completion rather than mistaking them for finished sets. No API call
+or save write was made.
+
+## 2026-08-01 · Dialga/Lugia competitive fusion
+
+Added a net-new Dialga-head/Lugia-body Steel/Flying fusion to competitive Box 25 via
+`tools/sidmod_editor/spec_dialga_lugia.json`: Lv100 Modest Multiscale @ Leftovers, 252 HP / 252 SpA
+/ 4 SpD, perfect IVs, Calm Mind / Roost / Flash Cannon / Aeroblast. This is a bulky special win
+condition: Multiscale creates setup opportunities, Roost preserves it, and dual STAB avoids a
+passive mono-attacking set. Revert from the automatic `apply.ps1` backup or remove the added slot.
+
+## 2026-08-01 · Lugia-body legendary pair
+
+Used `tools/sidmod_editor/spec_kyogre_lugia_rayquaza_lugia.json` to rebuild the existing
+Kyogre/Lugia as a Timid Drizzle Water/Flying Calm Mind attacker (Leftovers; Surf / Aeroblast /
+Thunder), and add a net-new Rayquaza/Lugia: Jolly Multiscale Dragon/Flying Dragon Dance attacker
+(Lum Berry; Dragon Claw / Earthquake / Extreme Speed). Both are Lv100 with perfect IVs and
+252/252/4 competitive EV spreads. Revert from the automatic `apply.ps1` backup; the Kyogre/Lugia
+edit preserves its identity, while Rayquaza/Lugia can be removed from its reported destination.
+
+## 2026-08-01 · Lugia/Zekrom Multiscale dancer
+
+Added a net-new Lugia-head/Zekrom-body Psychic/Electric fusion via
+`tools/sidmod_editor/spec_lugia_zekrom_volcarona_lugia.json`: Lv100 Jolly Multiscale @ Lum Berry, perfect IVs,
+252 Atk / 252 Spe / 4 HP, Dragon Dance / Plasma Fists / Zen Headbutt / Earthquake. Lugia must be
+the head to produce the requested Psychic/Electric typing; the reverse orientation would be
+Dragon/Flying. Plasma Fists is intentionally supplied through the legal Move Expert pool. Revert
+from the automatic `apply.ps1` backup or remove the reported destination slot.
+
+## 2026-08-01 · Volcarona/Lugia Multiscale quiver dancer
+
+The same `spec_lugia_zekrom_volcarona_lugia.json` batch adds Volcarona-head/Lugia-body for the
+requested Bug/Flying typing: Lv100 Timid Multiscale @ Leftovers, perfect IVs, 252 SpA / 252 Spe /
+4 HP, Quiver Dance / Bug Buzz / Aeroblast / Roost. Multiscale creates the setup turn and Roost can
+restore it while dual STAB preserves coverage. Box 25 was full, so both new Lugia fusions target
+competitive Box 26. Revert from the automatic `apply.ps1` backup or remove the reported slots.
+
+---
+
+## 2026-08-01 · Showcase save sync — 8 new, 0 competitively upgraded
+<!-- save-diff-counts:added=8 upgraded=0 -->
+
+Semantic diff of `File A.rxdata` → live `File A.rxdata`. Pokémon are matched by owner + personal ID. The report includes only net-new identities and existing Pokémon that newly reach competitive-ready status (Lv100 + held item + at least 508 EVs). Moveset/item-only edits and 0 PC/party relocation(s) are ignored.
+
+- Old SHA-256: `6085c9602a2ad6e21d5d1d534b0690997c2f7002530b1377ac913b001d3ef724`
+- New SHA-256: `337ef13569050820802ff1e3aacfe7483a5812fd69b4e9e07b9aba7c7ae8a4fb`
+- Roster: 928 → 936 Pokémon
+- Tooling: `tools/sidmod_editor/save_diff.rb` (semantic identity diff) and `tools/sidmod_editor/sync_showcase_save.ps1` (verified copy + documentation sync).
+
+### Added Pokémon (8)
+
+| Head | Body | Typing | Location | Lv | Ability | Item | Moveset |
+|---|---|---|---|---:|---|---|---|
+| Dialga | Lugia | STEEL/FLYING | Box 25 "Box 25", slot 12 | 100 | MULTISCALE | LEFTOVERS | CALMMIND / ROOST / FLASHCANNON / AEROBLAST |
+| Rayquaza | Lugia | DRAGON/FLYING | Box 25 "Box 25", slot 26 | 100 | MULTISCALE | LUMBERRY | DRAGONDANCE / DRAGONCLAW / EARTHQUAKE / EXTREMESPEED |
+| Volcarona | Lugia | BUG/FLYING | Box 26 "Box 26", slot 18 | 100 | MULTISCALE | LEFTOVERS | QUIVERDANCE / BUGBUZZ / AEROBLAST / ROOST |
+| Lugia | Zekrom | PSYCHIC/ELECTRIC | Box 26 "Box 26", slot 3 | 100 | MULTISCALE | LUMBERRY | DRAGONDANCE / PLASMAFISTS / ZENHEADBUTT / EARTHQUAKE |
+| Reshiram | Mewtwo | DRAGON/PSYCHIC | Box 37 "Laboratory", slot 4 | 100 | TURBOBLAZE | LIFEORB | CALMMIND / BLUEFLARE / PSYSTRIKE / ROOST |
+| Lugia | Deoxys | PSYCHIC | Box 37 "Laboratory", slot 5 | 100 | MULTISCALE | LEFTOVERS | CALMMIND / PSYCHIC / AEROBLAST / RECOVER |
+| Rayquaza | Mewtwo | DRAGON/PSYCHIC | Box 37 "Laboratory", slot 6 | 100 | AIRLOCK | LIFEORB | CALMMIND / PSYSTRIKE / DRAGONPULSE / RECOVER |
+| Azumarill | Lugia | WATER/FLYING | Box 37 "Laboratory", slot 7 | 100 | HUGEPOWER | LEFTOVERS | DRAGONDANCE / WATERFALL / AQUAJET / ROOST |
+
+### Reproduce or revert
+
+- Preview: `powershell -File tools/sidmod_editor/sync_showcase_save.ps1`
+- Apply the live-save copy and append this report: `powershell -File tools/sidmod_editor/sync_showcase_save.ps1 -Apply`
+- Revert the repository copy with Git; this tool never writes the live save.
+
+<!-- save-sync:337ef13569050820802ff1e3aacfe7483a5812fd69b4e9e07b9aba7c7ae8a4fb -->
