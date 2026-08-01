@@ -29,44 +29,84 @@
 module SidmodRandomOpp
   module_function
 
+  # sidmod: mode picks the GENERATOR only; the competitive tier is a separate step
+  # (see TIER_LABELS below), so every generator can be played in every tier.
   MODES = begin
-    [_INTL("Chaos - OU"), _INTL("Smart - OU"), _INTL("Smart v2 - OU"),
-     _INTL("Chaos - Ubers"), _INTL("Smart - Ubers"), _INTL("Smart v2 - Ubers"),
-     _INTL("OU Apex")]
+    [_INTL("Chaos"), _INTL("Smart"), _INTL("Smart v2"), _INTL("OU Apex")]
   rescue
-    ["Chaos - OU", "Smart - OU", "Smart v2 - OU",
-     "Chaos - Ubers", "Smart - Ubers", "Smart v2 - Ubers", "OU Apex"]
+    ["Chaos", "Smart", "Smart v2", "OU Apex"]
   end
-  MODE_SEL = %i[chaos smart smart2 chaos smart smart2 apex]
+  MODE_SEL = %i[chaos smart smart2 apex]
 
-  # sidmod: RESEARCH BAN SETS - an optional filter layered on top of the tier/mode,
-  # mirroring the offline ladder's ban conditions (tools/sidmod_editor/sim/nladder.rb)
-  # that showed banning the dominant "multiplier" fusions (Marowak/Azumarill/Pikachu)
-  # is what actually diversifies the metagame. Applied to the candidate pool in
-  # build_team_named. Spore is ALWAYS excluded (BANNED_MOVES); these add the standard
-  # competitive clauses + the two dominant-group species bans. Wonder Guard is
-  # deliberately NOT clause-banned in-game (per Sid's earlier call to leave it playable).
+  # sidmod: COMPETITIVE TIERS. Assignments live in Data/sidmod/tiers.json, which is a
+  # straight copy of tools/sidmod_editor/sim/tiers.json so the game and the offline ladder
+  # share ONE source of truth. Every fusion has a home tier; a tier's legal pool is its own
+  # members plus everything below it (ag > ubers > ou > uu), so listing a fusion under
+  # "ubers" bans it from OU and UU. Anything unlisted defaults to uu = legal everywhere.
+  #
+  # Identity is the engine's own canonical fusion id - the species symbol B<body>H<head>,
+  # which is exactly what pk.species already holds, so matching is a direct lookup.
+  # Entries in the json may be written "HEAD/BODY" or "B373H105"; both resolve here.
+  #
+  # Standard clauses (uncompetitive abilities/moves) apply in EVERY tier. Wonder Guard and
+  # Spore stay in BANNED_MOVES/none here - Spore is already excluded pool-wide, and Wonder
+  # Guard is deliberately left playable in-game per Sid's call.
+  TIER_ORDER  = %w[uu ou ubers ag]           # ascending power
+  TIER_LABELS = begin
+    [_INTL("AG - anything goes"), _INTL("Ubers"), _INTL("OU"), _INTL("UU")]
+  rescue
+    ["AG - anything goes", "Ubers", "OU", "UU"]
+  end
+  TIER_SEL = %w[ag ubers ou uu]
+  # AG/Ubers play the full pool; OU/UU additionally apply the legendary filter.
+  TIER_LEGEND_FILTER = { "ag" => :ubers, "ubers" => :ubers, "ou" => :ou, "uu" => :ou }
   CLAUSE_ABILITIES = %i[MOODY SHADOWTAG ARENATRAP]
   CLAUSE_MOVES     = %i[BATONPASS SWAGGER FISSURE SHEERCOLD HORNDRILL GUILLOTINE]
-  GROUP_A_SPECIES  = %i[MAROWAK AZUMARILL PIKACHU]
-  GROUP_B_SPECIES  = %i[DRAGONITE SLAKING REGIGIGAS]
-  BAN_SETS = {
-    none:     { species: [],                                clauses: false },
-    clauses:  { species: [],                                clauses: true  },
-    ban_a:    { species: GROUP_A_SPECIES,                   clauses: true  },
-    ban_b:    { species: GROUP_B_SPECIES,                   clauses: true  },
-    ban_both: { species: GROUP_A_SPECIES + GROUP_B_SPECIES, clauses: true  },
-  }
-  BAN_SET_LABELS = begin
-    [_INTL("No clauses"), _INTL("Standard clauses"),
-     _INTL("Ban multipliers (Marowak/Azu/Pika)"),
-     _INTL("Ban setup+stat (Dnite/Slaking/Regi)"),
-     _INTL("Ban both groups")]
-  rescue
-    ["No clauses", "Standard clauses", "Ban multipliers (Marowak/Azu/Pika)",
-     "Ban setup+stat (Dnite/Slaking/Regi)", "Ban both groups"]
+  TIERS_PATH = "Data/sidmod/tiers.json"
+
+  # canonical fusion id (Symbol) => home tier String. Cached; missing/!broken json degrades
+  # to "no tier bans" rather than breaking Random Battle.
+  # The engine ships a lightweight RGSS JSON parser that returns SYMBOL keys, while Ruby's
+  # stdlib JSON (used by the offline sim on the same file) returns STRING keys. Fetch either.
+  def jget(h, key)
+    return nil unless h.is_a?(Hash)
+    h[key.to_s] || h[key.to_sym]
   end
-  BAN_SET_SEL = %i[none clauses ban_a ban_b ban_both]
+
+  def tier_assignments
+    return @tier_assignments if @tier_assignments
+    @tier_assignments = {}
+    begin
+      cfg = JSON.parse(File.read(TIERS_PATH))
+      (jget(cfg, :tiers) || {}).each do |tname, tdata|
+        (jget(tdata, :members) || []).each do |entry|
+          sym = canon_fusion_id(entry)
+          @tier_assignments[sym] = tname.to_s if sym
+        end
+      end
+    rescue => e
+      echoln "[sidmod] tiers.json unreadable (#{e.class}) - tier bans disabled" if $DEBUG
+    end
+    @tier_assignments
+  end
+
+  # "MAROWAK/MIMIKYU" or "B373H105" -> :B373H105
+  def canon_fusion_id(entry)
+    s = entry.to_s.strip
+    return s.upcase.to_sym if s =~ /\AB\d+H\d+\z/i
+    parts = s.upcase.split("/").map { |x| x.strip }
+    return nil unless parts.length == 2
+    head = (GameData::Species.get(parts[0].to_sym) rescue nil)
+    body = (GameData::Species.get(parts[1].to_sym) rescue nil)
+    return nil unless head && body
+    (getFusedPokemonIdFromDexNum(body.id_number, head.id_number) rescue nil)
+  end
+
+  # Is this candidate legal in `tier`? Its home tier must not sit ABOVE the tier played.
+  def tier_legal?(c, tier)
+    home = tier_assignments[(c[:ref].species rescue nil)] || "uu"
+    (TIER_ORDER.index(home) || 0) <= (TIER_ORDER.index(tier.to_s) || 0)
+  end
 
   # TIER FILTER. OU excludes any fusion whose head OR body is a legendary that ISN'T one of these
   # sub-600 "OU-legal" legendaries (the birds/beasts/golems + Regigigas special-case). Ubers = no filter.
@@ -500,26 +540,26 @@ module SidmodRandomOpp
   end
 
   # -> [[pokemon x6], archetype_used_or_nil] | nil
-  # sidmod: apply a research ban set (standard clauses + dominant-group species bans)
-  # to the candidate pool. :none is a no-op (Spore/OU filters still apply upstream).
-  def apply_ban_set(cands, bans)
-    set = BAN_SETS[bans] || BAN_SETS[:none]
-    if set[:clauses]
-      cands = cands.reject do |c|
-        CLAUSE_ABILITIES.include?(c[:ability]) || ((c[:moves] || []) & CLAUSE_MOVES).any?
-      end
+  # sidmod: standard competitive clauses (apply in every tier) + the tier's own banlist.
+  # `tier` is a tier NAME string ("ag"/"ubers"/"ou"/"uu"); nil skips tier bans entirely.
+  def apply_tier(cands, tier)
+    cands = cands.reject do |c|
+      CLAUSE_ABILITIES.include?(c[:ability]) || ((c[:moves] || []) & CLAUSE_MOVES).any?
     end
-    species = set[:species]
-    cands = cands.reject { |c| ((c[:bases] || []) & species).any? } unless species.empty?
+    cands = cands.select { |c| tier_legal?(c, tier) } if tier
     cands
   end
 
-  def build_team_named(sel, tier, seed, arch = nil, avoid = nil, bans = :none)
+  # `tier` may be a tier NAME ("ou") or the legacy legendary-filter symbol (:ou/:ubers) that
+  # the offline sim harness passes to build_team. Both are accepted.
+  def build_team_named(sel, tier, seed, arch = nil, avoid = nil)
+    tname = TIER_SEL.include?(tier.to_s) ? tier.to_s : nil
+    legend = tname ? TIER_LEGEND_FILTER[tname] : tier
     rng   = Random.new(seed)
     cands = battle_pool.map { |pk| candidate(pk) }
     cands = cands.reject { |c| ((c[:moves] || []) & BANNED_MOVES).any? }   # Spore clause (all modes)
-    cands = cands.select { |c| ou_legal?(c) } if tier == :ou
-    cands = apply_ban_set(cands, bans)                                     # sidmod research bans
+    cands = cands.select { |c| ou_legal?(c) } if legend == :ou
+    cands = apply_tier(cands, tname)                                       # sidmod tier banlist
     return nil if cands.length < 6
     chosen = nil
     used   = nil
@@ -638,31 +678,38 @@ module SidmodRandomOpp
     end
   end
 
+  # sidmod: display name for a tier value (tier NAME string, or legacy :ou/:ubers symbol)
+  def tier_label(tier)
+    i = TIER_SEL.index(tier.to_s)
+    return TIER_LABELS[i].split(" - ").first if i
+    tier == :ou ? "OU" : "Ubers"
+  end
+
   def cant_build(sel, tier, arch, side)
     if sel == :smart2 && arch && arch != :random
-      pbMessage(_INTL("Your battle-ready {1}pool can't build a {2} team for {3} - it's missing the " \
-                      "pieces (a weather setter, enough walls, etc.). Try another plan.",
-                      tier == :ou ? "OU-legal " : "", ARCH_LABELS[arch], side))
+      pbMessage(_INTL("Your battle-ready {1}-legal pool can't build a {2} team for {3} - it's missing " \
+                      "the pieces (a weather setter, enough walls, etc.). Try another plan.",
+                      tier_label(tier), ARCH_LABELS[arch], side))
     else
-      pbMessage(_INTL("Need 6+ battle-ready {1}Pokemon at Lv100 holding an item (party or PC). " \
-                      "Upgrade more mons first.", tier == :ou ? "OU-legal " : ""))
+      pbMessage(_INTL("Need 6+ battle-ready {1}-legal Pokemon at Lv100 holding an item (party or PC). " \
+                      "Upgrade more mons first.", tier_label(tier)))
     end
   end
 
   # `my_arch` is the plan for the player's lent team; `arch` is the opponent's. YOUR
   # side is built FIRST so the opponent's random roll knows which plan to avoid.
-  def start_battle(sel, tier, arch = nil, who = :real, spectate = false, my_arch = nil, bans = :none)
+  def start_battle(sel, tier, arch = nil, who = :real, spectate = false, my_arch = nil)
     mine = nil
     mine_used = nil
     if who == :gen
-      r2 = build_team_named(sel, tier, rand(1_000_000), my_arch, nil, bans)
+      r2 = build_team_named(sel, tier, rand(1_000_000), my_arch)
       unless r2
         cant_build(sel, tier, my_arch, _INTL("your side"))
         return
       end
       mine, mine_used = r2
     end
-    result = build_team_named(sel, tier, rand(1_000_000), arch, mine_used, bans)
+    result = build_team_named(sel, tier, rand(1_000_000), arch, mine_used)
     unless result
       cant_build(sel, tier, arch, _INTL("the opponent"))
       return
@@ -680,7 +727,7 @@ module SidmodRandomOpp
     names = refs.map { |pk| pk.name || pk.speciesName }.join(", ")
     fight(refs, _INTL("Random Challenger"),
           _INTL("A {1} {2} challenger appears with:\n{3}!",
-                style, tier == :ou ? "OU" : "Ubers", names),
+                style, tier_label(tier), names),
           mine, spectate)
   end
 
@@ -834,8 +881,8 @@ module SidmodRandomOpp
     [mine, foe]
   end
 
-  # Two stages: WHO plays which side, then WHICH team generator. B backs out at
-  # every step.
+  # Three stages: WHO plays which side, WHICH generator, then the competitive TIER.
+  # B backs out at every step. Apex skips the tier step (fixed rosters).
   def run
     s = pbShowCommands(nil, SIDE_LABELS, -1)
     return if s < 0
@@ -844,10 +891,9 @@ module SidmodRandomOpp
     return if idx < 0
     sel = MODE_SEL[idx]
     return run_apex(who, spectate) if sel == :apex   # fixed rosters - no tier step
-    tier = (idx <= 2) ? :ou : :ubers
-    bidx = pbShowCommands(nil, BAN_SET_LABELS, -1)   # sidmod: research ban-set step
-    return if bidx < 0
-    bans = BAN_SET_SEL[bidx]
+    tidx = pbShowCommands(nil, TIER_LABELS, -1)      # sidmod: competitive tier step
+    return if tidx < 0
+    tier = TIER_SEL[tidx]
     arch = nil
     my_arch = nil
     if sel == :smart2
@@ -855,7 +901,7 @@ module SidmodRandomOpp
       return if picked.nil?
       my_arch, arch = picked
     end
-    start_battle(sel, tier, arch, who, spectate, my_arch, bans)
+    start_battle(sel, tier, arch, who, spectate, my_arch)
   end
 end
 

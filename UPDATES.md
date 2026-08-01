@@ -295,3 +295,43 @@ failed to place, consistent with the earlier damage calc: ~100 physical Def is f
 
 Follow-up running: `ladder_ou2` (does the promoted Huge Power crowd break OU → Ubers case?) and
 `ladder_uu2` (did the promotions stabilise UU?).
+
+---
+
+## 2026-07-30 · Four-tier sweep + tiers playable in-game
+
+**Full sweep run** (`ladder_v_ag/ubers/ou/uu`, 100 teams × 20 batches each) with correct
+cascading exclusions (AG 2 → Ubers +8 → OU +15).
+
+| Tier | Cap-saturated (30/100) | Niche spread | Top Elo |
+|---|---|---|---|
+| AG | Blissey/Dusknoir, Azumarill/Garchomp | rain 27, balance 26, priority 18, HO 13 | 1888 |
+| Ubers | Azumarill/Marowak, Azumarill/Absol | **HO 31**, balance 20, priority 15 | 1855 |
+| OU | Suicune/Togekiss, Tyranitar/Golisopod | **balance 28, priority 21, rain 16, HO 10** | 1902 |
+| UU | Politoed/Forretress | **rain 31**, balance 26, hazardstack 14 | 1828 |
+
+**Methodological finding — cap-saturation is a bad ban criterion.** Every tier has ~2 mons
+pinned at exactly 30/100 *because the ladder's usage cap is 30%*. Something will always sit
+there; banning it just promotes the next mon into the same slot, so per-mon "ban what capped"
+is **unbounded by construction**. The AG banlist was built on that signal and should be treated
+as provisional. **Niche spread is the better health signal**, and by it **OU is the healthiest
+tier we have built** — no archetype monoculture. Recommendation: stop adding bans.
+
+One promotion validated: **Marowak/Dragonite**, promoted UU→OU last pass, landed **#4 in OU
+(26 uses)** — strong but not dominant, i.e. correctly tiered.
+
+**Session builds finally placed:** Suicune/Gliscor **#21 in OU** (best of any build this
+session — the Poison Heal Water/Flying wall is genuinely OU-caliber), Gengar/Zoroark **#17 in
+Ubers** (the rebuild works), Blissey/Gengar #46 OU, Alakazam/Gengar #39 UU, Mimikyu/Crobat #51
+OU, Machamp/Crobat #65 UU.
+
+**Tiers are now playable in-game.** Random Battle's menu is restructured: the generator
+(Chaos / Smart / Smart v2 / OU Apex) and the **competitive tier (AG / Ubers / OU / UU)** are
+separate steps, so any generator can be played in any tier. `Data/sidmod/tiers.json` is a copy
+of the sim's `tiers.json`, so game and ladder share one source of truth — **re-copy it after
+any tier change**. Full detail and revert steps in `sidmod.txt`.
+
+Bug worth remembering: the engine's lightweight RGSS JSON parser returns **symbol** keys while
+Ruby's stdlib JSON returns **string** keys on the same file. `cfg["tiers"]` silently read nil
+in-game, so zero assignments loaded and every tier was unfiltered. Fixed with a key-agnostic
+`jget`; verified 25 assignments load and all four tier boundaries behave.

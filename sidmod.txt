@@ -2080,3 +2080,80 @@ Data/Scripts/055_sidmod/RandomOpponent.rb
   verified: ruby -c Syntax OK; apply_ban_set headless on rsnap pool -> none356/clauses340/banA306/
     banB289/both261 legal. NOT yet seen on a real screen (the extra menu step is unverified in-game).
   revert: remove the BAN_* consts + apply_ban_set, drop the `bans` params and the run menu step.
+
+##############################################
+PC search: head/body species filter - find a fusion by either of its halves, in any order
+Data/Scripts/052_InfiniteFusion/Menus/PC/PCSearch.rb
+  open ~line 15: new 5th entry "Head/Body species" (before Cancel) -> `when 4 then
+    filter_by_parts(storage)`. Existing indices 0-3 (Type/Level/Name/Dex) unchanged, so
+    the old muscle memory still works.
+  filter_by_parts ~line 68 (new): the same two-step shape as filter_by_type, but over
+    fusion halves. Step 1 picks a species from a live-filter list ("gli" -> Gliscor);
+    step 2 picks the other half ("sui" -> Suicune). Matching is ORDER-INDEPENDENT -
+    Gliscor+Suicune returns both Gliscor/Suicune and Suicune/Gliscor, exactly like the
+    two-type filter. Step 2 also offers "(Any half)" = every mon using that species on
+    either side.
+  both lists are built FROM THE BOXES, not from GameData, with match counts in the row
+    ("Gliscor (22)"): a pick can therefore never return an empty result list, and step 2
+    is narrowed to species that actually pair with the step-1 pick (Gliscor -> 19
+    partners in the current PC). part_entries/partner_entries/build_part_entries (new).
+  parts_match?(pkmn, sym1, sym2) (new): counts occurrences rather than testing include?
+    twice, so picking the same species twice means a SELF-FUSION (needs both halves) and
+    does not falsely match a single-half mon.
+  pkmn_part_symbols(pkmn) (new): [head, body] for a fusion, [species] for anything else.
+    Unfused mons and triple fusions have no two halves, so they list under their own name
+    and are only reachable via "(Any half)" - deliberate, they can't be a pairing.
+  reuses the existing choose_searchable + pick_match, so the result rows, the "h:X b:Y"
+    labels and the jump-to-box behaviour are identical to the other filters.
+  NOTE this is narrower than the existing "Name (contains)" filter, which already matches
+    either half - but only ONE substring and it also hits nicknames. This one pins BOTH
+    halves at once, which is what "is that exact fusion in here" needs.
+  verified: ruby -c Syntax OK; logic run headless against a real storage_system
+    (nreports/ladder_v_ou/save_snapshot.rxdata): 322 species listed; typing "gli" -> row
+    "Gliscor (22)"; partners include "Suicune (1)"; parts_match?(GLISCOR,SUICUNE) -> 1 hit
+    B37.18 Suicune/Gliscor, identical set with the args reversed; unfused Arceus reachable
+    via (Any half). NOT yet seen on a real screen (the two windows are unverified in-game).
+  revert: delete filter_by_parts / parts_match? / pkmn_part_symbols / part_entries /
+    partner_entries / build_part_entries / part_name, and drop the menu entry + `when 4`.
+
+##############################################
+competitive tiers (AG/Ubers/OU/UU) in Random Battle - replaces the research ban-set menu
+Data/Scripts/055_sidmod/RandomOpponent.rb
+Data/sidmod/tiers.json  (NEW - straight copy of tools/sidmod_editor/sim/tiers.json)
+  MODES ~line 32: was 7 entries pairing generator+legendary-filter ("Chaos - OU", "Chaos -
+    Ubers", ...); now 4 generator-only entries [Chaos, Smart, Smart v2, OU Apex]. The tier is
+    its own menu step, so every generator is playable in every tier.
+  TIER_ORDER / TIER_LABELS / TIER_SEL / TIER_LEGEND_FILTER (new consts): ag > ubers > ou > uu.
+    A tier's legal pool = its own members plus everything BELOW it, so a fusion listed under
+    "ubers" is banned from OU and UU. Unlisted = uu = legal everywhere.
+    TIER_LEGEND_FILTER maps ag/ubers -> :ubers (full pool) and ou/uu -> :ou (legendary filter),
+    so the old legendary filter still applies to the two lower tiers.
+  tier_assignments (new): loads Data/sidmod/tiers.json -> {canonical fusion id => tier name}.
+    Cached. On any read/parse failure it logs and returns {} so Random Battle still works with
+    no tier bans rather than crashing.
+  jget (new): the engine's lightweight RGSS JSON parser returns SYMBOL keys while Ruby's stdlib
+    JSON (used by the offline sim on the SAME file) returns STRING keys - jget fetches either.
+    THIS WAS A REAL BUG: cfg["tiers"] silently returned nil in-game, so 0 assignments loaded and
+    every tier was unfiltered. Verified fixed: 25 assignments load (ag 2 / ubers 8 / ou 15).
+  canon_fusion_id (new): "HEAD/BODY" or "B<body>H<head>" -> the engine's canonical fusion
+    species symbol (pk.species already holds exactly this, so matching is a direct lookup).
+  tier_legal?(c, tier) (new): home tier must not sit ABOVE the tier being played.
+  apply_tier (replaces apply_ban_set) ~line 537: standard clauses (Moody/ShadowTag/ArenaTrap +
+    BatonPass/Swagger/OHKO moves) in EVERY tier, then the tier banlist.
+  build_team_named ~line 545: takes the tier NAME ("ou") or the legacy legendary symbol
+    (:ou/:ubers) that the offline sim harness still passes to build_team - both accepted, so
+    tools/sidmod_editor/sim/nbattle.rb keeps working unchanged.
+  start_battle / run: dropped the `bans` param, added the tier menu step after the generator.
+  tier_label (new): display name for messages ("A balanced OU challenger appears with: ...").
+  SUPERSEDES the earlier "research ban-set modes" block below - that menu (No clauses / Ban
+    multipliers / Ban setup+stat / Ban both) is removed; the tier system replaces it.
+  verified: ruby -c Syntax OK. Head-less against the real pool: 25 assignments load; legal
+    counts AG 466 / Ubers 464 / OU 339 / UU 324; boundary checks all correct -
+    Azumarill/Garchomp ag=true ubers=false, Azumarill/Absol ubers=true ou=false,
+    Raichu/Scizor ou=true uu=false, Volcarona/Pikachu uu=true.
+    NOT yet seen on a real screen (the new menu step is unverified in-game).
+  revert: restore the 7-entry MODES + MODE_SEL, drop the TIER_* consts / tier_assignments /
+    jget / canon_fusion_id / tier_legal? / apply_tier / tier_label, restore apply_ban_set and
+    the `bans` params, and delete Data/sidmod/tiers.json.
+  keeping tiers.json in sync: it is a copy of tools/sidmod_editor/sim/tiers.json (the source of
+    truth the offline ladder reads). Re-copy after any tier change.
