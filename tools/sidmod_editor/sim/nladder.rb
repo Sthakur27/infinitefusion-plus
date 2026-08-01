@@ -270,7 +270,10 @@ def init!(rtag, tag, size, seed_opps, nw)
     @ban_meta = st_bans
   end
   gen = Gen.new(meta, rat, legal_keys)
-  rng = Random.new(777)
+  # LSEED varies the whole search so PURE runs can be repeated independently; without it every
+  # run on the same snapshot is byte-identical (all three RNGs were hardcoded).
+  lseed = (ENV['LSEED'] || 0).to_i
+  rng = Random.new(777 + lseed * 7919)
 
   teams = []
   ok = ->(keys) { keys.is_a?(Array) && keys.length == 6 && keys.all? { |k| legal_keys.include?(k) } }
@@ -299,7 +302,7 @@ def init!(rtag, tag, size, seed_opps, nw)
 
   st = { 'tag' => tag, 'rating_tag' => rtag, 'tier' => tier.to_s, 'size' => size,
          'bar_percentile' => 50, 'batch' => 0, 'tested' => 0, 'promoted' => 0,
-         'teams' => teams, 'history' => [], 'created' => Time.now.to_s,
+         'teams' => teams, 'history' => [], 'created' => Time.now.to_s, 'lseed' => lseed,
          'banned_keys' => banned, 'ban_meta' => @ban_meta }
   save_state(tag, st)
   puts "ladder #{tag}: #{teams.length} seed teams (tier #{tier})"
@@ -310,7 +313,7 @@ def init!(rtag, tag, size, seed_opps, nw)
   jobs = []
   ids = teams.map { |t| t['id'] }
   by_id = teams.each_with_object({}) { |t, h| h[t['id']] = t }
-  rng2 = Random.new(31337)
+  rng2 = Random.new(31337 + lseed * 7919)
   teams.each do |t|
     others = ids.reject { |x| x == t['id'] }.shuffle(random: rng2).first(seed_opps)
     others.each do |o|
@@ -349,7 +352,7 @@ def run!(tag, batches, per_batch, nw)
   pool -= banned
   gen  = Gen.new(meta, rat, pool)
   lead_stats = Lead.stats_from_games(Dir[File.join(File.dirname(dir_for(tag)), '**', 'games.tsv')])
-  rng  = Random.new(4242 + st['batch'].to_i * 17)
+  rng  = Random.new(4242 + st['lseed'].to_i * 7919 + st['batch'].to_i * 17)
   logf = File.open(File.join(dir_for(tag), 'ladder_log.txt'), 'ab')
   promf = File.join(dir_for(tag), 'promotions.tsv')
 
