@@ -1,0 +1,30 @@
+{
+  "pokemon": [
+    {
+      "mode": "edit",
+      "box": 33,
+      "slot": 14,
+      "level": 100,
+      "ability": "IRONFIST",
+      "item": "LIFEORB",
+      "nature": "ADAMANT",
+      "moves": ["PLASMAFISTS", "FIREPUNCH", "MACHPUNCH", "ICEPUNCH"],
+      "evs": { "ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 }
+    },
+    {
+      "mode": "add",
+      "head": "METAGROSS",
+      "body": "INFERNAPE",
+      "level": 100,
+      "ability": "IRONFIST",
+      "item": "LIFEORB",
+      "nature": "ADAMANT",
+      "moves": ["METEORMASH", "CLOSECOMBAT", "MACHPUNCH", "ICEPUNCH"],
+      "evs": { "ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL",
+      "box": 24
+    }
+  ]
+}

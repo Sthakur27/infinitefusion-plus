@@ -259,6 +259,7 @@ Engine/gameplay patches additionally live in [`sidmod.txt`](sidmod.txt). Recent 
 
 | Date | Step |
 |---|---|
+| 2026-08-01 | **Showcase save expansion + semantic sync** — 30 new competitive fusions, 2 collection mons upgraded, and identity-aware live-save diff/copy tooling |
 | 2026-07-29 | **Move legality audit** — all 456 L100 mons checked against `pbGetLegalMoves`; 62 illegal moves replaced (orientation-aware) |
 | 2026-07-29 | Build batches — No Guard Zap Cannon / Dynamic Punch, Simple Quiver Dance, Mimikyu Disguise crew, Rock Head recoil crew |
 | 2026-07-30 | Serene Grace Sacred Fire (100% burn) batch + Absol Swords Dance trio |

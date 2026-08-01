@@ -1,0 +1,18 @@
+{
+  "pokemon": [
+    {
+      "mode": "add",
+      "head": "GIRATINA",
+      "body": "GLISCOR",
+      "level": 100,
+      "ability": "POISONHEAL",
+      "item": "TOXICORB",
+      "nature": "IMPISH",
+      "moves": ["SPECTRALTHIEF", "ROOST", "KNOCKOFF", "TOXIC"],
+      "evs": { "HP": 252, "DEFENSE": 252, "SPECIAL_DEFENSE": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL",
+      "box": 31
+    }
+  ]
+}

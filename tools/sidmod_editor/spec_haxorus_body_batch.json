@@ -1,0 +1,44 @@
+{
+  "pokemon": [
+    {
+      "mode": "edit",
+      "box": 23,
+      "slot": 5,
+      "level": 100,
+      "ability": "SPEEDBOOST",
+      "item": "LIFEORB",
+      "nature": "JOLLY",
+      "moves": ["PROTECT", "SWORDSDANCE", "FLAREBLITZ", "CLOSECOMBAT"],
+      "evs": { "ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 }
+    },
+    {
+      "mode": "add",
+      "head": "GOODRA",
+      "body": "HAXORUS",
+      "level": 100,
+      "ability": "SAPSIPPER",
+      "item": "LEFTOVERS",
+      "nature": "ADAMANT",
+      "moves": ["DRAGONDANCE", "DRAGONCLAW", "EARTHQUAKE", "FIREPUNCH"],
+      "evs": { "ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL",
+      "box": 21
+    },
+    {
+      "mode": "add",
+      "head": "DRAGONITE",
+      "body": "HAXORUS",
+      "level": 100,
+      "ability": "MULTISCALE",
+      "item": "LEFTOVERS",
+      "nature": "ADAMANT",
+      "moves": ["DRAGONDANCE", "DRAGONCLAW", "EARTHQUAKE", "ROOST"],
+      "evs": { "ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL",
+      "box": 21
+    }
+  ]
+}

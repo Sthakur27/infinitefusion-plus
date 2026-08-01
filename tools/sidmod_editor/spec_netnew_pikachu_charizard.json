@@ -1,0 +1,60 @@
+{
+  "pokemon": [
+    {
+      "mode": "add",
+      "head": "CHARIZARD",
+      "body": "NOIVERN",
+      "level": 100,
+      "ability": "INFILTRATOR",
+      "item": "LIFEORB",
+      "nature": "TIMID",
+      "moves": ["FLAMETHROWER", "DRACOMETEOR", "BOOMBURST", "ROOST"],
+      "evs": { "SPECIAL_ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL",
+      "box": 21
+    },
+    {
+      "mode": "add",
+      "head": "PIKACHU",
+      "body": "WEAVILE",
+      "level": 100,
+      "ability": "STATIC",
+      "item": "LIGHTBALL",
+      "nature": "JOLLY",
+      "moves": ["ZINGZAP", "ICEPUNCH", "SUCKERPUNCH", "SWORDSDANCE"],
+      "evs": { "ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL",
+      "box": 21
+    },
+    {
+      "mode": "add",
+      "head": "PIKACHU",
+      "body": "INFERNAPE",
+      "level": 100,
+      "ability": "IRONFIST",
+      "item": "LIGHTBALL",
+      "nature": "JOLLY",
+      "moves": ["ZINGZAP", "CLOSECOMBAT", "MACHPUNCH", "SWORDSDANCE"],
+      "evs": { "ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL",
+      "box": 21
+    },
+    {
+      "mode": "add",
+      "head": "PIKACHU",
+      "body": "JOLTEON",
+      "level": 100,
+      "ability": "VOLTABSORB",
+      "item": "LIGHTBALL",
+      "nature": "TIMID",
+      "moves": ["NASTYPLOT", "THUNDERBOLT", "SHADOWBALL", "GRASSKNOT"],
+      "evs": { "SPECIAL_ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL",
+      "box": 21
+    }
+  ]
+}

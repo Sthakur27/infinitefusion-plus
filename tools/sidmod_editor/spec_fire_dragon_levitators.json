@@ -1,0 +1,79 @@
+{
+  "pokemon": [
+    {
+      "mode": "move",
+      "from_box": 2,
+      "from_slot": 10,
+      "box": 23,
+      "slot": 11
+    },
+    {
+      "mode": "edit",
+      "box": 23,
+      "slot": 11,
+      "level": 100,
+      "ability": "LEVITATE",
+      "item": "LEFTOVERS",
+      "nature": "ADAMANT",
+      "moves": ["DRAGONDANCE", "SACREDFIRE", "DRAGONCLAW", "EARTHQUAKE"],
+      "evs": { "ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 }
+    },
+    {
+      "mode": "add",
+      "head": "MAGMORTAR",
+      "body": "HYDREIGON",
+      "level": 100,
+      "ability": "LEVITATE",
+      "item": "LIFEORB",
+      "nature": "TIMID",
+      "moves": ["NASTYPLOT", "FLAMETHROWER", "DRAGONPULSE", "EARTHPOWER"],
+      "evs": { "SPECIAL_ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL",
+      "box": 23
+    },
+    {
+      "mode": "add",
+      "head": "LATIOS",
+      "body": "RESHIRAM",
+      "level": 100,
+      "ability": "LEVITATE",
+      "item": "LIFEORB",
+      "nature": "TIMID",
+      "moves": ["CALMMIND", "BLUEFLARE", "DRAGONPULSE", "ROOST"],
+      "evs": { "SPECIAL_ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL",
+      "box": 23
+    },
+    {
+      "mode": "add",
+      "head": "HOOH",
+      "body": "HYDREIGON",
+      "level": 100,
+      "ability": "LEVITATE",
+      "item": "LIFEORB",
+      "nature": "TIMID",
+      "moves": ["NASTYPLOT", "FLAMETHROWER", "DRAGONPULSE", "ROOST"],
+      "evs": { "SPECIAL_ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL",
+      "box": 23
+    },
+    {
+      "mode": "add",
+      "head": "LATIOS",
+      "body": "VOLCARONA",
+      "level": 100,
+      "ability": "LEVITATE",
+      "item": "LEFTOVERS",
+      "nature": "TIMID",
+      "moves": ["QUIVERDANCE", "FLAMETHROWER", "DRAGONPULSE", "ROOST"],
+      "evs": { "SPECIAL_ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL",
+      "box": 23
+    }
+  ]
+}

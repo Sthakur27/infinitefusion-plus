@@ -57,6 +57,21 @@ Turn under-built PC mons into competitive **Lv100 + item** mons (which also enro
 Reference run (this session): 53 mons coached → **all 309 scope mons** (fusion boxes 18-25 idx17-24, Squads idx33-35, vanilla UU/OU/Uber idx37-39) are now L100+item. Pool the Random Battle feature sees = every L100+item PC mon (was ~396, incl. pre-existing collection boxes).
 
 ---
+### 1c. Sync the live save into the repository showcase
+
+```powershell
+powershell -File tools\sidmod_editor\sync_showcase_save.ps1          # semantic preview only
+powershell -File tools\sidmod_editor\sync_showcase_save.ps1 -Apply   # verified copy + UPDATES entry + SHA refresh
+```
+
+`save_diff.rb` matches Pokémon by owner identity + personal ID rather than box/slot. The generated
+update includes only **net-new Pokémon** and existing Pokémon that newly become competitive-ready
+(Lv100 + held item + at least 508 EVs). PC relocations and moveset/item/nature-only changes are
+ignored. `-Apply` refuses while the game is open, copies through a `.new` file, verifies SHA-256,
+atomically replaces `saves/File A.rxdata`, appends an idempotent hash-marked entry to `UPDATES.md`,
+and refreshes the SHA in `saves/README.md`. It never writes the live save.
+
+---
 ## 2. Inspect fusions  (`sim/fusion_inspector.rb` — the ground-truth ORACLE)
 
 Builds a candidate in the real engine and reports actual typing / stats-vs-both-parents / 4x-2x-immune weaknesses / resolved ability / auto-flags (TYPING-NO-GAIN, STAT-TAX, NEW-4x-WEAK, DEAD-ABILITY, WEATHER-ABILITY, INVALID). **This is the oracle — use it before trusting any typing/stat intuition; my priors have been wrong repeatedly (Ferro/Skarm is Steel/Flying not Grass/Flying; Rock/Water SpD in sand; etc.).**

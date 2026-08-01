@@ -40,7 +40,7 @@ Save folder is `%APPDATA%\infinitefusion` on Windows,
 `~/Library/Application Support/infinitefusion` on macOS, else
 `${XDG_CONFIG_HOME:-~/.config}/infinitefusion`. Override with `SAVE_DIR=/path` on the shell script.
 
-`sha256: 1932920e76b944e65f2cc4a30b6a71504e1f054db648ac95987e08dc0af70c9e`
+`sha256: 6085c9602a2ad6e21d5d1d534b0690997c2f7002530b1377ac913b001d3ef724`
 
 ## What's in it
 
@@ -67,3 +67,20 @@ held item, which is also what enrolls it in the sidmod **Random Battle** pool.
 
 The save carries its own trainer name and ID, and a lot of hours of progress — treat it as a
 showcase/benchmark save rather than a starting point for a fresh run.
+
+## Latest competitive expansion (2026-08-01)
+
+This snapshot adds **30 new Lv100 competitive fusions** and upgrades **2 existing collection
+fusions** to complete competitive sets. Highlights include:
+
+- Four Drizzle Water/Flying crosses: Politoed/Kyogre heads with Rayquaza/Lugia bodies.
+- Light Ball Pikachu builds, Speed Boost Blaziken builds, and mono-Dragon Haxorus-body sweepers.
+- Fire/Dragon Levitate setup attackers, including Latios/Volcarona with Quiver Dance.
+- Fast Pixilate Hyper Voice and Serene Grace flinch/status attackers.
+- Poison Heal Giratina/Gliscor, Sheer Force Ho-Oh/Feraligatr, and Iron Fist Metagross/Infernape.
+- Charizard/Haxorus and Ho-Oh/Flygon promoted from ordinary collection levels to Lv100 builds.
+
+The full generated roster diff, including locations and sets, is in the 2026-08-01 entry of
+[`../UPDATES.md`](../UPDATES.md). Future snapshots can be previewed or applied with
+`tools/sidmod_editor/sync_showcase_save.ps1`; PC relocations and moveset/item-only tweaks are
+deliberately excluded from its generated update report.

@@ -384,3 +384,67 @@ Also built this session: Sceptile/Gliscor (Scepcor, fast Poison Heal, new "Funho
 Suicune/Volcarona + Volcarona/Suicune (Quiver Dance hybrid tanks), and three purpose-built
 Sturdy/Focus Sash revenge killers (Weavile/Lucario, Donphan/Aerodactyl, Magnezone/Aerodactyl)
 to test whether they suppress the setup archetype — untested so far.
+
+---
+
+---
+
+## 2026-08-01 · Showcase save sync — 30 new, 2 competitively upgraded
+<!-- save-diff-counts:added=30 upgraded=2 -->
+
+Semantic diff of `File A.rxdata` → live `File A.rxdata`. Pokémon are matched by owner + personal ID. The report includes only net-new identities and existing Pokémon that newly reach competitive-ready status (Lv100 + held item + at least 508 EVs). Moveset/item-only edits and 2 PC/party relocation(s) are ignored.
+
+- Old SHA-256: `8fdd0ac67788626dabcd75b7b7f8f57bae88ea86959ca17969e83e9dc8c5aa3a`
+- New SHA-256: `6085c9602a2ad6e21d5d1d534b0690997c2f7002530b1377ac913b001d3ef724`
+- Roster: 898 → 928 Pokémon
+- Tooling: `tools/sidmod_editor/save_diff.rb` (semantic identity diff) and `tools/sidmod_editor/sync_showcase_save.ps1` (verified copy + documentation sync).
+
+### Added Pokémon (30)
+
+| Head | Body | Typing | Location | Lv | Ability | Item | Moveset |
+|---|---|---|---|---:|---|---|---|
+| Politoed | Rayquaza | WATER/FLYING | Box 18 "Rain 17", slot 2 | 100 | DRIZZLE | LIFEORB | DRAGONDANCE / WATERFALL / EARTHQUAKE / DRAGONCLAW |
+| Politoed | Lugia | WATER/FLYING | Box 18 "Rain 17", slot 3 | 100 | DRIZZLE | LEFTOVERS | RECOVER / CALMMIND / SURF / THUNDER |
+| Kyogre | Rayquaza | WATER/FLYING | Box 18 "Rain 17", slot 4 | 100 | DRIZZLE | LIFEORB | DRAGONDANCE / WATERFALL / EARTHQUAKE / DRAGONCLAW |
+| Kyogre | Lugia | WATER/FLYING | Box 18 "Rain 17", slot 5 | 100 | DRIZZLE | LEFTOVERS | RECOVER / CALMMIND / SURF / THUNDER |
+| Togekiss | Zoroark | FAIRY/DARK | Box 20 "Bench", slot 28 | 100 | SERENEGRACE | LIFEORB | MOONBLAST / DARKPULSE / AIRSLASH / NASTYPLOT |
+| Charizard | Noivern | FIRE/DRAGON | Box 22 "Sandbox", slot 12 | 100 | INFILTRATOR | LIFEORB | FLAMETHROWER / DRACOMETEOR / BOOMBURST / ROOST |
+| Pikachu | Weavile | ELECTRIC/ICE | Box 22 "Sandbox", slot 17 | 100 | STATIC | LIGHTBALL | ZINGZAP / ICEPUNCH / SUCKERPUNCH / SWORDSDANCE |
+| Pikachu | Infernape | ELECTRIC/FIGHTING | Box 22 "Sandbox", slot 23 | 100 | IRONFIST | LIGHTBALL | ZINGZAP / CLOSECOMBAT / MACHPUNCH / SWORDSDANCE |
+| Pikachu | Jolteon | ELECTRIC | Box 22 "Sandbox", slot 24 | 100 | VOLTABSORB | LIGHTBALL | NASTYPLOT / THUNDERBOLT / SHADOWBALL / GRASSKNOT |
+| Jolteon | Pikachu | ELECTRIC | Box 22 "Sandbox", slot 28 | 100 | VOLTABSORB | LIGHTBALL | NASTYPLOT / THUNDERBOLT / SHADOWBALL / GRASSKNOT |
+| Goodra | Haxorus | DRAGON | Box 22 "Sandbox", slot 29 | 100 | SAPSIPPER | LEFTOVERS | DRAGONDANCE / DRAGONCLAW / EARTHQUAKE / FIREPUNCH |
+| Dragonite | Haxorus | DRAGON | Box 22 "Sandbox", slot 30 | 100 | MULTISCALE | LEFTOVERS | DRAGONDANCE / DRAGONCLAW / EARTHQUAKE / ROOST |
+| Magmortar | Hydreigon | FIRE/DRAGON | Box 24 "Sun", slot 25 | 100 | LEVITATE | LIFEORB | NASTYPLOT / FLAMETHROWER / DRAGONPULSE / EARTHPOWER |
+| Latios | Reshiram | DRAGON/FIRE | Box 24 "Sun", slot 26 | 100 | LEVITATE | LIFEORB | CALMMIND / BLUEFLARE / DRAGONPULSE / ROOST |
+| Ho-Oh | Hydreigon | FIRE/DRAGON | Box 24 "Sun", slot 27 | 100 | LEVITATE | LIFEORB | NASTYPLOT / FLAMETHROWER / DRAGONPULSE / ROOST |
+| Latios | Volcarona | DRAGON/FIRE | Box 24 "Sun", slot 28 | 100 | LEVITATE | LEFTOVERS | QUIVERDANCE / FLAMETHROWER / DRAGONPULSE / ROOST |
+| Blaziken | Haxorus | FIRE/DRAGON | Box 24 "Sun", slot 5 | 100 | SPEEDBOOST | LIFEORB | PROTECT / SWORDSDANCE / FLAREBLITZ / DRAGONCLAW |
+| Blaziken | Machamp | FIRE/FIGHTING | Box 24 "Sun", slot 6 | 100 | SPEEDBOOST | LIFEORB | PROTECT / SWORDSDANCE / FLAREBLITZ / CLOSECOMBAT |
+| Blaziken | Entei | FIRE | Box 24 "Sun", slot 7 | 100 | SPEEDBOOST | LIFEORB | PROTECT / SWORDSDANCE / SACREDFIRE / CLOSECOMBAT |
+| Blaziken | Ho-Oh | FIRE/FLYING | Box 24 "Sun", slot 8 | 100 | SPEEDBOOST | LIFEORB | PROTECT / SWORDSDANCE / SACREDFIRE / CLOSECOMBAT |
+| Sylveon | Jolteon | FAIRY/ELECTRIC | Box 25 "Box 25", slot 1 | 100 | PIXILATE | LIFEORB | HYPERVOICE / THUNDERBOLT / SHADOWBALL / CALMMIND |
+| Volcarona | Slaking | BUG/NORMAL | Box 25 "Box 25", slot 10 | 100 | FLAMEBODY | LIFEORB | QUIVERDANCE / BUGBUZZ / BOOMBURST / FLAMETHROWER |
+| Sylveon | Crobat | FAIRY/FLYING | Box 25 "Box 25", slot 2 | 100 | PIXILATE | LIFEORB | HYPERVOICE / AIRSLASH / SHADOWBALL / CALMMIND |
+| Sylveon | Mewtwo | FAIRY/PSYCHIC | Box 25 "Box 25", slot 3 | 100 | PIXILATE | LIFEORB | HYPERVOICE / PSYSTRIKE / AURASPHERE / CALMMIND |
+| Metagross | Infernape | STEEL/FIGHTING | Box 25 "Box 25", slot 4 | 100 | IRONFIST | LIFEORB | METEORMASH / CLOSECOMBAT / MACHPUNCH / ICEPUNCH |
+| Ho-Oh | Feraligatr | FIRE/WATER | Box 25 "Box 25", slot 5 | 100 | SHEERFORCE | LIFEORB | DRAGONDANCE / WATERFALL / SACREDFIRE / ICEPUNCH |
+| Jirachi | Aerodactyl | STEEL/FLYING | Box 25 "Box 25", slot 6 | 100 | SERENEGRACE | LEFTOVERS | IRONHEAD / ICEFANG / ROCKSLIDE / THUNDERWAVE |
+| Togekiss | Aerodactyl | FAIRY/FLYING | Box 25 "Box 25", slot 7 | 100 | SERENEGRACE | LIFEORB | AIRSLASH / MOONBLAST / AURASPHERE / CALMMIND |
+| Giratina | Regigigas | GHOST/NORMAL | Box 25 "Box 25", slot 8 | 100 | PRESSURE | LIFEORB | DRAGONDANCE / SPECTRALTHIEF / RETURN / EARTHQUAKE |
+| Giratina | Gliscor | GHOST/FLYING | Box 32 "AI Ubers", slot 30 | 100 | POISONHEAL | TOXICORB | SPECTRALTHIEF / ROOST / KNOCKOFF / TOXIC |
+
+### Competitively upgraded Pokémon (2)
+
+| Head | Body | Typing | Location | Before | Competitive build |
+|---|---|---|---|---|---|
+| Charizard | Haxorus | FIRE/DRAGON | Box 20 "Bench", slot 11 | Lv56 @LEFTOVERS | Lv100 ADAMANT MOLDBREAKER @LIFEORB · DRAGONDANCE / FLAREBLITZ / DRAGONCLAW / EARTHQUAKE |
+| Ho-Oh | Flygon | FIRE/DRAGON | Box 24 "Sun", slot 12 | Lv58 | Lv100 ADAMANT LEVITATE @LEFTOVERS · DRAGONDANCE / SACREDFIRE / DRAGONCLAW / EARTHQUAKE |
+
+### Reproduce or revert
+
+- Preview: `powershell -File tools/sidmod_editor/sync_showcase_save.ps1`
+- Apply the live-save copy and append this report: `powershell -File tools/sidmod_editor/sync_showcase_save.ps1 -Apply`
+- Revert the repository copy with Git; this tool never writes the live save.
+
+<!-- save-sync:6085c9602a2ad6e21d5d1d534b0690997c2f7002530b1377ac913b001d3ef724 -->

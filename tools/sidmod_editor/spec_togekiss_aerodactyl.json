@@ -1,0 +1,18 @@
+{
+  "pokemon": [
+    {
+      "mode": "add",
+      "head": "TOGEKISS",
+      "body": "AERODACTYL",
+      "level": 100,
+      "ability": "SERENEGRACE",
+      "item": "LIFEORB",
+      "nature": "TIMID",
+      "moves": ["AIRSLASH", "MOONBLAST", "AURASPHERE", "CALMMIND"],
+      "evs": { "SPECIAL_ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 },
+      "ball": "ULTRABALL",
+      "box": 24
+    }
+  ]
+}

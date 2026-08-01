@@ -1,0 +1,23 @@
+{
+  "pokemon": [
+    {
+      "mode": "move",
+      "from_box": 7,
+      "from_slot": 3,
+      "box": 19,
+      "slot": 10
+    },
+    {
+      "mode": "edit",
+      "box": 19,
+      "slot": 10,
+      "level": 100,
+      "ability": "MOLDBREAKER",
+      "item": "LIFEORB",
+      "nature": "ADAMANT",
+      "moves": ["DRAGONDANCE", "FLAREBLITZ", "DRAGONCLAW", "EARTHQUAKE"],
+      "evs": { "ATTACK": 252, "SPEED": 252, "HP": 4 },
+      "ivs": { "HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31 }
+    }
+  ]
+}
