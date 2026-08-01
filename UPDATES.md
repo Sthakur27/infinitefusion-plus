@@ -335,3 +335,52 @@ Bug worth remembering: the engine's lightweight RGSS JSON parser returns **symbo
 Ruby's stdlib JSON returns **string** keys on the same file. `cfg["tiers"]` silently read nil
 in-game, so zero assignments loaded and every tier was unfiltered. Fixed with a key-agnostic
 `jget`; verified 25 assignments load and all four tier boundaries behave.
+
+---
+
+## 2026-07-30 · "Best team in the PC" — unconstrained AG search + head-to-head
+
+Ran the AG tier with **PURE=1 / USAGE_CAP=1.0**: no usage cap, no niche reservation, no
+niche-biased generation, no crowding eviction — **Species Clause as the only team constraint**.
+100 teams × 30 batches, then a direct head-to-head round-robin over the top 10
+(270 games, every pairing on 3 seeds and BOTH side assignments).
+
+**Winner — 71.3% head-to-head, a 12-point gap over 2nd:**
+
+| Fusion | Nickname | Role |
+|---|---|---|
+| Volcarona/Politoed | Nimbus | Drizzle · Leftovers |
+| Gengar/Ninetales | Emberwraith | Drought · Focus Sash |
+| Dragonite/Regigigas | Dragotitan | Multiscale DD · Leftovers |
+| Greninja/Slaking | Lagoonking | Protean · Life Orb |
+| Porygonz/Noivern | Boombox | Adaptability Boomburst · Silk Scarf |
+| **Suicune/Gliscor** | **Suicor** | Poison Heal · Toxic Orb *(built this session)* |
+
+**Ladder Elo is NOT team strength.** The head-to-head winner was only ladder **rank #5**
+(Elo 1889); the ladder's **#1 (Elo 1925) placed 2nd** at 59.3%. On a converged monoculture
+ladder, teams trade wins against near-identical opponents and ratings drift — which is exactly
+why `best_team.rb` decides by round-robin instead. Worth remembering for any future "best X"
+question.
+
+**Suicune/Gliscor validated:** #5 most-used at **36%** in the uncapped pool and present on
+**4 of the top 6 teams**. The Poison Heal Water/Flying wall (Ground-immune, Toxic-immune,
+self-healing) is a genuine top-tier mon by measurement.
+
+Uncapped usage top 5: Azumarill/Garchomp 54%, Dragonite/Regigigas 52%, Ludicolo/Sceptile 42%,
+Raichu/Scizor 37%, Suicune/Gliscor 36%. (Under the normal 30% cap the top two are both pinned
+at 30 and look equal — uncapped shows Azumarill/Garchomp wanted to go far past it.)
+
+**Correction worth recording:** the winning team runs Drizzle *and* Drought, which I flagged as
+a teambuilding flaw. That was wrong. Weather abilities fire **on entry** and overwrite
+permanently, so each setter simply brings its own weather whenever it switches in — they never
+degrade each other in singles. Two different setters is mildly *good* (you can flip an
+opponent's field by switching). No fix needed.
+
+**Caveat:** "best" = best against this AI. RQ1 measured team rankings as strongly AI-dependent
+(rho ~0.14 between the native heuristic and the lookahead), so this is the answer for Random
+Battle opponents and a softer claim against a human pilot.
+
+Also built this session: Sceptile/Gliscor (Scepcor, fast Poison Heal, new "Funhouse" box),
+Suicune/Volcarona + Volcarona/Suicune (Quiver Dance hybrid tanks), and three purpose-built
+Sturdy/Focus Sash revenge killers (Weavile/Lucario, Donphan/Aerodactyl, Magnezone/Aerodactyl)
+to test whether they suppress the setup archetype — untested so far.

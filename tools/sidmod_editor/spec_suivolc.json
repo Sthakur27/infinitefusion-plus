@@ -1,0 +1,22 @@
+{
+  "pokemon": [
+    {
+      "mode": "add", "box": 22,
+      "head": "SUICUNE", "body": "VOLCARONA", "level": 100,
+      "ability": "FLAMEBODY", "item": "LEFTOVERS", "nature": "BOLD",
+      "moves": ["QUIVERDANCE", "SCALD", "FIERYDANCE", "ROOST"],
+      "evs": {"HP": 252, "DEFENSE": 252, "SPECIAL_ATTACK": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL"
+    },
+    {
+      "mode": "add", "box": 22,
+      "head": "VOLCARONA", "body": "SUICUNE", "level": 100,
+      "ability": "FLAMEBODY", "item": "LEFTOVERS", "nature": "BOLD",
+      "moves": ["QUIVERDANCE", "SCALD", "BUGBUZZ", "ROOST"],
+      "evs": {"HP": 252, "DEFENSE": 252, "SPECIAL_ATTACK": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL"
+    }
+  ]
+}

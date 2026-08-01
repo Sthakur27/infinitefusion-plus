@@ -1,0 +1,31 @@
+{
+  "pokemon": [
+    {
+      "mode": "add", "box": 22,
+      "head": "WEAVILE", "body": "LUCARIO", "level": 100,
+      "ability": "JUSTIFIED", "item": "FOCUSSASH", "nature": "ADAMANT",
+      "moves": ["EXTREMESPEED", "ICESHARD", "BULLETPUNCH", "CLOSECOMBAT"],
+      "evs": {"ATTACK": 252, "SPEED": 252, "HP": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL"
+    },
+    {
+      "mode": "add", "box": 22,
+      "head": "DONPHAN", "body": "AERODACTYL", "level": 100,
+      "ability": "STURDY", "item": "LEFTOVERS", "nature": "ADAMANT",
+      "moves": ["ICESHARD", "EARTHQUAKE", "STONEEDGE", "RAPIDSPIN"],
+      "evs": {"ATTACK": 252, "SPEED": 252, "HP": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL"
+    },
+    {
+      "mode": "add", "box": 22,
+      "head": "MAGNEZONE", "body": "AERODACTYL", "level": 100,
+      "ability": "STURDY", "item": "LIFEORB", "nature": "TIMID",
+      "moves": ["THUNDERBOLT", "FLASHCANNON", "EARTHPOWER", "VOLTSWITCH"],
+      "evs": {"SPECIAL_ATTACK": 252, "SPEED": 252, "HP": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL"
+    }
+  ]
+}
