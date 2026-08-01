@@ -21,14 +21,17 @@ module Tiers
   module_function
 
   PATH  = File.join(__dir__, 'tiers.json')
-  ORDER = %w[uu ou ubers].freeze          # ascending power; index = how high the mon sits
+  # ascending power; index = how high the mon sits. `ag` (Anything Goes) is the escape hatch
+  # above Ubers: assigning a fusion to `ag` bans it from Ubers as well, which is what makes
+  # Ubers an actual tier with a banlist rather than "everything".
+  ORDER = %w[uu ou ubers ag].freeze
 
   def config
     @config ||= NStore::PARSE.call(File.binread(PATH))
   end
 
   def tier_names
-    ORDER.reverse                          # ubers, ou, uu
+    ORDER.reverse                          # ag, ubers, ou, uu
   end
 
   def default_tier
@@ -125,7 +128,8 @@ if __FILE__ == $PROGRAM_NAME
 
   (only ? [only] : Tiers.tier_names).each do |t|
     # ubers plays the whole pool; ou/uu use the OU-legal (non-legendary) subset
-    pool = (t == 'ubers') ? NativeSim.all_pool : NativeSim.pool(tier: :ou)
+    # ag/ubers play the whole pool (legendaries included); ou/uu use the OU-legal subset
+    pool = %w[ag ubers].include?(t) ? NativeSim.all_pool : NativeSim.pool(tier: :ou)
     ex = Tiers.excluded_keys(t, pool)
     by = ex.values.tally.sort_by { |k, _v| -Tiers::ORDER.index(k) }.map { |k, v| "#{k} #{v}" }.join(', ')
     puts "== #{t.upcase} =="

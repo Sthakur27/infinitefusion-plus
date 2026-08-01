@@ -1,0 +1,58 @@
+{
+  "pokemon": [
+    {
+      "mode": "add", "box": 36,
+      "head": "VOLCARONA", "body": "GLISCOR", "level": 100,
+      "ability": "POISONHEAL", "item": "TOXICORB", "nature": "TIMID",
+      "moves": ["QUIVERDANCE", "BUGBUZZ", "HEATWAVE", "ROOST"],
+      "evs": {"SPECIAL_ATTACK": 252, "SPEED": 252, "HP": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL"
+    },
+    {
+      "mode": "add", "box": 36,
+      "head": "RAIKOU", "body": "GLISCOR", "level": 100,
+      "ability": "POISONHEAL", "item": "TOXICORB", "nature": "TIMID",
+      "moves": ["SUBSTITUTE", "ROOST", "THUNDERBOLT", "TOXIC"],
+      "evs": {"HP": 252, "DEFENSE": 4, "SPEED": 252},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL"
+    },
+    {
+      "mode": "add", "box": 36,
+      "head": "SUICUNE", "body": "GLISCOR", "level": 100,
+      "ability": "POISONHEAL", "item": "TOXICORB", "nature": "BOLD",
+      "moves": ["CALMMIND", "SCALD", "ROOST", "SUBSTITUTE"],
+      "evs": {"HP": 252, "DEFENSE": 252, "SPECIAL_ATTACK": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL"
+    },
+    {
+      "mode": "add", "box": 36,
+      "head": "MILOTIC", "body": "GLISCOR", "level": 100,
+      "ability": "POISONHEAL", "item": "TOXICORB", "nature": "CALM",
+      "moves": ["RECOVER", "SCALD", "ICEBEAM", "TOXIC"],
+      "evs": {"HP": 252, "SPECIAL_DEFENSE": 252, "SPECIAL_ATTACK": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL"
+    },
+    {
+      "mode": "add", "box": 36,
+      "head": "MEWTWO", "body": "ALAKAZAM", "level": 100,
+      "ability": "MAGICGUARD", "item": "LIFEORB", "nature": "TIMID",
+      "moves": ["CALMMIND", "PSYSTRIKE", "FOCUSBLAST", "SHADOWBALL"],
+      "evs": {"SPECIAL_ATTACK": 252, "SPEED": 252, "HP": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL"
+    },
+    {
+      "mode": "add", "box": 36,
+      "head": "DIALGA", "body": "ALAKAZAM", "level": 100,
+      "ability": "MAGICGUARD", "item": "LIFEORB", "nature": "TIMID",
+      "moves": ["CALMMIND", "FLASHCANNON", "PSYSHOCK", "FOCUSBLAST"],
+      "evs": {"SPECIAL_ATTACK": 252, "SPEED": 252, "HP": 4},
+      "ivs": {"HP": 31, "ATTACK": 31, "DEFENSE": 31, "SPECIAL_ATTACK": 31, "SPECIAL_DEFENSE": 31, "SPEED": 31},
+      "ball": "ULTRABALL"
+    }
+  ]
+}

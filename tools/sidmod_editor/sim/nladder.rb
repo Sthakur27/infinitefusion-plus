@@ -210,7 +210,8 @@ def compute_bans
   if tier_def
     bad = Tiers.validate
     raise "tiers.json invalid:\n  #{bad.join("\n  ")}" unless bad.empty?
-    tpool = (tier_def == 'ubers') ? NativeSim.all_pool : NativeSim.pool(tier: :ou)
+    # ag/ubers play the whole pool (legendaries included); ou/uu use the OU-legal subset
+    tpool = %w[ag ubers].include?(tier_def) ? NativeSim.all_pool : NativeSim.pool(tier: :ou)
     # exclude anything whose HOME tier sits above the tier being played
     Tiers.excluded_keys(tier_def, tpool).each { |k, home| reasons[k] = "tier:#{home}" }
   end

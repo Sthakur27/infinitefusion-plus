@@ -4,12 +4,14 @@
     "assigned per fusion by JUDGMENT — not derived from any ability/item/species rule.",
     "",
     "MODEL (standard Smogon nesting): every fusion has one home tier. A tier's legal pool is",
-    "its own members plus everything below it.",
-    "  ubers = everything            (all fusions, incl. legendaries)",
-    "  ou    = ou members + uu       (ubers members excluded)",
-    "  uu    = uu members only       (ubers AND ou members excluded)",
-    "So listing a fusion under 'ubers' bans it from OU and UU; listing it under 'ou' bans it",
-    "from UU only. Anything not listed defaults to 'uu' and is therefore legal in every tier.",
+    "its own members plus everything below it. Power order: ag > ubers > ou > uu.",
+    "  ag    = everything                  (the no-holds-barred tier; nothing is banned here)",
+    "  ubers = ubers + ou + uu members     (ag members excluded)",
+    "  ou    = ou + uu members             (ag AND ubers excluded)",
+    "  uu    = uu members only             (ag, ubers AND ou excluded)",
+    "So listing a fusion under 'ag' bans it even from Ubers; 'ubers' bans it from OU and UU;",
+    "'ou' bans it from UU only. Anything unlisted defaults to 'uu' and is legal in every tier.",
+    "AG exists so that Ubers is a real tier with its own banlist rather than 'everything'.",
     "",
     "IDENTITY: the engine's own canonical fusion id — species symbol B<body_dex>H<head_dex>",
     "(Marowak/Mimikyu == B373H105, dexNum = body*NB_POKEMON + head), stored on every Pokemon and",
@@ -31,14 +33,19 @@
   ],
   "default_tier": "uu",
   "tiers": {
-    "ubers": {
-      "desc": "Proven dominant. Measured as top-usage / top-team anchors on the unbanned ladders — an attack multiplier or a free-setup ability ON a chassis that actually converted it.",
+    "ag": {
+      "desc": "Anything Goes — banned even from Ubers. Evidence: on the UNBANNED Ubers ladder (ladder_u0) these two SATURATED the ladder's 30% usage cap, i.e. the cap was the only thing holding them down, and they anchored the top-10 teams. Both stack an attack multiplier on a chassis that converts it (Huge Power + Garchomp's typing/speed; Thick Club + Disguise's free Swords Dance).",
       "members": [
         "AZUMARILL/GARCHOMP",
+        "MAROWAK/MIMIKYU"
+      ]
+    },
+    "ubers": {
+      "desc": "Legal in Ubers, banned from OU and UU. Proven dominant on the unbanned ladders — an attack multiplier or a free-setup ability ON a chassis that actually converted it — but not cap-saturating like the AG pair.",
+      "members": [
         "AZUMARILL/ABSOL",
         "AZUMARILL/MAROWAK",
         "AZUMARILL/ARCEUS",
-        "MAROWAK/MIMIKYU",
         "DRAGONITE/REGIGIGAS",
         "DRAGONITE/SLAKING",
         "SLAKING/DRAGONITE",
