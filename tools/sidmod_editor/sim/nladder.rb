@@ -102,7 +102,15 @@ def niche_counts(st, meta)
   c
 end
 
+# PURE=1 turns OFF every diversity mechanism (niche reservation, niche-biased challenger
+# generation, crowding eviction, and — with USAGE_CAP=1.0 — the per-mon usage cap), leaving
+# Species Clause as the only team constraint. Use it to answer "what is the single strongest
+# team", accepting that the ladder will collapse into a monoculture; use the default mode to
+# study the metagame.
+def pure_mode?; ENV['PURE'] == '1'; end
+
 def niche_reserve(st)
+  return 0 if pure_mode?
   # every niche that the pool can actually support gets a floor; the rest is open
   [(st['size'].to_i * 0.06).floor, 4].max
 end
@@ -149,6 +157,8 @@ def choose_eviction_niched(st, keys, n, meta, cap_n)
 end
 
 def choose_eviction(st, keys, cap_n)
+  # PURE: no cap, no crowding — the weakest team simply makes way.
+  return st['teams'].min_by { |t| t['elo'] } if pure_mode?
   usage = usage_of(st)
   # `usage[k] + 1` because the challenger itself is about to add one. Evicting a
   # holder frees a slot the challenger immediately refills, so the swap must be
@@ -344,7 +354,9 @@ def run!(tag, batches, per_batch, nw)
   promf = File.join(dir_for(tag), 'promotions.tsv')
 
   shrink = 0.55        # fraction of (perf - bar) an entrant keeps
-  cap_n  = ((ENV['USAGE_CAP'] || 0.30).to_f * st['teams'].length).ceil   # max teams per mon
+  # PURE ignores the cap entirely (set it to the ladder size so nothing can exceed it)
+  cap_n  = pure_mode? ? st['teams'].length :
+           ((ENV['USAGE_CAP'] || 0.30).to_f * st['teams'].length).ceil   # max teams per mon
   maint  = (ENV['MAINT'] || 90).to_i   # incumbent re-test games per batch
   stages = [{ 'opps' => 4,  'seeds' => 1, 'cull' => 0.25, 'top_bias' => 0.0 },
             { 'opps' => 8,  'seeds' => 1, 'cull' => 0.40, 'top_bias' => 0.3 },
